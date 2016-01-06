@@ -9,6 +9,8 @@
     "build": "npm run bbl-build",
     "watch": "npm run bbl-watch",
     "postinstall": "npm run build",
+    "start": "node . --httpauth ../presentations.htpasswd",
+    "debug": "DEBUG=app:*,express:* npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
