@@ -66,7 +66,7 @@ go 'til ~5min in
 
 * What is Node.js
 * Javascript Review
-* Core APIs
+* Core Modules
 * Understanding Async
 * The Node Ecosystem & NPM
 
