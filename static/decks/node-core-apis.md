@@ -26,6 +26,12 @@ tasks
 
 # HTTP Module
 
+```js
+var http = require('http');
+```
+
+|||
+
 <ul>
   <li class="fragment"> `http.Server` </li>
   <li class="fragment"> `http.IncomingMessage` </li>
@@ -37,10 +43,9 @@ tasks
 - three classes we're interested in
 - pull up examples from before
 
-|||
+---
 
 ## `http.Server`
-* <!-- .element: class="fragment" -->
 <ul>
   <li class="fragment">`Event Emitter`</li>
 </ul>
@@ -54,14 +59,18 @@ tasks
 ## `EventEmitter`
 <ul>
   <li class="fragment">Interface</li>
-  <li class="fragment">`on` method</li>
-  <li class="fragment">`emit` method</li>
+  <li class="fragment">Main methods:
+  <ul>
+  <li class="fragment">`on(event, handlerFunction)`</li>
+  <li class="fragment">`emit(event, data)`</li>
+  </ul>
 </ul>
 
 ^
 - All there is to it
 - show example `event-emitter.js`
 - show how you can make handlers separate
+- multiple handlers
 - show http-server example, change to **external** function
 
 |||
@@ -78,7 +87,7 @@ Hints:
 - what arguments will it take?
 - that's the main thing you need to know for the server
 
-|||
+---
 
 ## IncomingMessage
 <ul>
@@ -119,16 +128,16 @@ Hints:
 
 <!-- .slide: class="exercise" -->
 1. If user requests `/found`
-  * statusCode = 200
+  * HTTP status code: 200
   * respond with "you found it!"
 2. Any other path
-  * statusCode = 404
+  * HTTP status code: 404
   * respond with "Not found! :("
 
 ^
 - What issues did you run into?
 
-|||
+---
 
 <!-- .slide: class="transition" -->
 *Up Next: File System and Path Modules*
