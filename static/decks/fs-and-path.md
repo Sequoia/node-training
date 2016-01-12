@@ -21,7 +21,25 @@ var fs = require('fs');
 - has methods for most unixy filesystem ops
 - `read` creates a file `descriptor`
 - `open` consumes a `descriptor`
-- also some convenience methods for files
+
+|||
+
+## Evil twins
+* `fs.readSync`
+* `fs.openSync`
+* `fs.linkSync`
+* `fs.writeSync`
+* `fs.chownSync`
+* `fs.mkdirSync`
+* `fs.statSync`
+* etc.
+
+^
+- Don't use these unless you have a specific reason! (or you just don't care
+  about perf)
+- Block event loop
+- Will cover more later
+- **also some convenience methods for files**
 
 |||
 
