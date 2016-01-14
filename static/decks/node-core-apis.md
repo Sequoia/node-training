@@ -105,6 +105,7 @@ Hints:
 
 ^
 - what's the name of the event?
+- mostly properties as we **read from** this obj
 - show example of dumping URL
 
 |||

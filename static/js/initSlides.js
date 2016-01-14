@@ -18,4 +18,3 @@ Reveal.initialize({
     { src: 'vendor/reveal.js/plugin/notes/notes.js', async: true }
   ]
 });
-

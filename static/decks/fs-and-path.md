@@ -225,6 +225,8 @@ TODO: do this later when we've gone over path?
 
 |||
 
+TODO: move this to end-of-day
+
 <!-- .slide: class="exercise" -->
 # Extra Challenge:
 ## HTTP Server
@@ -234,4 +236,3 @@ TODO: do this later when we've gone over path?
 3. Send file contents
 
 *Remember to set the appropriate HTTP status code!* <!-- .element: class="fragment" -->
-

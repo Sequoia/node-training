@@ -1,0 +1,10 @@
+/*html{*/
+  /*transition: all 3s ease 0s;*/
+/*}*/
+html.exercise body{
+  background: #B80000;
+}
+
+html.transition body{
+  background: #0000FF;
+}
