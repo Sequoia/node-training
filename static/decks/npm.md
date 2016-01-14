@@ -258,7 +258,18 @@ List of packages (*and versions*) required by our package
 
 |||
 
+## Finding packages
 
+<ul>
+  <li class="fragment"><https://www.npmjs.com/></li>
+  <li class="fragment">`npm search`</li>
+  <li class="fragment">google</li>
+</ul>
+
+^
+- go look around
+- NPM search is slow
+- if you don't know exact name sometimes google is better
 
 ---
 OTHER STUFF
@@ -273,7 +284,6 @@ main
 bin
 scripts
 registry
-installing packages
 local
 exercise: chalk
 --save
