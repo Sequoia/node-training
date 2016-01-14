@@ -39,7 +39,7 @@ Contains info on package...
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 
 ## `npm init`
 
@@ -84,7 +84,7 @@ Why do I have author stuff?
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 
 ## `npm config`
 
@@ -101,7 +101,7 @@ fix this ^
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 
 ## `package.main`
 
@@ -140,7 +140,7 @@ we want chalk in our project, we're gonna install that
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 
 `npm install chalk`
 
@@ -151,7 +151,7 @@ we want chalk in our project, we're gonna install that
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 
 Use our dependency:
 
@@ -183,7 +183,7 @@ Hints:
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 
 `npm install --save chalk`
 

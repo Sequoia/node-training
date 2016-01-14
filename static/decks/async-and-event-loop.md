@@ -38,7 +38,7 @@ TODO: sick animated SVG to illustrate multi-threaded vs. event-loop
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 
 ---
 
@@ -140,7 +140,7 @@ TODO: add example with promises? may better illustrate issue with ordering ops
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Flow Control Strategies*
 
 ---
@@ -307,7 +307,7 @@ self(startVal, function (selfed){
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Callback Hell*
 
 ---
@@ -397,7 +397,7 @@ function outputResults(err){
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 
 ```js
 function self  (x, cb) { cb(null, x); }
@@ -431,7 +431,7 @@ self(startVal, function (err, selfed){
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: `EventEmitter` Review*
 
 ---
@@ -474,7 +474,7 @@ self(startVal, function (err, selfed){
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Promises*
 
 ---
@@ -572,7 +572,7 @@ function readFilePromise(filename){
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 
 "Promisify" `getHeadersHTTPS`. This should work:
 
@@ -645,5 +645,5 @@ function addProperty(jsondata){
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Node Ecosystem & NPM*

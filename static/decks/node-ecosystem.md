@@ -151,7 +151,7 @@ var express = require('express');
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: `module.exports`*
 
 ---
@@ -213,7 +213,7 @@ module.exports = new Singleton();
 
 ---
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 Create a file that exports something, and a second file to `require` it.
 
 ---
@@ -418,12 +418,12 @@ dog.bark(); // ??
 
 ---
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Excercise!*
 
 ---
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 
 Write `greeterFactory.js` for:
 

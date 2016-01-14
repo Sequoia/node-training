@@ -68,6 +68,6 @@ do some examples with Object.getPrototypeOf
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Core Modules*
 

@@ -1,4 +1,4 @@
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 Create the following file:
 
 ```js
@@ -179,13 +179,13 @@ Whiteboard? TODO
 
 ---
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 
 *Up Next: Running Node*
 
 ---
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 
 # Running Node
 
@@ -204,6 +204,6 @@ Whiteboard? TODO
 
 ---
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 
 *Up Next: What is Javascript*

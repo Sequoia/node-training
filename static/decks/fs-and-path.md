@@ -110,7 +110,7 @@ var myCallback = function(err, ...
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Back to Filesystem*
 
 ---
@@ -126,7 +126,7 @@ Be sure to re-throw error!
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 ## `fs.writeFile`
 
 ```js
@@ -148,7 +148,7 @@ TODO: do this later when we've gone over path?
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Other Core Modules*
 
 ---
@@ -199,7 +199,7 @@ TODO: do this later when we've gone over path?
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 ## `fs.readFile` + `process.argv`
 
 1. Receive filename as argument
@@ -220,14 +220,14 @@ TODO: do this later when we've gone over path?
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Break!*
 
 |||
 
 TODO: move this to end-of-day
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 # Extra Challenge:
 ## HTTP Server
 `/path/to/filename.txt?u=tim&p=ponies`

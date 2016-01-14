@@ -51,7 +51,7 @@ TODO: LTS Graphic
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Javascript Review*
 
 ---
@@ -97,7 +97,7 @@ before we talk about problems, let's talk about how to solve problems
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 ## Console
 
 Find some differences between node `console` and browser `console`
@@ -305,7 +305,7 @@ Uncaught Error:
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 Find where I broke the "Always use named expressions" rule and rewrite it as a
 named expression
 
@@ -314,14 +314,14 @@ named expression
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 1. Create `divide` using a function **declaration**
 2. Create `multiply` using function **expression**
 
 ^ filename: math.js
 
 |||
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Handling Functions*
 
 ---
@@ -361,7 +361,7 @@ setTimeout(sayHi, delay);
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 Use `setTimeout` to call `add(3, 5)` after `1` second.
 
 ^
@@ -374,7 +374,7 @@ Use `setTimeout` to call `add(3, 5)` after `1` second.
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Scope & Hoisting*
 
 ---
@@ -468,7 +468,7 @@ function myDictionary(){
 - no IMPLICIT globals in node, still good to use var
 
 |||
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 `http-server-congrats.js`:
 
 Alter `http-server.js` to say "CONGRATULATIONS!" to the **5th** visitor
@@ -560,5 +560,5 @@ add(3,2);  // => 5
 
 |||
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: Node.js Core Modules*

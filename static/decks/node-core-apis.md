@@ -6,7 +6,7 @@ TODO: add util
 
 ---
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 ## Browser, Node, or Javascript?
 <ul>
   <li class="fragment"> `Math.pow` </li>
@@ -76,7 +76,7 @@ var http = require('http');
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 Alter `http-server.js` to attach the listener function thus:
 ```js
 server.on('request', myRequestHandler);
@@ -128,7 +128,7 @@ Hints:
 
 |||
 
-<!-- .slide: class="exercise" -->
+<!-- .slide: data-state="exercise" -->
 1. If user requests `/found`
   * HTTP status code: 200
   * respond with "you found it!"
@@ -141,5 +141,5 @@ Hints:
 
 ---
 
-<!-- .slide: class="transition" -->
+<!-- .slide: data-state="transition" -->
 *Up Next: File System and Path Modules*
