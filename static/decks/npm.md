@@ -255,6 +255,56 @@ List of packages (*and versions*) required by our package
 - **only** installed for the parent package
 - **What do you think these are for?**
 - grunt, gulp, mocha, test tools, etc.
+- what about versions?
+
+|||
+
+## Semver
+
+*"Semantic Versioning"*
+
+^
+- give meaning to version numbers
+- explain crazy past
+
+<https://docs.npmjs.com/getting-started/semantic-versioning>
+
+|||
+
+### Semver Parts
+
+`3.10.23`
+
+<ul>
+  <li class="fragment">`3`: Major Version</li>
+  <li class="fragment">`10`: Minor Version</li>
+  <li class="fragment">`23`: Patch Version</li>
+</ul>
+
+^
+- Major: increment this when breaking BC
+- Minor: adding features, don't break BC
+- Patch: Bug fixes & minor changes
+
+|||
+
+### Semver Ranges
+
+<ul>
+  <li class="fragment">`>=2.3`</li>
+  <li class="fragment">`2.*`</li>
+  <li class="fragment"> `1.2.7`</li>
+  <li class="fragment">`~3.1` (`3.1.*`)</li>
+  <li class="fragment">`^3.1.9` (`3.*` + `>=3.1`)</li>
+</ul>
+
+<http://semver.npmjs.com/><!-- .element: class="fragment" -->
+
+^
+- tilde: fix all available digits
+- carat: fix only first digit
+- carat is good for "all but breaking changes"
+- go to website & play around
 
 |||
 
@@ -271,22 +321,179 @@ List of packages (*and versions*) required by our package
 - NPM search is slow
 - if you don't know exact name sometimes google is better
 
----
-OTHER STUFF
+|||
+
+<!-- .slide: data-state="transition" -->
+*Up Next: Global Installs*
+
+^
+One more part of package.json but we'll do that after (**scripts**)
+
 ---
 
-package.json
-what it is
-how it’s used
-deps
-devdeps
-main
-bin
-scripts
-registry
-local
-exercise: chalk
---save
-rm
-global
-exercise: node-watch
+## Global Install
+
+`npm install -g foo`
+
+^ 
+
+- for utilities
+- anything you'd call from the command line
+
+|||
+
+## Global Install
+
+Installs to privileged location (`/usr/local/bin`)
+
+* Change permissions, or<!-- .element: class="fragment" -->
+* Tell NPM to install elsewhere<!-- .element: class="fragment" -->
+* Use "sudo"<!-- .element: class="fragment" -->
+
+^ don't use sudo!
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+Make NPM install globals in our home directory
+
+`npm set prefix /home/sequoia/npm_packages`
+
+^
+now you can install without sudo 
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+1. `npm install jshint`
+2. `jshint somefile.js`
+
+^
+- grunt, gulp, jshint etc. are more useful
+
+|||
+
+### `package.bin`
+
+Like `package.main` but for command-line usage:
+
+```json
+  "main": "index.js",
+  "bin" : "bin/index.js"
+```
+
+```json
+  "bin" : {
+    "ccc" : "dist/cli/do_this.js",
+    "jsfoo":"dist/cli/foo.js"
+  }
+```
+<!-- .element: class="fragment" -->
+
+^
+- you can also install cli packages local to your app
+- **demo**: `npm install cowsay`, `"sayhi" : "cowsay Hello"`, `npm run boo`
+
+|||
+
+<!-- .slide: data-state="transition" -->
+*Up Next: npm scripts*
+
+---
+
+## NPM Scripts
+
+<https://docs.npmjs.com/misc/scripts>
+
+<ul>
+  <li class="fragment">Live in `package.json`</li>
+  <li class="fragment">Run with `npm run scriptname`</li>
+  <li class="fragment">A few "special" ones run automatically</li>
+</ul>
+
+^
+- **Why would this be useful?**
+
+|||
+
+```json
+...
+"scripts": {
+  "bbl-build": "babel src --out-dir dist",
+  "build": "npm run bbl-build",
+  "postinstall": "npm run build",
+  "start": "node . --httpauth ../presentations.htpasswd",
+  "debug": "PORT=3030 DEBUG=app:*,express:* npm run start",
+  "pretest": "echo \"about to start tests...\"",
+  "test": "echo \"Error: no test specified\" && exit 1"
+},
+...
+```
+
+^ 
+- talk thru these
+- bower install
+- demo a bit
+- alternative to grunt/gulp for builds
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+Set up "watch" script for development:
+<ol>
+  <li class="fragment">`node .` starts a webserver</li>
+  <li class="fragment">`npm run watch` starts & watches server</li>
+</ol>
+
+<div class="fragment">
+<br>
+
+<p>Hints</p>
+
+<ul>
+  <li>You know how to write a webserver :)</li>
+  <li>`package.json.main`</li>
+  <li>npm scripts run `node_modules/.bin` directly</li>
+  <li>`watch "cat foo.txt" ./bar`<br>will `cat foo.txt` whenever a file changes in `./bar`</li>
+  </ul>
+</div>
+
+^
+- demo watch for them
+
+---
+
+<!-- .slide: data-state="exercise" -->
+# File Server
+
+## HTTP Server
+`/path/to/filename.txt?u=xing&p=ponies`
+1. If user/pass aren't correct, send "Access Denied"
+2. If file can't be read/found, send "Not Found"
+3. Send file contents
+
+*Remember to set the appropriate HTTP status code!* <!-- .element: class="fragment" -->
+
+## Extra Credit
+1. Set port with environment variable
+2. Set file base path with CLI argument
+3. Remove requestHandler to its own file
+
+|||
+
+# Good Job! :)
+
+|||
+
+# Tomorrow
+
+* Express
+* Datastores & ORMs
+
+<https://mongolab.com/><!-- .element: class="fragment" -->
+TODO: mariadb equiv?
+
+^
+- go over express
+- datastores, mongo & mysql
+- set up an account on mongolab for free mongodb hosting
