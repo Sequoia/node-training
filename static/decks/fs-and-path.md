@@ -24,7 +24,7 @@ var fs = require('fs');
 
 |||
 
-## Evil twins
+## 	&#9888;Synchronous versions&#9888;
 * `fs.readSync`
 * `fs.openSync`
 * `fs.linkSync`
@@ -225,14 +225,3 @@ TODO: do this later when we've gone over path?
 
 |||
 
-TODO: move this to end-of-day
-
-<!-- .slide: data-state="exercise" -->
-# Extra Challenge:
-## HTTP Server
-`/path/to/filename.txt?u=tim&p=ponies`
-1. If user/pass aren't correct, send "Access Denied"
-2. If file can't be read/found, send "Not Found"
-3. Send file contents
-
-*Remember to set the appropriate HTTP status code!* <!-- .element: class="fragment" -->
