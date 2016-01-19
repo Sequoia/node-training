@@ -72,11 +72,11 @@ Ruby on Rails
 
 ## Competitors
 
+TODO?
+
 |||
 
 ## Router
-
-### Express
 
 ```js
 app.get(path, handlerFunction);
@@ -282,18 +282,22 @@ app.get(path, handler);
 
 ^
 - *demo changing get to post* (use postman)
-- *demo using `.use` and `req.method`
+- demo using `.use` and `req.method`
 
 |||
 
 <!-- .slide: data-state="exercise" -->
 1. `GET /greet` replies 'Hello, you!'
-2. `GET /count` replies
-  * 'Count: 1' on first request
-  * 'Count: 2' second request, etc.
+2. `POST /count` Increments a counter
+3. `GET /count` replies with the current count
+4. `DELETE /count` sets count to 0
 
 Hints:
-* Remember scope
+* What scope does your counter live in? 
+* Use Postman or another REST tool to post/delete
+
+^
+- don't worry about post-data, will handle that later
 
 |||
 
@@ -343,8 +347,8 @@ app.get('/test', function(req, res) {
 <!-- .slide: data-state="exercise" -->
 
 Make a server wherein...
-1. `/test/` alone replies "you requested '/test/'"
-1. `/test/[any number of characters]` replies "you requested '/test/something'"
+1. `GET /test/` alone replies "you requested '/test/'"
+1. `GET /test/[any number of characters]` replies "you requested '/test/something'"
 1. any other route replies "you requested something else"
 
 Hints:
@@ -360,7 +364,7 @@ Hints:
 
 ---
 
-### `request` Object
+## `request` Object
 
 <http://expressjs.com/en/4x/api.html#req>
 * `req.app`
@@ -455,7 +459,7 @@ Extra Credit:
 
 ---
 
-## `request` Object
+## `response` Object
 <http://expressjs.com/en/4x/api.html#res>
 
 <ul>
@@ -691,3 +695,26 @@ res.set('user', {
 - Renders template
 - optionally passes in data
 - **We'll talk about templates more in a bit**
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+
+Update our users server...
+1. `GET /user/1` returns...
+  1. Not "AJAX" request: `User 1: Zeynep`
+  2. "AJAX" request: { name: 'Zeynep'}
+2. If user not found, send appropriate **HTTP Code** and **message**
+3. Set `X-Server-Time` header to the server time
+
+^
+TODO : create solution for this
+
+|||
+
+<!-- .slide: data-state="transition" -->
+*Up Next: Middleware*
+
+---
+
+#
