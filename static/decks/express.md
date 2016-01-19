@@ -464,7 +464,8 @@ Extra Credit:
   <li class="fragment" >`res.status(httpStatusCode)`</li>
   <li class="fragment" >`res.set(headerName, headerValue)`<br>
   `res.set({name: 'value'})`</li>
-  <li class="fragment" >`res.sendFile(path)`</li>
+  <li class="fragment" >`res.redirect(url)`</li>
+  <li class="fragment" >`res.sendFile(path, options, callback)`</li>
   <li class="fragment" >`res.download(path)`</li>
   <li class="fragment" >`res.render(template, data)`</li>
 </ul>
@@ -498,10 +499,10 @@ res.send(new Buffer('Here is an octet-stream for you!'));
 
 |||
 
-## `req.json`
+## `res.json`
 
 ```js
-req.json([
+res.json([
   {id : 1, name : 'Sequoia'},
   {id : 2, name : 'Jackson'},
   {id : 3, name : 'Christine'}
@@ -510,16 +511,183 @@ req.json([
 <!-- .element: class="fragment" -->
 
 ```js
-req.json(null)
+res.json(null)
 ```
 <!-- .element: class="fragment" -->
 
+```js
+res.json("<h1>Hello!</h1>");
+```
+<!-- .element: class="fragment" -->
+
+^
+- `res.json` will send application/json header no matter what 
+- treats non-object values as json
 
 |||
 
-  <li class="fragment" >`res.status(httpStatusCode)`</li>
-  <li class="fragment" >`res.set(headerName, headerValue)`<br>
-  `res.set({name: 'value'})`</li>
-  <li class="fragment" >`res.sendFile(path)`</li>
-  <li class="fragment" >`res.download(path)`</li>
-  <li class="fragment" >`res.render(template, data)`</li>
+## `res.status`
+
+```js
+res.status(204); // No Content
+```
+<!-- .element: class="fragment" -->
+
+```js
+res.status(404)
+   .send('Not Found');
+
+///or perhaps
+
+res.status(404)
+   .json({error : 'Not Found'});
+```
+<!-- .element: class="fragment" -->
+
+```js
+res.status(500)
+   .sendFile('/var/www/shared/internal_error.html');
+```
+<!-- .element: class="fragment" -->
+
+^
+- can be chained
+
+|||
+
+## `res.set`
+
+```js
+res.set('Content-Type', 'text/markdown');
+```
+<!-- .element: class="fragment" -->
+
+```js
+res.set({
+  'X-Powered-By' : 'Sequoia\'s #1 Web Framwork!/v2.5',
+  'X-Favorite-Animal': 'Hamster',
+  Pragma : 'no-cache'
+});
+```
+<!-- .element: class="fragment" -->
+
+|||
+
+## `res.redirect`
+
+```js
+res.redirect('http://other.url.com');
+```
+<!-- .element: class="fragment" -->
+
+```js
+// GET /admin/users/
+
+res.redirect('../login');
+
+// => /admin/login
+
+```
+<!-- .element: class="fragment" -->
+
+|||
+
+## `res.sendFile`
+
+*Takes (optional) callback with error-first function signature*
+
+```js
+function fileSent(err){
+  if(err){
+    console.error(err);
+    res.status(err.status).end();
+  }
+}
+
+var options = { root: '/var/static/' };
+```
+<!-- .element: data-fragment-index="2" class="fragment" -->
+
+```js
+res.sendFile('app.js', options , fileSent);
+```
+<!-- .element: data-fragment-index="1" class="fragment" -->
+
+
+^
+- **What does callback sig tell us?**
+- options include cache-control header, file root path
+- options object optional
+
+|||
+
+## `res.sendFile`
+
+```js
+app.get('/assets/protected/:filename' function(req,res){
+  if(req.user && hasAccess(req.params.filename req.user)){
+    res.sendFile(req.params.filename, options, fileSent);
+  }else{
+    res.status(403).send('Not Authorized');
+  }
+});
+
+// @return Boolean : true if user has access to requested file
+function hasAccess(file, user){ /*...*/
+```
+
+^
+- useful when you need to prog. protect certain files
+- **Where did request.user come from?** Will cover soon
+
+|||
+
+## `res.download`
+
+```js
+res.download('/path/to/file.ext');
+```
+<!-- .element: class="fragment" -->
+
+```js
+res.download('/path/to/file.ext', 'response.txt');
+```
+<!-- .element: class="fragment" -->
+
+```js
+res.download('/path/to/file.ext', 'response.txt', fileSent);
+```
+<!-- .element: class="fragment" -->
+
+^ 
+- Uses `sendFile` 
+- sets `Content-Disposition` header so it will d/l
+
+|||
+
+## `res.render`
+
+<http://expressjs.com/en/guide/using-template-engines.html>
+
+```js
+res.set('index');
+```
+<!-- .element: class="fragment" -->
+
+```js
+res.set('userList', users);
+```
+<!-- .element: class="fragment" -->
+
+```js
+res.set('user', {
+  name: 'Michelle',
+  role: 'Admin'
+});
+```
+<!-- .element: class="fragment" -->
+
+^
+- Renders template
+- optionally passes in data
+- **We'll talk about templates more in a bit**
