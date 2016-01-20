@@ -85,7 +85,17 @@ app.get(path, handlerFunction);
 ```js
 function handlerFunction(request, response){ //...
 ```
-<!-- .element: class="fragment" -->
+<!-- .element: data-fragment-index="0" class="fragment" -->
+
+^
+- links http paths/request types to handler methods
+- how to use them
+- handler signature
+- example
+
+|||
+
+### Express Hello World
 
 ```js
 var server = require('express')();
@@ -96,15 +106,9 @@ server.get('/', function (req, res) {
 
 server.listen(3000);
 ```
-<!-- .element: class="fragment" -->
 
-^
-- how to use them
-- handler signature
-- example
-
-### Node/http
-<!-- .element: data-fragment-index="1" class="fragment" -->
+### Node/http Hello World
+<!-- .element: data-fragment-index="2" class="fragment" -->
 
 ```js
 var server = require('http').createServer();
@@ -116,15 +120,11 @@ server.on('request', function(req, res){
 
 server.listen(3000);
 ```
-<!-- .element: data-fragment-index="1" class="fragment" -->
-
-^ links http paths/request types to handler methods
-- much like 
+<!-- .element: data-fragment-index="2" class="fragment" -->
 
 |||
 
-### With Node/http:
-
+### Node/http Two Routes
 ```js
 //http-greet-route.js
 var http = require('http');
@@ -269,6 +269,14 @@ app.get(path, handler);
   * *Check out "Guide" in the menu!*
 * <http://devdocs.io>
 
+|||
+
+<!-- .slide: data-state="transition" -->
+*Up Next: Routes*
+
+^
+TODO: Do I need a section on app methods, app.set etc.?
+
 ---
 
 ### Route methods
@@ -308,6 +316,7 @@ Hints:
 ```js
 app.get('/users/*`, handleUsers);
 ```
+
 |||
 
 ### Route patterns
@@ -432,8 +441,10 @@ var users = [
 ```
 
 Create server ...
-1. `/users/1` replies with 'User 1: Zeynep'
-1. `/users/1?title=Ms.` replies with 'User 1: Ms. Zeynep'
+1. `/users/1` replies...<br>
+  'User 1: Zeynep'
+1. `/users/1?title=Ms.` replies...<br>
+  'User 1: Ms. Zeynep'
 
 Hints:
 * Arrays are indexed to 0:
@@ -596,6 +607,23 @@ res.redirect('../login');
 
 |||
 
+<!-- .slide: data-state="exercise" -->
+
+Update our users server...
+1. `GET /user/1` returns...
+  1. Not "AJAX" request: `User 1: Zeynep`
+  2. "AJAX" request: { name: 'Zeynep'}
+2. If user not found, send appropriate **HTTP Code** and **message**
+3. Set `X-Server-Time` header for all requests
+
+Hints:
+* "AJAX" requests have `X-Requested-With: XMLHTTP` header
+* `request` object has a property that identifies this ^
+^
+TODO : create solution for this
+
+|||
+
 ## `res.sendFile`
 
 *Takes (optional) callback with error-first function signature*
@@ -674,17 +702,17 @@ res.download('/path/to/file.ext', 'response.txt', fileSent);
 <http://expressjs.com/en/guide/using-template-engines.html>
 
 ```js
-res.set('index');
+res.render('index');
 ```
 <!-- .element: class="fragment" -->
 
 ```js
-res.set('userList', users);
+res.render('userList', users);
 ```
 <!-- .element: class="fragment" -->
 
 ```js
-res.set('user', {
+res.render('user', {
   name: 'Michelle',
   role: 'Admin'
 });
@@ -698,23 +726,232 @@ res.set('user', {
 
 |||
 
-<!-- .slide: data-state="exercise" -->
-
-Update our users server...
-1. `GET /user/1` returns...
-  1. Not "AJAX" request: `User 1: Zeynep`
-  2. "AJAX" request: { name: 'Zeynep'}
-2. If user not found, send appropriate **HTTP Code** and **message**
-3. Set `X-Server-Time` header to the server time
-
-^
-TODO : create solution for this
-
-|||
-
 <!-- .slide: data-state="transition" -->
 *Up Next: Middleware*
 
 ---
 
-#
+# Middleware
+
+Map functions to a (set of) routes
+
+<http://expressjs.com/en/guide/using-middleware.html>
+
+<ul>
+  <li class="fragment">Trigger side effects</li>
+  <li class="fragment">Alter `request`</li>
+  <li class="fragment">Alter `response`</li>
+  <li class="fragment">"short circuit" request/response flow</li>
+</ul>
+
+^
+- logging for example
+- add stuff like "user id"
+- add headers for example
+- e.g. check auth & skip to error
+
+|||
+
+## Middleware Signature
+
+Arguments:
+1. `request`
+2. `response`
+3. `next`
+
+```js
+function middleware(req, res, next){
+  //do some stuff
+  next(); //go to next matching middleware/route
+}
+```
+<!-- .element: class="fragment" -->
+
+```js
+function middleware(req, res, next){
+  doSomethingAsync(function done(err, results){
+    if(err){ return next(err); }
+
+    req.extraStuff = results;
+    next();
+  })
+}
+```
+<!-- .element: class="fragment" -->
+
+^
+- **We'll discuss passing errors in a moment**
+
+|||
+
+## Using Middleware
+
+```js
+app.use(middleware);
+```
+<!-- .element: class="fragment" -->
+
+```js
+app.use(path, middleware);
+```
+<!-- .element: class="fragment" -->
+
+```js
+app.get(path, middlewareOne);
+app.post(path, middlewareTwo);
+app.delete(middlewareThree);
+```
+<!-- .element: class="fragment" -->
+
+^
+- attach to all requests
+- attach to path, all types
+- attach to only certain request types
+
+## Middleware Order
+
+```js
+app.get('/', function(req, res, next){
+  /* run first */
+  next();
+});
+
+app.get('/', function(req, res, next){
+  /* run second */
+  res.send('done!');
+});
+
+app.get('/', function(req, res, next){
+  /* never runs */
+  next();
+});
+```
+
+^
+&rarr; now let's look at what we can do with middleware...
+
+|||
+
+## Alter Request
+
+```js
+app.use(function(req, res, next){
+  req.foo = 'something';
+});
+```
+
+^
+- add something for use later
+
+|||
+
+## Alter Request Example
+
+Generated placeholder images
+
+```no-highlight
+//GET /placeholder/png?size=200x300
+//GET /placeholder/jpg?size=10x20
+//GET /placeholder/jpg?x=100&y=200
+//GET /placeholder/gif?x=50&y=20
+```
+
+```js
+app.get('/placeholder/*', function(req, res, next){
+  if(req.query.size){
+    req.dimensions = req.query.size.split('x');
+  }else if(req.query.x && req.query.y){
+    req.dimensions = [req.query.x, req.query.y];
+  }else{
+    req.dimensions = [200, 200];
+  }
+  next();
+});
+```
+<!-- .element: class="fragment" -->
+
+```js
+app.get('/placeholder/gif',function(req, res){
+  var img = generateImage(req.dimensions);
+  /*...*/
+```
+<!-- .element: class="fragment" -->
+
+^
+Example: generating placeholder images
+
+|||
+
+## Alter Response
+
+<!-- .slide: data-state="exercise" -->
+Alter a server with multiple routes...
+1. Keep track of server uptime
+2. Add `X-Server-Uptime` header (time in ms) to **all** responses.
+
+Hints:
+* `Date.now()`
+* Pay attention to scope
+* Middleware!!
+
+|||
+**Do it together at end**
+
+TODO: solution for this one
+
+## Side Effects
+
+<!-- .slide: data-state="exercise" -->
+Create middleware to log all requests as follows:
+```no-highlight
+[client IP]: [METHOD] [path] 
+```
+
+e.g.
+```no-highlight
+172.52.221.10: GET /
+190.32.21.10: GET /
+172.52.221.10: GET /users
+172.52.221.10: GET /users/1
+172.52.221.10: POST /users
+```
+
+Hints:
+* Remember The Fun Manual!
+
+Extra Credit:
+1. Pad strings for even columns
+2. Colors
+
+^
+**Do together?**
+
+|||
+
+## "Short Circuit" Request
+
+```js
+//reject unlucky requests
+app.use(function(req, res, next){
+  if(Math.random() > .5){
+    console.error('UNLUCKY USER!!!');
+    res.status(403).send('Not Authorized (Unlucky User)');
+  }
+  else{
+    next();
+  }
+});
+
+app.get('/', function(req, res){
+  /*...*/
+```
+
+^
+- we don't call next, we prevent any further paths from loading
+
+|||
+
+<!-- .slide: data-state="transition" -->
+Up Next: Error Handling
+
+---
