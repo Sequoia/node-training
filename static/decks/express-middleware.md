@@ -1,550 +1,3 @@
-## Middleware
-
-Map functions to a (set of) routes
-
-```js
-app.use(path, middleware);
-```
-
-```js
-function middleware(req, res, next){
-  //do some stuff
-  next();
-}
-```
-<!-- .element: class="fragment" -->
-
-^
-- path is optional
-
-|||
-
-### Middleware Example
-
-```js
-var auth = require('auth-middleware');
-var static = require('static-middleware');
-var logger = require('log-middleware');
-
-app.use(logger);
-app.use('/assets', static('site/assets'));
-app.use('/admin', auth)
-
-app.get('/', handleRoot);
-app.get('/users', listUsersHandler);
-
-app.get('/auth/home', authHomeHandler);
-app.get('/auth/users/create', userForm);
-app.post('/auth/users/create', createUser);
-// ...
-```
-
-^
-- logger: all requests
-- static: requests to 'assets' path
-- auth: all auth routes
-
-|||
-
-### One weird trick...
-
-```js
-function handler(req, res){
-  res.end('Hello World!');
-}
-```
-<!-- .element: class="fragment" -->
-
-```js
-function middleware(req, res, next){
-  //do some stuff
-  next();
-}
-```
-<!-- .element: class="fragment" -->
-
-```js
-app.use(path, middleware);
-app.get(path, handler);
-```
-<!-- .element: class="fragment" -->
-
-**"Routes" are middleware that don't call next!**
-<!-- .element: class="fragment" -->
-
-^
-- also they typically use a shorthand `use` method
-
-|||
-
-## Finding help
-
-* <http://expressjs.com/en/4x/api.html>
-  * *Check out "Guide" in the menu!*
-* <http://devdocs.io>
-
-|||
-
-<!-- .slide: data-state="transition" -->
-*Up Next: Routes*
-
-^
-TODO: Do I need a section on app methods, app.set etc.?
-
----
-
-### Route methods
-
-<http://expressjs.com/en/guide/routing.html>
-
-* `app.get`
-* `app.post`
-* `app.delete`
-* `.head`, `.put`, `.patch`, `.options`, ...
-
-^
-- *demo changing get to post* (use postman)
-- demo using `.use` and `req.method`
-
-|||
-
-<!-- .slide: data-state="exercise" -->
-1. `GET /greet` replies 'Hello, you!'
-2. `POST /count` Increments a counter
-3. `GET /count` replies with the current count
-4. `DELETE /count` sets count to 0
-
-Hints:
-* What scope does your counter live in? 
-* Use Postman or another REST tool to post/delete
-
-^
-- don't worry about post-data, will handle that later
-
-|||
-
-### Wildcard routes
-
-`*` can match any number of characters.
-
-```js
-app.get('/users/*`, handleUsers);
-```
-
-|||
-
-### Route patterns
-
-Routes can be Regular Expressions
-
-```js
-app.get(/.*nodejs$/, function(req, res) {
-  res.send('Your request path ended with "nodejs"!');
-});
-```
-
-^
-- work together thru `regex-route.js`
-
-|||
-
-```js
-app.get('*', function(req, res) {
-  res.send('you requested something else');
-});
-
-app.get('/test', function(req, res) {
-  res.send('you requested /test');
-});
-```
-
-**Order matters!**
-<!-- .element: class="fragment" -->
-
-^
-- **what do you think will happen?**
-- try it out
-
-|||
-
-<!-- .slide: data-state="exercise" -->
-
-Make a server wherein...
-1. `GET /test/` alone replies "you requested '/test/'"
-1. `GET /test/[any number of characters]` replies "you requested '/test/something'"
-1. any other route replies "you requested something else"
-
-Hints:
-* Wildcards
-
-^
-- answer in wildecard-route.js
-
-|||
-
-<!-- .slide: data-state="transition" -->
-*Up Next: the `request` object*
-
----
-
-## `request` Object
-
-<http://expressjs.com/en/4x/api.html#req>
-* `req.app`
-* `req.body`
-* `req.path`
-* `req.query`
-* `req.params`
-* `req.xhr`
-* `req.method`
-
-^
-- body is raw, unparsed body
-- path is without querystring
-- query is PARSED querystring
-- params is route parameters
-
-|||
-
-### Key Differences from `HTTP.IncomingMessage`
-<ul>
-  <li class="fragment">`url.parse` not needed</li>
-  <li class="fragment">`querystring.parse` not needed</li>
-</ul>
-
-|||
-
-### Query Parameters
-
-```js
-// req.params.js
-var server = require('express')();
-
-// example: GET /?foo=bar
-server.get('/', function(req, res){
-  res.send('foo is... ' + req.query.foo);
-});
-
-server.listen(3000);
-```
-
-|||
-
-### Named Parameters
-
-```js
-var server = require('express')();
-
-server.get('/:foo', function(req, res){
-  res.send(':foo is... ' + req.params.foo);
-});
-
-server.listen(3000);
-```
-
-|||
-
-<!-- .slide: data-state="exercise" -->
-
-```js
-var users = [
-  { name: 'Qian' },
-  { name: 'Zeynep'},
-  { name: 'Raisel'}
-];
-```
-
-Create server ...
-1. `/users/1` replies...<br>
-  'User 1: Zeynep'
-1. `/users/1?title=Ms.` replies...<br>
-  'User 1: Ms. Zeynep'
-
-Hints:
-* Arrays are indexed to 0:
-  ['a','b','c'][1] === 'b'
-
-^
-Time allowing:
-
-**how would we create listing of all?**
-
-Extra Credit:
-2. `/users` replies with all users:
-    ```
-    User 0: Qian
-    User 1: Zeynep
-    User 2: Raisel
-    ```
-
-|||
-
-<!-- .slide: data-state="transition" -->
-*Up Next: the `response` object*
-
----
-
-## `response` Object
-<http://expressjs.com/en/4x/api.html#res>
-
-<ul>
-  <li class="fragment" >`res.send(string|buffer|object)`</li>
-  <li class="fragment" >`res.json(object)`</li>
-  <li class="fragment" >`res.status(httpStatusCode)`</li>
-  <li class="fragment" >`res.set(headerName, headerValue)`<br>
-  `res.set({name: 'value'})`</li>
-  <li class="fragment" >`res.redirect(url)`</li>
-  <li class="fragment" >`res.sendFile(path, options, callback)`</li>
-  <li class="fragment" >`res.download(path)`</li>
-  <li class="fragment" >`res.render(template, data)`</li>
-</ul>
-
-^
-- send sets `Content-Length` (text/html for strings!)
-- sendfile is super useful
-- **Who's done download by hand?**
-- `render` we'll talk about later
-
-|||
-
-## `req.send`
-
-```js
-res.send('<h1>Sequoia\'s WebZone!</h1>');
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.send({ id: 1, name: 'Zeynep' });
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.send(new Buffer('Here is an octet-stream for you!'));
-```
-<!-- .element: class="fragment" -->
-
-^ sets header type
-
-|||
-
-## `res.json`
-
-```js
-res.json([
-  {id : 1, name : 'Sequoia'},
-  {id : 2, name : 'Jackson'},
-  {id : 3, name : 'Christine'}
-]);
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.json(null)
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.json("<h1>Hello!</h1>");
-```
-<!-- .element: class="fragment" -->
-
-^
-- `res.json` will send application/json header no matter what 
-- treats non-object values as json
-
-|||
-
-## `res.status`
-
-```js
-res.status(204); // No Content
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.status(404)
-   .send('Not Found');
-
-///or perhaps
-
-res.status(404)
-   .json({error : 'Not Found'});
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.status(500)
-   .sendFile('/var/www/shared/internal_error.html');
-```
-<!-- .element: class="fragment" -->
-
-^
-- can be chained
-
-|||
-
-## `res.set`
-
-```js
-res.set('Content-Type', 'text/markdown');
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.set({
-  'X-Powered-By' : 'Sequoia\'s #1 Web Framwork!/v2.5',
-  'X-Favorite-Animal': 'Hamster',
-  Pragma : 'no-cache'
-});
-```
-<!-- .element: class="fragment" -->
-
-|||
-
-## `res.redirect`
-
-```js
-res.redirect('http://other.url.com');
-```
-<!-- .element: class="fragment" -->
-
-```js
-// GET /admin/users/
-
-res.redirect('../login');
-
-// => /admin/login
-
-```
-<!-- .element: class="fragment" -->
-
-|||
-
-<!-- .slide: data-state="exercise" -->
-
-Update our users server...
-1. `GET /user/1` returns...
-  1. Not "AJAX" request: `User 1: Zeynep`
-  2. "AJAX" request: { name: 'Zeynep'}
-2. If user not found, send appropriate **HTTP Code** and **message**
-3. Set `X-Server-Time` header for all requests
-
-Hints:
-* "AJAX" requests have `X-Requested-With: XMLHTTP` header
-* `request` object has a property that identifies this ^
-^
-TODO : create solution for this
-
-|||
-
-## `res.sendFile`
-
-*Takes (optional) callback with error-first function signature*
-
-```js
-function fileSent(err){
-  if(err){
-    console.error(err);
-    res.status(err.status).end();
-  }
-}
-
-var options = { root: '/var/static/' };
-```
-<!-- .element: data-fragment-index="2" class="fragment" -->
-
-```js
-res.sendFile('app.js', options , fileSent);
-```
-<!-- .element: data-fragment-index="1" class="fragment" -->
-
-
-^
-- **What does callback sig tell us?**
-- options include cache-control header, file root path
-- options object optional
-
-|||
-
-## `res.sendFile`
-
-```js
-app.get('/assets/protected/:filename' function(req,res){
-  if(req.user && hasAccess(req.params.filename req.user)){
-    res.sendFile(req.params.filename, options, fileSent);
-  }else{
-    res.status(403).send('Not Authorized');
-  }
-});
-
-// @return Boolean : true if user has access to requested file
-function hasAccess(file, user){ /*...*/
-```
-
-^
-- useful when you need to prog. protect certain files
-- **Where did request.user come from?** Will cover soon
-
-|||
-
-## `res.download`
-
-```js
-res.download('/path/to/file.ext');
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.download('/path/to/file.ext', 'response.txt');
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.download('/path/to/file.ext', 'response.txt', fileSent);
-```
-<!-- .element: class="fragment" -->
-
-^ 
-- Uses `sendFile` 
-- sets `Content-Disposition` header so it will d/l
-
-|||
-
-## `res.render`
-
-<http://expressjs.com/en/guide/using-template-engines.html>
-
-```js
-res.render('index');
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.render('userList', users);
-```
-<!-- .element: class="fragment" -->
-
-```js
-res.render('user', {
-  name: 'Michelle',
-  role: 'Admin'
-});
-```
-<!-- .element: class="fragment" -->
-
-^
-- Renders template
-- optionally passes in data
-- **We'll talk about templates more in a bit**
-
-|||
-
-<!-- .slide: data-state="transition" -->
-*Up Next: Middleware*
-
----
-
 # Middleware
 
 Map functions to a (set of) routes
@@ -696,6 +149,28 @@ Example: generating placeholder images
 
 |||
 
+### Useful Request-Altering Middleware
+
+<ul>
+  <li class="fragment">`body-parser`</li>
+  <li class="fragment">`cookie-parser`</li>
+  <li class="fragment">`express-session`</li>
+</ul>
+
+^
+**Demo body-parser middleware** TODO: write demo
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+Update server so `POST /user` adds a user to the user-list
+
+Hints:
+* `body-parser`
+* Postman
+
+|||
+
 ## Alter Response
 
 <!-- .slide: data-state="exercise" -->
@@ -708,10 +183,26 @@ Hints:
 * Pay attention to scope
 * Middleware!!
 
-|||
+^
+
 **Do it together at end**
 
 TODO: solution for this one
+
+|||
+
+### Useful Response-Altering Middleware
+
+<ul>
+  <li class="fragment">`compression`</li>
+  <li class="fragment">`response-time`</li>
+  <li class="fragment">`express-partial-response`</li>
+</ul>
+
+^
+- compresses responses
+- adds `X-Response-Time` header (in 'til out)
+- filter json by `?fields`
 
 ## Side Effects
 
@@ -742,7 +233,23 @@ Extra Credit:
 
 |||
 
+### Useful side-effects middleware
+
+<ul>
+  <li>`morgan`</li>
+</ul>
+
+^
+Show morgan example:
+`app.use(morgan(':remote-addr: :method :url'))`
+TODO: Make sure this works ^
+
+
+|||
+
 ## "Short Circuit" Request
+
+Respond (or error) immediately for certain requests
 
 ```js
 //reject unlucky requests
@@ -759,9 +266,42 @@ app.use(function(req, res, next){
 app.get('/', function(req, res){
   /*...*/
 ```
+<!-- .element: class="fragment" -->
 
 ^
 - we don't call next, we prevent any further paths from loading
+
+|||
+
+### Useful "Short Circuit" Middleware
+
+<ul>
+  <li class="fragment">`passport`</li>
+  <li class="fragment">`express.static`</li>
+  <li class="fragment">`serve-index`</li>
+</ul>
+
+^
+- passport does auth & adds req.user
+
+demo serve-index
+```js
+app.use('/ftp', serveIndex('/Users/sequoia', {'icons': true}))
+app.listen(9090)
+```
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+Use the `express.static` middleware to serve:
+1. an `index.html` file with...
+2. a `css` file
+3. an image
+
+Hints:
+* Examples: <http://expressjs.com/en/guide/using-middleware.html>
+* Remember you can use any arbitrary directory as `{ root }`
+* It will serve `index.html` by default
 
 |||
 
@@ -770,4 +310,202 @@ Up Next: Error Handling
 
 ---
 
+## Error Handling Middleware
 
+Arguments:
+1. **`error`**
+1. `request`
+2. `response`
+3. `next`
+
+```js
+function errorMiddleware(err, req, res, next){
+  res
+    .status(err.code)
+    .send(err.message);
+}
+```
+<!-- .element: class="fragment" -->
+
+```js
+app.use('/', rootHandler);
+app.use('/user', userRouter);
+//...
+
+app.use(errorHandlerMiddleware);
+```
+<!-- .element: class="fragment" -->
+
+^
+- put app routes first (order!!)
+
+|||
+
+### Invoking Error Handler
+
+```js
+app.get('/user/:id', function(req, res, next){
+  db.Users.get({id: req.params.id}, function(err, user){
+    if(err){
+      next(err);
+    }else{
+      res.json(user);
+    }
+  });
+});
+```
+
+```js
+app.use(function(err, req, res, next){
+  console.error(err);
+  res.status(500).send('Error');
+});
+```
+<!-- .element: class="fragment" -->
+
+^
+- *walk thru code*
+
+|||
+
+### Invoking Error Handler
+
+```js
+app.use(someLoginMiddleware);
+
+app.use('/account/*', function gateAdminArea(req, res, next){
+  if(!req.user){
+    var e = new Error('Please log in');
+    var e.code = 403;
+    next(e);
+  }
+});
+
+app.use('account/edit', /*...*/);
+app.use('account/subscriptions', /*...*/);
+// ...
+
+app.use(function(err, req, res, next){
+  /* handle error */
+});
+```
+
+^
+- *walk thru code*
+
+|||
+
+### Multiple Error Handlers
+
+```js
+app.get('/post/:id', function gateAdminArea(req, res, next){
+  db.Posts.get({id: req.params.id}, function(err, post){
+    if(err){
+      //there was an internal/db error
+      err.code = 500;
+      next(err);
+    }else if( isEmpty(post) ){
+      next(makeError('Post Not Found!', 404));
+    }
+    else res.json(post);
+  }
+});
+```
+
+^
+- *walk thru code*
+- Two types of error
+
+|||
+
+### Multiple Error Handlers
+
+```js
+app.use(function handle404(err, req, res, next){
+  if(err.code !== 404) return next(err);
+
+  logger.info('NOT FOUND: ' + req.originalUrl');
+  next(err);
+});
+
+app.use(function handle500(err, req, res, next){
+  if(err.code < 500 || err.code > 599) return next(err);
+
+  logger.urgent(err.message);
+  emailAdmin(new Date(), err.toString());
+
+  next(err);
+});
+
+app.use(function errorPage(err, req, res, next){
+  res.render('error_page', err);
+});
+```
+
+^
+- walk thru with a couple diff. paths
+
+|||
+
+### Catchall Handler
+
+```js
+app.use(404Handler);
+app.use(OtherErrorHandler);
+app.use(500Handler);
+
+app.use(function catchallErrorHandler(err, req, res, next){
+  res.status(500).send('We do not know what happened... sorry!');
+});
+```
+
+|||
+
+### Catchall Route
+
+```js
+app.get('/', /*...*/);
+app.get('/admin', /*...*/);
+app.get('/post/:id', /*...*/);
+app.post('/post/:id', /*...*/);
+/* ... */
+
+app.use(function catchallRoute(req, res, next){
+  next(makeError('We couldn\'t find it!', 404));
+});
+```
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+
+1. log in RED for `500`s
+2. log in YELLOW for `404`
+3. ensure status code is an HTTP code
+
+```js
+// handle-errors.js
+var app = require('express')();
+var thrower = require('error-throwing-middleware');
+var chalk = require('chalk');
+var error = chalk.red.bold;
+var info = chalk.blue;
+
+app.use(thrower);
+app.get('/', function(req, res){ res.send('hello world!'); })
+
+/* handle errors here */
+
+app.listen(3000, function(err){
+  if(err) console.error(error(err.message));
+  else console.log(info('Server started on port 3000'));
+});
+```
+
+^
+- introduce chalk
+- show the file running
+
+|||
+<!-- .slide: data-state="transition" -->
+Up Next: Templates
