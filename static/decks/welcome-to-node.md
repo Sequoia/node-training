@@ -147,30 +147,6 @@ Time: 9:15
 
 ---
 
-# The Event Loop
-
-<http://sequoia.makes.software/eventloop-svg><!-- .element: class="fragment" -->
-
-^
-- Thread per connection: waiter, takes order, goes & prepares food
-  - more waiters = more threads
-- Single thread: one **fast** waiter
-  - loops, taking/placing orders, taking/delivering food
-  - Chefs are POSIX threads
-  - Waiter is async
-- What happens if this waiter stops to make someone's food?
-
-|||
-
-# ABC
-* **A**lways
-* **B**e
-* asyn**C**
-
-^ We'll look into the practical aspect of this later
-
----
-
 # What about ~~ES6~~ ES7?
 
 ^

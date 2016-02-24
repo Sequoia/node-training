@@ -424,7 +424,7 @@ Functions can be passed around like other values
 ```js
 //filename: javascript-review/set_timeout_example.js
 
-//setTimeout( FUNCTION , NUMBER);
+//setTimeout( FUNCTION , NUMBER );
 
 var sayHi = function logHello(){
   console.log('hello');
@@ -677,4 +677,4 @@ add(3,2);  // => 5
 |||
 
 <!-- .slide: data-state="transition" -->
-*Up Next: Node.js Core Modules*
+*Up Next: Asynchronous Programming*

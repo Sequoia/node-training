@@ -1,160 +1,14 @@
-TODO: move maintaining asynchrony AFTER flow control portion
-
-# Asynchrony in Node
-
-^ brief review from AM. talked about...
-
-- Callbacks, EventEmitters
-- The importance of maintaining asynchrony
-- Talk about history, browser, why it's Async,
-
----
-
-## The Event Loop
-
-^
-- Waiter example (**Whiteboard**)
-- 1 cook/waiter → sync
-- many → multi-thread
-- 1 fast waiter, many cooks → event loop
-- don't block!
-
-|||
-
-TODO: sick animated SVG to illustrate multi-threaded vs. event-loop
-
-^
-- posix threads (actually do have multiple threads!)
-- TODO: read more link
-
-|||
-
-## Timing demo
-
-<http://j.mp/eventloop-sim><!-- .element: class="fragment" -->
-
-- http://j.mp/eventloop-sim if you want
-- **If you use `readFileSync`, which of these models are you using?**
-
-|||
-
-<!-- .slide: data-state="transition" -->
-
----
-
-## Maintaining Asynchrony
-
-Error-first callback in Node.js says:
-**"I am asynchronous!"**<!-- .element: class="fragment" -->
-
-^
-- If you are creating callbacks like this, they MUST be async
-- Otherwise break flow-control tools that assume asyncrhony
-
-|||
-
-### Get Site Headers
-
-```js
-var https = require('https');
-
-function getHeadersHTTPS(address, cb){
-  https.get(address)
-    .on('response', function(response){
-      //success! pass `null` error + headers to callback
-      cb(null, response.headers);
-    })
-    .on('error', function(err){
-      //error :( pass to callback
-      cb(err);
-    });
-}
-```
-
-```js
-var target = 'https://devdocs.io/';
-
-getHeadersHTTPS(target , function(err, headers){
-  if(err) return console.error('ERROR: ', err.message);
-  console.log(headers);
-});
-```
-<!-- .element: class="fragment" -->
-
-^
-- walk thru function, **https.get is ASYNC I/O**
-- **what async style is https.get using?**
-  - EventEmitter
-- call thus
-- **Why are we saying `return console.error`?**
-
-|||
-
-### Ensure protocol is HTTPS
-
-```js
-var https = require('https');
-var url = require('url');
-
-function getHeadersHTTPS(address, cb){
-
-  var protocol = url.parse(address).protocol;
-  if(protocol !== 'https:'){
-    return cb(new Error('address must be httpS'));
-  }
-
-  https.get(address)
-    .on('response', //... omitted ...
-}
-```
-
-**"takes callback" !== "automatically asynchronous"**
-<!-- .element: class="fragment" -->
-
-^
-- What will happen here?
-- demo
-- one outcome fires on next tick, one on THIS cycle of eventloop
-- how to fix this?
-TODO: add example with promises? may better illustrate issue with ordering ops
-
-|||
-
-### Make it Asynchronous
-
-```js
-  // ...
-  if(protocol !== 'https:'){
-    return process.nextTick(function(){
-      cb(new Error('address must be httpS'));
-    }
-  }
-  // ...
-```
-
-^
-- waits 'til next tick to call callback
-- **now failure matches timing of success**
-- allows other things on thisTick to complete first
-- allows for use with async flow control tools
-
-|||
-
-<!-- .slide: data-state="transition" -->
-*Up Next: Flow Control Strategies*
-
----
-
 # Async Flow Control
 * Callbacks <!-- .element: class="fragment" -->
 * EventEmitters <!-- .element: class="fragment" -->
 * Promises <!-- .element: class="fragment" -->
 
 ^
-- JS is async by default
+- JS is async by default (**Browser history**)
+- going to cover practical first, then theory
 - Flow control can be confusing
 - Code doesn't execute top to bottom
-- different styles
+- **different styles**
 
 ---
 
@@ -166,6 +20,8 @@ TODO: add example with promises? may better illustrate issue with ordering ops
 - Traditional API/strategy for handling async in node
 - Why was this chosen?
 - based on style called "Continuation Style Passing"
+- **&rarr;let's take look at CSP**
+- used in setTimeout
 
 |||
 
@@ -181,14 +37,14 @@ TODO: add example with promises? may better illustrate issue with ordering ops
 ### Continuation Style Passing
 
 ```js
-//without CPS
+//without CSP
 function self  (x) { return x; }
 function addOne(x) { return 1 + x; }
 function double(x) { return 2 * x; }
 ```
 
 ```js
-//without CPS
+//without CSP
 var startVal = 2;
 var selfed   = self(startVal);
 var oneAdded = addone(selfed);
@@ -207,14 +63,14 @@ console.log(doubled);   // output: 6
 ### Continuation Style Passing
 
 ```js
-//WITH CPS
+//WITH CSP
 function self  (x, cb) { cb(x); }
 function addOne(x, cb) { cb(1 + x); }
 function double(x, cb) { cb(2 * x); }
 ```
 
 ```js
-//WITH CPS
+//WITH CSP
 var startVal = 2;
 
 self(startVal, function (selfed){
@@ -234,7 +90,7 @@ double(starVal, function(doubled){
 |||
 
 ```js
-//WITH CPS
+//WITH CSP
 function self  (x, cb) { cb(x); }
 function addOne(x, cb) { cb(1 + x); }
 function double(x, cb) { cb(2 * x); }
@@ -296,14 +152,52 @@ self(startVal, function (selfed){
 <!-- .element: class="fragment" data-fragment-index="2" -->
 
 ^
-- Problems with this? → blocking
-- Solution? **→ CSP aka "callbacks"**
+- Problems with this? &rarr; blocking
+- Solution? **&rarr; CSP aka "callbacks"**
+- **&rarr; Let's give it a try**
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+## `fs.readfile`
+
+```js
+//filename: async/read-file.js
+var fs = require('fs');
+
+var filename = 'letter.txt';
+
+fs.readFile(filename, function(err, data){
+  if(err){
+    console.error('there was an error!', err);
+  }
+  else{
+    console.log(data.toString());
+  }
+});
+```
+
+^ do this one alone, show results
+
+- what do you notice about this?
+- did you run into issues?
+
+|||
+
+## Node callback conventions
+
+```js
+asyncOperation(/*...*/, function(error, /*...*/);
+```
+
+1. Callback always **last** argument
+2. Callback takes error as **first** argument
 
 |||
 
 ## Callback Review
 * Continuation Style Passing<!-- .element: class="fragment" -->
-* Error first<!-- .element: class="fragment" -->
+* Node conventions<!-- .element: class="fragment" -->
 
 |||
 
@@ -395,44 +289,41 @@ function outputResults(err){
 ```
 <!-- .element: class="fragment" -->
 
+^
+- add'l advantage of allowing reuse & testing
+
 |||
 
 <!-- .slide: data-state="exercise" -->
 
-```js
-function self  (x, cb) { cb(null, x); }
-function addOne(x, cb) { cb(null, 1 + x); }
-function double(x, cb) { cb(null, 2 * x); }
-```
-
 Clean up the following callback heck:
 
 ```js
+//filename: async/callback-heck-start.js
+
+function self  (x, cb) { cb(null, x); }
+function addOne(x, cb) { cb(null, 1 + x); }
+function double(x, cb) { cb(null, 2 * x); }
+
 var startVal = 2;
 
 self(startVal, function (err, selfed){
-
   addOne(selfed, function (err, oneAdded){
-
     double(oneAdded, function (err, doubled){
-
       console.log(doubled); //outputs 6
-
     });
-
   });
-
 });
 ```
 
-^ Hints:
-- name functions
-- externalize functions
+Hints:
+1. name functions
+2. externalize functions
 
 |||
 
 <!-- .slide: data-state="transition" -->
-*Up Next: `EventEmitter` Review*
+*Up Next: `EventEmitter`s*
 
 ---
 
@@ -442,7 +333,6 @@ self(startVal, function (err, selfed){
 
 ^
 - Another flow control tool
-- talked about with HTTP
 
 |||
 
@@ -457,7 +347,9 @@ self(startVal, function (err, selfed){
 </ul>
 
 ^ 
-**→ Events + handlers vs callbacks**
+- *Does this look familiar to anyone?*
+- Used it on our server
+- **&rarr; Events + handlers vs callbacks**
 
 |||
 
@@ -471,6 +363,45 @@ self(startVal, function (err, selfed){
 ^
 - callbacks respond to completion of a SINGLE action and fire **once**
 - usually emit error event
+- demo with EventEmitter.js
+
+|||
+
+## Example
+
+```js
+//filename: async/event-emitter.js
+
+var EventEmitter = require('events');
+var ee = new EventEmitter();
+
+ee.on('count', function(num){
+  console.log('number emitted: ', num);
+});
+
+var count = 0;
+
+setInterval(function increment(){
+  count++;
+  ee.emit('count', count);
+}, 1000);
+```
+
+^ 
+note that emit is passed...
+- event name
+- DATA
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+Alter `event-emitter.js`...
+
+1. if count > 3, emit `done`
+2. on `done`, log "DONE" and exit
+
+Hints
+1. `process.exit()`
 
 |||
 
@@ -509,13 +440,13 @@ What is a promise?
   * rejected<!-- .element: class="fragment" -->
 
 ^
-→ you can also assign it to a var & pass it around
+&rarr; you can also assign it to a var & pass it around
 - What does `then` take?
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
 |||
 
-### `.then` method
+## `.then` method
   1. `onFulfilled` function
   2. `onRejected` function
 
@@ -526,7 +457,7 @@ readFilePromise('users.json')
       console.log(results);
     },
     function failure(err){
-      console.err(err);
+      console.error(err);
     }
   );
 ```
@@ -537,12 +468,32 @@ readFilePromise('users.json')
 
 |||
 
+## Chaining
+
 ```js
 var promise = readFilePromise('users.json');
 
 promise
-  .then(processUsers, handleError)
+  .then(filterUsers, handleError)
+  .then(formatRecords, handleError)
   .then(writeFile, handleError);
+```
+
+|||
+
+## Promises are Objects
+
+```js
+function getUser(id){
+  return restPromiseAPI.getOne({
+    type : 'user',
+    id   : id
+  });
+}
+
+var userPromise = getUser(id);
+
+userPromise.then(updateUI, logError);
 ```
 
 ^
@@ -574,21 +525,24 @@ function readFilePromise(filename){
 
 <!-- .slide: data-state="exercise" -->
 
-"Promisify" `getHeadersHTTPS`. This should work:
+"Promisify" `readFile`. This should work:
 
 ```js
-getHeadersHTTPS(target)
-  .then(function getDate(headers){
-    return headers.date;
-  })
-  .then(function(date){
-    console.log(date);
-  });
+//filename: async/read-file-promise.js
+
+function print(text){ /*...*/ }
+function handleError(err){ /*...*/ }
+
+readFile('letter.txt')
+  .then(print, handleError);
 ```
 
-Hint:
+Hints:
+1. Remember **encoding**
+2. Return a Promise
+
 ```js
-function returnPromise(){
+function returnsPromise(){
   return new Promise(function(resolve, reject){
     // do something...
     // reject(err); //or
@@ -596,9 +550,6 @@ function returnPromise(){
   });
 }
 ```
-
-^
-- challenge: add error handling as well
 
 |||
 
@@ -619,23 +570,14 @@ function returnPromise(){
 |||
 
 ### Using Bluebird to "promisify" an API
+
 ```js
 Promise = require('bluebird');
 var fs = Promise.promisifyAll(require(fs));
 
-fs.readFileAsync('myfile.json')
-  .then(JSON.parse)
-  .tap(function(jsondata){
-    console.log(jsondata);
-  })
-  .then(jsondata)
-  .then(doTheNextThing)
+fs.readFileAsync('myfile.txt', 'utf-8')
+  .then(print)
   .catch(handleError);
-
-function addProperty(jsondata){
-  jsondata.myProperty = "hello!!";
-  return jsondata;
-}
 ```
 
 ^
@@ -645,5 +587,27 @@ function addProperty(jsondata){
 
 |||
 
+### Utilities
+
+```js
+Promise = require('bluebird');
+var fs = Promise.promisifyAll(require(fs));
+
+fs.readFileAsync('users.json', 'utf-8')
+  .then(JSON.parse)
+  .filter(justAdmins)
+  .tap(function log(admins){
+    console.log(admins);
+  })
+  .map(sendNotification)
+  .then(doTheNextThing)
+  .catch(handleError);
+
+function justAdmins(user){
+  return user.role == 'admin';
+}
+```
+
+|||
 <!-- .slide: data-state="transition" -->
-*Up Next: Node Ecosystem & NPM*
+Up Next: The Event Loop
