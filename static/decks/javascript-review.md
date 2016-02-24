@@ -11,43 +11,29 @@
 
 |||
 
-What is ~~ES6~~ ES7?
+## What is ~~ES6~~ ES7?
 
-* ES6 = ES2015, ES7 = ES2016 etc. <!-- .element: class="fragment" -->
-* Support of ES6+ features varies widely <!-- .element: class="fragment" -->
-* Solution: Transpile (using Babel) <!-- .element: class="fragment" -->
+ES6 = ES2015, ES7 = ES2016 etc. <!-- .element: class="fragment" -->
 
 ^
 - Version number: increments with year
 - It's a spec **not an impl!!**
 - Babel is it's own topic (I can go over EOD)
-- Lots of new stuff, sticking with basics for this training
 - feel free to ask!
-
-|||
-
-Whence Javascript?
-
-*i.e. "how did we get in this mess?"*
-
-^
-- written for Netscape, supposed to be "like scheme" but management wanted it to look like java
-- No standard, standard came later
-- Vendors all implemented their own (often conflicting) versions
-- Vendors take time to update, devs don't want to wait
 
 |||
 
 # Node.js LTS
 ## Long Term Support Releases
 
-TODO: LTS Graphic
-
 ^
+
+http://sequoia.makes.software/s/node_lts.png
+
 - Predictable releases,
 - Even Number releases in April get 3 years support
 - Go to stable (5.x right now) for newest/latest
-- Note this when reading docs!
+- **Note this when reading docs!**
 
 |||
 
@@ -71,9 +57,26 @@ before we talk about problems, let's talk about how to solve problems
 
 ^
 - Pick version on nodejs.org!
-- Devdocs: show how to pick & save
+- *Devdocs: show how to pick & save*
 - search before you post!
 **--> a couple things you'll hear when you ask for help...**
+
+|||
+
+## On `devdocs.io`, enable:
+
+1. JavaScript
+2. Node.js (*your version!*)
+<br>
+<br>
+
+## Node or Javascript?
+1. `console`
+2. `Promise`
+3. `url.parse` method
+4. `alert` function
+
+<!-- .slide: data-state="exercise" -->
 
 |||
 
@@ -107,7 +110,7 @@ Find some differences between node `console` and browser `console`
 - let people poke around for a minute, **what are some differences?**
 - hint: devdocs.io
 - Who found something interesting?
-- A: `.err`, `.table`, `.assert`
+- A: `.table`, `.Console`, `.group`
 
 ---
 
@@ -117,6 +120,39 @@ Find some differences between node `console` and browser `console`
 * Primitives
 
 ^ if it's not a primitive it's an object & vice versa
+
+|||
+
+## Datatypes
+### Objects
+```js
+var me = {
+  first : 'Sequoia',
+  last  : 'McDowell',
+  age   : 31
+};
+
+console.log(me.age); // 31
+```
+<!-- .element: class="fragment" -->
+
+```js
+var me = new Person('Sequoia', 31);
+
+console.log(me.age); // 31
+```
+<!-- .element: class="fragment" -->
+
+```js
+var me = ['Sequoia', 'McDowell', 31];
+
+console.log(me[2]); // 31
+```
+<!-- .element: class="fragment" -->
+
+^
+- All are objects
+- All have methods, properties
 
 |||
 
@@ -139,7 +175,6 @@ Find some differences between node `console` and browser `console`
 
 `typeof` <!-- .element: class="fragment" -->
 
-
 `instanceof` <!-- .element: class="fragment" -->
 
 ^
@@ -150,7 +185,7 @@ Find some differences between node `console` and browser `console`
 - typeof tells you **built-in** type
 - DON'T RELY ON THESE TOO MUCH!
 - **All kinds of exceptions**
-- TODO come up with a couple examples here or put them in respective sections
+`String('x') instanceof String`, `[1,2,3] instanceof Object`, `Array`
 
 ---
 
@@ -194,34 +229,59 @@ add(3,2);  // => 5
 
 |||
 
+<!-- .slide: data-state="exercise" -->
+Create divide & multiply functions:
+```js
+console.log(
+  div(
+    mul( 21, 40 ),
+    mul(10, 2)
+  )
+);
+
+//output: 42
+```
+
+```js
+console.log( div( mul(21, 40), mul(10, 2) ) );
+```
+<!-- .element: class="fragment" -->
+
+* Run with `node filename.js`
+<!-- .element: class="fragment" -->
+
+^
+5 min
+
+|||
+
 ## Function Expressions
 What's meant by "expression"?
 
-*"An expression is any valid unit of code that resolves to a value." - MDN* <!--
-.element: class="fragment" -->
+*"any valid unit of code that resolves to a value." - MDN*<!-- .element: class="fragment" --> 
 
 |||
 
 ## Expressions
 
 ```js
-(1 + 1);                           //expression
-("hello world");                   //expression
-(function(){ return 21; });        //expression
+(1 + 1)                           //expression
+("hello world")                   //expression
+(function(){ return 21; })        //expression
 ```
  <!-- .element: class="fragment" -->
 
 ```js
-(1 + 1);                           //=> 2
-("hello world");                   //=> "hello world"
-(function(){ return 21; });        //=> function(){ return 21 }
+(1 + 1)                           //=> 2
+("hello world")                   //=> "hello world"
+(function(){ return 21; })        //=> function(){ return 21 }
 ```
  <!-- .element: class="fragment" -->
 
 ```js
-typeof (1 + 1);                    //=> "number"
-typeof ("hello world");            //=> "string"
-typeof (function(){ return 21; }); //=> "function"
+typeof (1 + 1)                    //=> "number"
+typeof ("hello world")            //=> "string"
+typeof (function(){ return 21; }) //=> "function"
 ```
  <!-- .element: class="fragment" -->
 
@@ -234,7 +294,7 @@ var fun = function(){ return 21; };
 
 ^ "An expression is any valid unit of code that resolves to a value." - MDN
 - these "values" can be assigned to variables
-- **anyone notice a difference in the last block of expressions?**
+- result of function expression **function value**
 
 |||
 
@@ -261,13 +321,23 @@ add(3,2);  // => 5
 |||
 
 ## Function Expression
-### (named)
+### anonymous
+
+```js
+var add = function (x, y){
+  return y + x;
+};
+```
+
+### named
+<!-- .element: data-fragment-index="1" class="fragment" -->
 
 ```js
 var add = function add(x, y){
   return y + x;
 };
 ```
+<!-- .element: data-fragment-index="1" class="fragment" -->
 
 ^
 - in both, variable was named
@@ -312,15 +382,29 @@ named expression
 ^
 - outside of this section
 
+- extra exercise: create function that takes another function & runs it
+
 |||
 
 <!-- .slide: data-state="exercise" -->
-1. Create `divide` using a function **declaration**
-2. Create `multiply` using function **expression**
+1. Create `helloWorld` function that logs "Hello World"
+2. Create a function that takes a a function as an argument & executes it
 
-^ filename: math.js
+```js
+//filename: javascript-review/function_expressions.js
+
+var helloWorld = function(){
+  console.log('Hello World!');
+};
+
+//... create `run` function
+
+run(helloWorld);
+// output: "Hello world"
+```
 
 |||
+
 <!-- .slide: data-state="transition" -->
 *Up Next: Handling Functions*
 
@@ -329,21 +413,19 @@ named expression
 ## Handling functions
 Functions can be passed around like other values
 
-### Example: setTimeout  <!-- .element: class="fragment" data-fragment-index="1"-->
-Arguments: <!-- .element: class="fragment"  data-fragment-index="2" -->
-* Function: function to run <!-- .element: class="fragment"  data-fragment-index="2" -->
-* Integer: time to delay before running <!-- .element: class="fragment"  data-fragment-index="2" -->
-
 ^
 - "first class citizens"
 - Important to be aware of this
 
 |||
 
-## Handling functions
 ### Example: setTimeout
 
 ```js
+//filename: javascript-review/set_timeout_example.js
+
+//setTimeout( FUNCTION , NUMBER);
+
 var sayHi = function logHello(){
   console.log('hello');
 };
@@ -362,15 +444,26 @@ setTimeout(sayHi, delay);
 |||
 
 <!-- .slide: data-state="exercise" -->
-Use `setTimeout` to call `add(3, 5)` after `1` second.
+Use `setTimeout` to call `greet("Sequoia")` after `1` second.
+
+```js
+function greet(name){
+  console.log('Hi, ' + name);
+}
+
+setTimeout(/*???*/);
+```
+
+Hint:
+1. `setTimeout` takes 2 variables, what type are they?
 
 ^
-- Hint: setTimeout takes 2 variables, what type are they?
-### Challenge Create a function that:
+
+### Challenge: Create a function that:
 1. Accepts a function argument
 2. Accepts a string argument
 3. Logs the string
-4. Runs the function
+4. Runs the function, passing the string as an argument
 
 |||
 
@@ -388,25 +481,37 @@ Use `setTimeout` to call `add(3, 5)` after `1` second.
 
 ---
 
-## Declarations
-
-* Variable Declarations<!-- .element: class="fragment" -->
-* Function Declarations<!-- .element: class="fragment" -->
-
-^
-- 2 types
-**--> what creates scope?**
-
-|||
-
 ## Types of Scope
 
 * Function
+* Module *(just in node!)*
 * Global
 
 |||
 
-Variables stay in the scope in which they are **declared**
+Variables & functions stay in the scope in which they are **declared**
+
+|||
+
+## Declarations
+
+* Variable Declarations<!-- .element: data-fragment-index="1" class="fragment" -->
+   ```js
+   var x;
+   var y;
+   ```
+   <!-- .element: data-fragment-index="1" class="fragment" -->
+* Function Declarations<!-- .element: data-fragment-index="2" class="fragment" -->
+   ```js
+   function three(){
+     return 3;
+   }
+   ```
+  <!-- .element: data-fragment-index="2" class="fragment" -->
+
+|||
+
+## Which `x`?
 
 ```js
 var x = 99;       // declared in outer scope
@@ -417,13 +522,13 @@ function addTen(y){
   return y + x;
 }
 
-addTen(7);        // => ??
-console.log(x);   // ??
+console.log(addTen(7)); // ??
+console.log(x);         // ??
 ```
  <!-- .element: class="fragment" -->
 
 ^
-- main thing you need to know
+- `x` is 99 because it was **declared** in inner scope
 
 |||
 
@@ -438,8 +543,8 @@ function addTen(y){
   return y + x;
 }
 
-addTen(7);        // => ??
-console.log(x);   // ??
+console.log(addTen(7)); // ??
+console.log(x);         // ??
 ```
  <!-- .element: class="fragment" -->
 
@@ -469,14 +574,15 @@ function myDictionary(){
 
 |||
 <!-- .slide: data-state="exercise" -->
-`http-server-congrats.js`:
+`http_server_congrats.js`:
 
 Alter `http-server.js` to say "CONGRATULATIONS!" to the **5th** visitor
 
-*Hint: functions can access variables **outside** their own scope*
+Hints:
+1. functions can access variables **outside** their own scope
 
 ^
-- 5-10min
+- 10min
 
 ---
 
@@ -490,15 +596,18 @@ foo();
 function foo(){
   return 10;
 }
-``` <!-- .element: class="fragment" -->
+```
+<!-- .element: class="fragment" data-fragment-index="1" -->
 
 Interpreter sees: <!-- .element: class="fragment" data-fragment-index="2" -->
 ```js
 function foo(){
   return 10;
 }
+
 foo();
-``` <!-- .element: class="fragment" data-fragment-index="2" -->
+```
+<!-- .element: class="fragment" data-fragment-index="2" -->
 
 |||
 
@@ -507,22 +616,27 @@ foo();
 console.log(x);
 
 var x = 100;
-``` <!-- .element: class="fragment" -->
+```
+<!-- .element: class="fragment" data-fragment-index="1"-->
 
-Interpreter sees:<!-- .element: class="fragment" data-fragment-index="2" -->
+Interpreter sees:
+<!-- .element: class="fragment" data-fragment-index="2" -->
 ```js
 var x;
 
 console.log(x);
 
 x = 100;
-``` <!-- .element: class="fragment" data-fragment-index="2" -->
+```
+<!-- .element: class="fragment" data-fragment-index="2" -->
 
 ^
 - **Declaration** is hoisted
 - **Assignment** is not
 
 |||
+
+### What will this do?
 
 ```js
 var x = 123;
@@ -542,9 +656,11 @@ z = 789;
 ^
 - What will this do?
 - Ask people to explain why
-**Let's revisit our function declarations & assignments**
+- **Let's revisit our function declarations & assignments**
 
 |||
+
+### Review
 
 ```js
 add(1,2);  // => 3

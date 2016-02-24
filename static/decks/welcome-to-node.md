@@ -2,7 +2,7 @@
 Create the following file:
 
 ```js
-//filename: http-server.js
+//filename: node-intro/http-server.js
 var http = require('http');
 
 var server = http.createServer(function(request, response){
@@ -46,19 +46,18 @@ go 'til ~5min in
 - almost all JS for n+ years
 - Spent summer teaching Strongloop/ibm
 - Asked to put on workshop for O'Reilly
+- Who are you?
 
 |||
 
 # About this workshop
 
 ^ 
-- mix of lecture and hands-on
-- feel free to ask questions, I may table
+- mix of lecture & hands-on
+- ask questions, I may table
 - help your neighbor! (or raise hand & I'll help)
-- Goal is to leave you oriented with Node.js
-- Know what's out there, comfortable working node.js project or starting own
-- move fairly quickly, all code is available, easy to jump to where we are &
-  examine later
+- Goal: orient to Node.js
+- know what's out there, comfortable working or starting project
 
 |||
 
@@ -79,7 +78,11 @@ go 'til ~5min in
 * SQL & Sequelize
 * Hands-on Exercises!
 
-^ **--> Who am I?**
+^
+- *talk about excercise slides & transition slides*
+- move fairly quickly, all code is available
+
+Time: 9:15
 
 ---
 
@@ -92,12 +95,11 @@ go 'til ~5min in
 * libuv/Event Loop <!-- .element: class="fragment" -->
 
 ^
-- V8 is same as chrome: just the core langauge bits
-- doesn't have `window`, `DOM`, `alert`, etc.
-- whiteboard this ^ (venn diagram?)
+- V8 is same as chrome
+- no `window`, `DOM`, `alert`, etc.
+- whiteboard this ^ (venn diagram?) TODO: create illustration
 - Server APIs = tools for the server (fs, http.server etc.)
 - libuv is cross-platform bindings for async I/O <-- explain importance
-TODO: have link to libuv article ready
 
 |||
 
@@ -108,7 +110,7 @@ TODO: have link to libuv article ready
 
 ^
 - eLoop Talk more about speed in a moment
-- good for high volume, small payload API style
+  - good for high volume, small payload API style
 - "lingua franca" for webdev, replacing php, java, ruby
 - reuse skills, sometimes even reuse code
 
@@ -124,7 +126,7 @@ TODO: have link to libuv article ready
   - **Use side-by-side**
 - Team or apps all Java/PHP/etc.
   - **Will be harder to find devs in future tho!**
-- This is changing, but must pick libs carefully
+- This is changing
   - **With LTS this isn't so bad**
   - also, ES6
 
@@ -135,7 +137,7 @@ TODO: have link to libuv article ready
 * Prototypal Inheritance <!-- .element: class="fragment" -->
 * Single Threaded <!-- .element: class="fragment" -->
 * Asynchronous I/O <!-- .element: class="fragment" -->
-* No "Rails"
+* No "Rails" <!-- .element: class="fragment" -->
 
 ^
 - You can write in classical style but it's not the "go-to" style
@@ -147,8 +149,7 @@ TODO: have link to libuv article ready
 
 # The Event Loop
 
-TODO: Illustration of event loop?
-Whiteboard? TODO
+<http://sequoia.makes.software/eventloop-svg><!-- .element: class="fragment" -->
 
 ^
 - Thread per connection: waiter, takes order, goes & prepares food
@@ -179,14 +180,6 @@ Whiteboard? TODO
 
 ---
 
-<!-- .slide: data-state="transition" -->
-
-*Up Next: Running Node*
-
----
-
-<!-- .slide: data-state="exercise" -->
-
 # Running Node
 
 * Run file <!-- .element: class="fragment" -->
@@ -204,6 +197,41 @@ Whiteboard? TODO
 
 ---
 
+<!-- .slide: data-state="exercise" -->
+## Run a script
+
+1. Create `hello-world.js`
+  ```js
+  console.log('hello world');
+  ```
+2. Run it
+
+---
+
+<!-- .slide: data-state="exercise" -->
+
+## Using the console
+
+1. Launch the node console
+2. Run the following statements
+
+```js
+var numbers = [72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100];
+```
+
+```js
+function decode(number){ return String.fromCharCode(number); }
+```
+
+```js
+numbers.map(decode).join('');
+```
+
+---
+
 <!-- .slide: data-state="transition" -->
 
 *Up Next: What is Javascript*
+
+^
+*Time: 9:30ish*
