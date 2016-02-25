@@ -1,4 +1,3 @@
-TODO: add util
 # Node Core Modules
 
 ^
@@ -30,8 +29,6 @@ tasks
 ```js
 var http = require('http');
 ```
-
-|||
 
 <ul>
   <li class="fragment"> `http.Server` </li>
@@ -79,14 +76,19 @@ var http = require('http');
 <!-- .slide: data-state="exercise" -->
 Alter `http-server.js` to attach the listener function thus:
 ```js
+var server = http.createServer();
+
 server.on('request', myRequestHandler);
 ```
 
-^
 Hints:
-- need a function `myRequestHandler`
-- what arguments will it take?
-- that's the main thing you need to know for the server
+1. `emitter.on(eventname, handlerFunction)`
+2. what arguments must `myRequestHandler` take?
+3. **docs:** request event (http.Server)
+
+^
+- that's how docs look on devdocs.io
+- solution `node-core-apis/http-server-on-request.js`
 
 ---
 
@@ -104,9 +106,7 @@ Hints:
 </ul>
 
 ^
-- what's the name of the event?
 - mostly properties as we **read from** this obj
-- show example of dumping URL
 
 |||
 
@@ -136,8 +136,13 @@ Hints:
   * HTTP status code: 404
   * respond with "Not found! :("
 
+Hints:
+1. see table of contents on nodejs.org docs
+  nodejs.org/dist/latest-v4.x/docs/api/http.html
+
 ^
 - What issues did you run into?
+- solution `node-core-apis/http-server-found.js`
 
 ---
 
@@ -200,7 +205,7 @@ Important concept, let's take a moment to examine
 
 ---
 
-# Callback Function
+# Callback Review
 
 * passed as an argument
 * invoked after async operation completes
@@ -277,19 +282,14 @@ Be sure to re-throw error!
 <!-- .slide: data-state="exercise" -->
 ## `fs.writeFile`
 
-```js
-var fs = require('fs');
+1. Write the string 'See you in San Francisco!' to `letter.txt`.
+2. `console.error` on error
+3. `console.log` success on success
 
-var msg = "See you in San Francisco!";
-
-fs.writeFile('letter.txt', msg, function(err){
-  if(err) console.error('there was an error!', err);
-  else console.log('file written successfully :)');
-});
-```
+Hints
+1. RTFM (`fs.writeFile`)
 
 ^ do this one alone, show results
-TODO: do this later when we've gone over path?
 
 - Did it behave as expected?
 - What if we wanted more control over the path?
@@ -312,18 +312,18 @@ TODO: do this later when we've gone over path?
 </ul>
 
 ^ Stuff for making & parsing paths
+- show off parse & join
+- assetPath = '/var/www/public'
 
 |||
 
 # URL
 
 * `url.parse(urlString)`
-* `url.format(urlObject)`
 * `url.resolve(from,to)`
 
 ^
 - demo parse
-- show how format is the opposite
 
 |||
 
@@ -354,7 +354,14 @@ TODO: do this later when we've gone over path?
 2. Read file
 3. Write file contents to console
 
-^ 5min?
+Hints:
+```js
+console.log(process.argv);
+```
+
+^ 10min
+solution: node-core-apis/read-file-argv-solution.js
+Does it work when you switch to parent directory & run?
 
 |||
 
@@ -365,3 +372,31 @@ TODO: do this later when we've gone over path?
 
 ^
 Together, modify script so it always reads relative to script itself
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+## Send HTML file
+
+Alter server to...
+
+1. Read an html file (e.g. `index.html`)
+2. Send it back to the browser
+
+Hints
+
+1. `fs` module
+2. `http` module
+3. Callbacks
+
+Extra Credit
+
+1. Allow port configuration with ENV variable
+
+^ EXTRA/time allowing: if not at break already
+- solution
+
+|||
+
+<!-- .slide: data-state="transition" -->
+Up Next: NPM & the Node Ecosystem

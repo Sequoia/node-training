@@ -1,10 +1,25 @@
 /*html{*/
   /*transition: all 3s ease 0s;*/
 /*}*/
+
+html .reveal .slides{
+  text-align:left;
+}
+
 html.exercise body{
-  background: #B80000;
+  background: linear-gradient(to right,
+    rgba(143,3,3,1) 0%,
+    rgba(143,3,3,1) 11%,
+    rgba(34,34,34,1) 11%,
+    rgba(34,34,34,1) 100%
+  );
 }
 
 html.transition body{
-  background: #0000FF;
+  background: linear-gradient(to right,
+    rgba(3,3,143,1) 0%,
+    rgba(3,3,143,1) 11%,
+    rgba(34,34,34,1) 11%,
+    rgba(34,34,34,1) 100%
+  );
 }
