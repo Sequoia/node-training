@@ -7,7 +7,7 @@ html .reveal .slides{
 }
 
 html.exercise body{
-  background: linear-gradient(to right,
+  background: linear-gradient(to left,
     rgba(143,3,3,1) 0%,
     rgba(143,3,3,1) 11%,
     rgba(34,34,34,1) 11%,
@@ -16,7 +16,7 @@ html.exercise body{
 }
 
 html.transition body{
-  background: linear-gradient(to right,
+  background: linear-gradient(to left,
     rgba(3,3,143,1) 0%,
     rgba(3,3,143,1) 11%,
     rgba(34,34,34,1) 11%,

@@ -43,15 +43,14 @@ Contains info on package...
 
 ## `npm init`
 
-1. Create a directory `myProject`
-2. `cd myProject`
+1. Create a directory `myproject`
+2. `cd myproject`
 3. `npm init`
 
 ^
 - *Step thru alone then together*
 - **Anything confusing?**
 - Version should not say "1.0.0"
-- `node .`
 
 |||
 
@@ -156,7 +155,7 @@ we want chalk in our project, we're gonna install that
 Use our dependency:
 
 ```js
-//index.js
+//myproject/index.js
 
 console.log(chalk.green.underline('Hello World!'));
 console.log(chalk.red.bold('Hello Again!'));
@@ -170,6 +169,8 @@ Hints:
 - *talk thru require & stuff*
 
 |||
+
+<!-- .slide: data-state="exercise" -->
 
 ## Install "this" package
 
@@ -298,13 +299,20 @@ List of packages (*and versions*) required by our package
   <li class="fragment">`^3.1.9` (`3.*` + `>=3.1`)</li>
 </ul>
 
-<http://semver.npmjs.com/><!-- .element: class="fragment" -->
-
 ^
 - tilde: fix all available digits
 - carat: fix only first digit
 - carat is good for "all but breaking changes"
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+
+<http://semver.npmjs.com/>
+
+^
 - go to website & play around
+
 
 |||
 
@@ -357,7 +365,9 @@ Installs to privileged location (`/usr/local/bin`)
 <!-- .slide: data-state="exercise" -->
 Make NPM install globals in our home directory
 
-`npm set prefix /home/sequoia/npm_packages`
+`npm set prefix /your/home/npm_packages`
+
+**Don't do this if you used `nvm` to install node!!**
 
 ^
 now you can install without sudo 
@@ -365,7 +375,7 @@ now you can install without sudo
 |||
 
 <!-- .slide: data-state="exercise" -->
-1. `npm install jshint`
+1. `npm install -g jshint`
 2. `jshint somefile.js`
 
 ^
@@ -466,7 +476,6 @@ Set up "watch" script for development:
 <!-- .slide: data-state="exercise" -->
 # File Server
 
-## HTTP Server
 `/path/to/filename.txt?u=xing&p=ponies`
 1. If user/pass aren't correct, send "Access Denied"
 2. If file can't be read/found, send "Not Found"
@@ -474,10 +483,9 @@ Set up "watch" script for development:
 
 *Remember to set the appropriate HTTP status code!* <!-- .element: class="fragment" -->
 
-## Extra Credit
+ Extra Credit
 1. Set port with environment variable
-2. Set file base path with CLI argument
-3. Remove requestHandler to its own file
+2. Remove requestHandler to its own file
 
 |||
 
@@ -490,8 +498,7 @@ Set up "watch" script for development:
 * Express
 * Datastores & ORMs
 
-<https://mongolab.com/><!-- .element: class="fragment" -->
-TODO: mariadb equiv?
+<https://mongolab.com/>
 
 ^
 - go over express

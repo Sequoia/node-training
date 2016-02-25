@@ -11,8 +11,6 @@
 
 # The Module System
 
-<https://nodejs.org/api/modules.html>
-
 <ul>
   <li class="fragment">`require`</li>
   <li class="fragment">`module.exports`</li>
@@ -27,8 +25,6 @@ How to access the code of one file from another file
 ---
 
 ## `require`
-
-<https://nodejs.org/api/globals.html>
 
 ^
 - How to get code from other files
@@ -69,6 +65,7 @@ var url = require('url');
 ```js
 var parser = require('./lib/parser.js');
 ```
+<!-- .element: class="fragment" -->
 
 ```js
 var Assembler = require('../Assembler');
@@ -81,11 +78,11 @@ var users = require('../data/users.json');
 <!-- .element: class="fragment" -->
 
 
-<span class="fragment">Relative to <strong>this file</strong></span>
+Relative to `thisFile.js`
 
 ```no-highlight
 \-- project
-    +-- Assember.js
+    +-- Assembler.js
     +-- data
     |   \-- users.json
     |
@@ -141,6 +138,7 @@ var express = require('express');
     |   \ -- express
     |        \-- ...
     |
+    |-- thisFile.js
     \-- src
         \-- thisFile.js
 ```
@@ -148,6 +146,66 @@ var express = require('express');
 ^
 - Note that it **ascends** 'til if finds node_modules, then looks there
 - how do packages get into node_modules? #8594; cover soon
+
+|||
+
+### `require` lookup behavior
+
+<ol>
+  <li>Is X a **core module**?</li>
+  <li>Is X a **file path**?</li>
+  <li>Is X a **directory path**?</li>
+  <li>Is X a **module in `node_modules`**?</li>
+  <li>Throw error</li>
+</ol>
+
+|||
+
+### Command Line
+
+...Works the same way
+
+```no-highlight
+.
++-- myDir
+|   +-- package.json
+|   +-- index.js
+|   \...
+|
++-- foo
+|   +-- index.js
+|   \...
+|
++-- foo.js
+\-- index.js
+```
+
+```no-highlight
+$ node ./foo.js
+$ node .           
+$ node myDir       
+$ node foo      
+```
+<!-- .element: class="fragment" -->
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+1. Create files & directories to make the following work
+2. Run with `node .`
+
+```js
+require('x.js'); // file: x.js
+require('./y');  // file: y.js
+require(/*??*/); // file: a/b/index.js
+```
+
+Hints:
+1. Each file can contain `console.log(__filename)`
+2. Code above may need fixes
+
+^
+not important what contents is
 
 |||
 
@@ -184,7 +242,7 @@ var foo = require('./foo.js');
 
 //basically means...
 
-var foo = `module.exports from the file 'foo.js'`
+var foo = {{module.exports from the file 'foo.js'}}
 ```
 
 ^
@@ -195,7 +253,6 @@ you can export all kinds of things
 ```js
 module.exports = function add(x, y){ return y + x }
 ```
-<!-- .element: class="fragment" -->
 
 ```js
 module.exports = "Hi there";
@@ -220,10 +277,12 @@ Create a file that exports something, and a second file to `require` it.
 
 ## Module Export Patterns
 
-* Object literal (`{}`)<!-- .element: class="fragment" -->
-* Constructor<!-- .element: class="fragment" -->
-* Factory<!-- .element: class="fragment" -->
-* ...anything else<!-- .element: class="fragment" -->
+<ul>
+<li class="fragment">Object literal (`{}`)</li>
+<li class="fragment">Constructor</li>
+<li class="fragment">Factory</li>
+<li class="fragment">...anything else</li>
+</ul>
 
 ---
 
@@ -233,19 +292,19 @@ Create a file that exports something, and a second file to `require` it.
 // myMaths.js
 
 module.exports = {
-  add : function(x, y) { return x + y },
-  sub : function(x, y) { return x - y },
-  div : function(x, y) { return x / y },
-  mul : function(x, y) { return x * y }
+  add : function(x, y) { return x + y; },
+  sub : function(x, y) { return x - y; },
+  div : function(x, y) { return x / y; },
+  mul : function(x, y) { return x * y; }
   /*...*/
 }
 ```
 
 ```js
-module.exports.add = function(x, y) { return x + y };
-module.exports.sub = function(x, y) { return x - y };
-module.exports.div = function(x, y) { return x / y };
-module.exports.mul = function(x, y) { return x * y };
+module.exports.add = function(x, y) { return x + y; };
+module.exports.sub = function(x, y) { return x - y; };
+module.exports.div = function(x, y) { return x / y; };
+module.exports.mul = function(x, y) { return x * y; };
 ```
 <!-- .element: class="fragment" -->
 
@@ -256,8 +315,10 @@ module.exports.mul = function(x, y) { return x * y };
 
 |||
 
+### Consuming object literal API
+
 ```js
-// consumer.js
+// mathsConsumer.js
 
 var maths = require('./myMaths.js');
 
@@ -266,7 +327,7 @@ console.log(maths.div(9, 0)); // Infinity
 ```
 
 ```js
-// consumer.js
+// fsConsumer.js
 
 var readFile = require('fs').readFile;
 
@@ -291,11 +352,13 @@ module.exports = Car;
 ```
 
 ```js
-// consumer.js
+// carConsumer.js
 
 var Car = require('./Car')
 
 var ride = new Car('Toyota', 'Celica');
+
+console.log(JSON.stringify(ride));
 ```
 
 ^
@@ -323,7 +386,7 @@ module.exports = function(prefix){
 ```
 
 ```js
-// consumer.js
+// loggerConsumer.js
 logger = require('./logger.js')('MyApp');
 
 logger.l('testing 123');
@@ -335,8 +398,25 @@ logger.l('testing 123');
 
 |||
 
+<!-- .slide: data-state="exercise" -->
+## Multiple Loggers
+
+1. Use the `logger.js` module
+2. Create a logger with prefix "DATABASE"
+2. Create a logger with prefix "HTTP"
+3. Log a message & and error from both
+
+Extra Credit:
+
+1. Allow loggers to be disabled by environment variable
+
+^
+
+10min
+
+|||
+
 ```js
-// consumer.js
 logfactory = require('./logger.js');
 
 dblog  = logfactory('DATABASE');
@@ -428,7 +508,7 @@ dog.bark(); // ??
 Write `greeterFactory.js` for:
 
 ```js
-// server-with-module.js
+// node-ecosystem/server-with-module.js
 // GET http://localhost:8080/
 // ==> 'Hello World!'
 

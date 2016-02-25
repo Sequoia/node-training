@@ -348,7 +348,7 @@ Hints
 |||
 
 <!-- .slide: data-state="exercise" -->
-## `fs.readFile` + `process.argv`
+## `readFile` + `argv`
 
 1. Receive filename as argument
 2. Read file
