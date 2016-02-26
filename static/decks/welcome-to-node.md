@@ -61,6 +61,17 @@ go 'til ~5min in
 
 |||
 
+# About the venue
+
+* "The Commons"
+* Bathroom: end of hall
+* Kitchen: left out the door, down hall on right
+
+<span>Request from hosts: "please be curteous of this shared space & don't be
+too loud in halls"</span><!-- .element: class="fragment" -->
+
+|||
+
 # Agenda: Day 1
 
 * What is Node.js

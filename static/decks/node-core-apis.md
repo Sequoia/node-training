@@ -289,6 +289,9 @@ Be sure to re-throw error!
 Hints
 1. RTFM (`fs.writeFile`)
 
+Extra Credit:
+1. If script is called with `--apend`, **append** instead of write
+
 ^ do this one alone, show results
 
 - Did it behave as expected?
@@ -350,7 +353,8 @@ Hints
 <!-- .slide: data-state="exercise" -->
 ## `readFile` + `argv`
 
-1. Receive filename as argument
+1. Receive filename as argument<br>
+   `node read-file.js someFile.txt`
 2. Read file
 3. Write file contents to console
 

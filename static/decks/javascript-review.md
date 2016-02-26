@@ -582,7 +582,7 @@ Hints:
 1. functions can access variables **outside** their own scope
 
 ^
-- 10min
+- 5min
 
 ---
 

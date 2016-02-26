@@ -31,11 +31,11 @@
 
 ---
 
-# Express.js
+# Express.js Overview
 
 ^
 - Top HTTP framework by a mile
-- Backed by IBM
+- ~~Backed by IBM~~
 - Relied upon by many other frameworks
 
 |||
@@ -72,7 +72,10 @@ Ruby on Rails
 
 ## Competitors
 
-TODO?
+* Koa
+* Sails.js
+* Hapi
+* Restify
 
 |||
 
@@ -124,7 +127,7 @@ server.listen(3000);
 
 |||
 
-### Node/http Two Routes
+### Node/HTTP Two Routes
 ```js
 //http-greet-route.js
 var http = require('http');
@@ -155,7 +158,7 @@ server.listen(3000);
 
 |||
 
-### With Express
+### Express Two Routers
 
 ```js
 //my-express-project/greeter.js

@@ -376,7 +376,7 @@ res.sendFile('app.js', options , fileSent);
 
 ```js
 app.get('/assets/protected/:filename' function(req,res){
-  if(req.user && hasAccess(req.params.filename req.user)){
+  if(req.user && hasAccess(req.params.filename, req.user)){
     res.sendFile(req.params.filename, options, fileSent);
   }else{
     res.status(403).send('Not Authorized');
@@ -390,6 +390,7 @@ function hasAccess(file, user){ /*...*/
 ^
 - useful when you need to prog. protect certain files
 - **Where did request.user come from?** Will cover soon
+- exercise with this?
 
 |||
 
