@@ -7,23 +7,23 @@ html(lang='en')
     meta(name='apple-mobile-web-app-capable', content='yes')
     meta(name='apple-mobile-web-app-status-bar-style', content='black-translucent')
     meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui')
-    link(rel='stylesheet', href='vendor/reveal.js/css/reveal.css')
-    link#theme(rel='stylesheet', href='vendor/reveal.js/css/theme/black.css')
-    link#customStyles(rel='stylesheet', href='css/sequoia.css')
+    link(rel='stylesheet', href='/vendor/reveal.js/css/reveal.css')
+    link#theme(rel='stylesheet', href='/vendor/reveal.js/css/theme/black.css')
+    link#customStyles(rel='stylesheet', href='/css/sequoia.css')
     // Code syntax highlighting
-    link(rel='stylesheet', href='vendor/reveal.js/lib/css/zenburn.css')
+    link(rel='stylesheet', href='/vendor/reveal.js/lib/css/zenburn.css')
 
   body
     .reveal
       // Any section element inside of this container is displayed as a slide
       .slides
         section(
-        data-markdown="decks/#{deck}.md"  
+        data-markdown="/decks/#{deck}.md"  
           data-separator="^\\r?\\n\\-\\-\\-\\r?\\n"
           data-separator-vertical="^\\r?\\n\\|\\|\\|\\r?\\n"
           data-separator-notes="^\\^"
           data-charset="iso-8859-15"
         )
-    script(src='vendor/reveal.js/lib/js/head.min.js')
-    script(src='vendor/reveal.js/js/reveal.js')
-    script(src='js/initSlides.js')
+    script(src='/vendor/reveal.js/lib/js/head.min.js')
+    script(src='/vendor/reveal.js/js/reveal.js')
+    script(src='/js/initSlides.js')

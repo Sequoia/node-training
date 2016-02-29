@@ -18,6 +18,8 @@ var _debug2 = _interopRequireDefault(_debug);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var fs = require('fs');
+
 var l = (0, _debug2.default)('app:info');
 var app = (0, _express2.default)();
 
@@ -27,10 +29,42 @@ app.use(_express2.default.static((0, _path.resolve)(__dirname, '../static')));
 app.set('views', (0, _path.resolve)(process.cwd(), 'template'));
 app.set('view engine', 'jade');
 
+//index page
+app.get('/', function (req, res, next) {
+  //redirect for now
+  res.redirect('node-2day');
+});
+
+//slides index
+app.get('/node-2day', function (req, res, next) {
+  var decks = ['welcome-to-node', 'javascript-review', 'async-flow-control', 'event-loop', 'node-core-apis', 'node-ecosystem', 'npm', 'express', 'express-routes', 'express-middleware', 'express-templates', 'datastores', 'sequelize', 'mongo-and-mongoose'].reduce(function (out, deck) {
+    //group in pairs for templater
+    var last = out[out.length - 1];
+    var lastlen = last.length;
+    if (lastlen === 2) {
+      out.push([deck]);
+    } else {
+      last.push(deck);
+    }
+    return out;
+  }, [[]]);
+  l(decks);
+  res.render('slides-toc', {
+    title: "Node 2-Day",
+    basepath: '/node-2day',
+    decks: decks
+  });
+});
+
 //get main slide view, load markdown & title into it
-app.get('/:deck', function (req, res, next) {
+app.get('/node-2day/:deck', function (req, res, next) {
   l('Deck requested: %s', req.params.deck);
-  res.render('index', { deck: req.params.deck, title: (0, _underscore.titleize)((0, _underscore.humanize)(req.params.deck)) });
+  res.render('slideshow', { deck: req.params.deck, title: (0, _underscore.titleize)((0, _underscore.humanize)(req.params.deck)) });
+});
+
+app.get('*', function (req, res, next) {
+  l('404: ', req.url);
+  res.redirect('/');
 });
 
 //catchall errors
