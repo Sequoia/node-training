@@ -109,8 +109,9 @@ db.sync({force: true});
 In `sequelize-restaurants`...
 
 1. `npm install`
-2. edit `index.js` to match your environment
-3. `node .`
+2. create a database (`test-db`, `node-workshop`, whatever)
+3. edit `index.js` to match your environment
+4. `node .`
 
 Hints:
 * **Grants!** Consider using `root`<br>(never in production of course &#9786;)
@@ -168,6 +169,22 @@ Post.findAll()
     //do something with posts Array
   });
 ```
+
+---
+
+## `.toJSON`
+
+```
+Post.findById(1)
+  .then(function(post){
+    post.title;                           // "The Hotdog Dillema"
+    post.hasOwnProperty('title');         // false
+    post.toJSON().hasOwnProperty('title');// true
+  });
+```
+
+<span class="fragment">**Property access is _proxied_**. Use `.toJSON` to get a POJO (plain old
+javascript object).</span>
 
 ---
 
@@ -309,6 +326,8 @@ Hints:
 
 ### Build & Save
 ```js
+postContents = '<h1>You have probably asked yourself this question a million times...';
+
 var hd_post = Post.build({
   title : 'Are Hotdogs Sandwiches?'
 });

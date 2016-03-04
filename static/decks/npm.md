@@ -375,8 +375,9 @@ now you can install without sudo
 |||
 
 <!-- .slide: data-state="exercise" -->
-1. `npm install -g jshint`
-2. `jshint somefile.js`
+1. `npm install -g nodemod`
+2. `nodemon some-http-server.js`
+3. make a change to the `some-http-server.js`
 
 ^
 - grunt, gulp, jshint etc. are more useful

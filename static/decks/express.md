@@ -20,7 +20,8 @@
 
     app.listen(3000);
     ```
-4. Point browser to <http://localhost:3000>
+4. `node .`
+5. Point browser to <http://localhost:3000>
 
 ^ after this, talk a bit about yesterday
 - node core
@@ -127,6 +128,31 @@ server.listen(3000);
 
 |||
 
+## Style note
+
+This:
+```js
+var app = require('express')();
+var obj = require('returns-a-function')();
+```
+
+Is the same as this:
+<!-- .element: data-fragment-index="1" class="fragment" -->
+
+```js
+var express = require('express');
+var app = express();
+
+var aFunction = require('returns-a-function');
+var obj = aFunction();
+```
+<!-- .element: data-fragment-index="1" class="fragment" -->
+
+^
+If you are just using the required function *once*, use the shorthand
+
+|||
+
 ### Node/HTTP Two Routes
 ```js
 //http-greet-route.js
@@ -158,7 +184,7 @@ server.listen(3000);
 
 |||
 
-### Express Two Routers
+### Express Two Routes
 
 ```js
 //my-express-project/greeter.js
@@ -219,19 +245,20 @@ app.use(logger);
 app.use('/assets', static('site/assets'));
 app.use('/admin', auth)
 
+/* handler functions omitted */
 app.get('/', handleRoot);
 app.get('/users', listUsersHandler);
 
-app.get('/auth/home', authHomeHandler);
-app.get('/auth/users/create', userForm);
-app.post('/auth/users/create', createUser);
+app.get('/admin/home', adminHomeHandler);
+app.get('/admin/users/create', userForm);
+app.post('/admin/users/create', createUser);
 // ...
 ```
 
 ^
 - logger: all requests
 - static: requests to 'assets' path
-- auth: all auth routes
+- auth: all admin routes
 
 |||
 

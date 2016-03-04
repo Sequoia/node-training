@@ -159,7 +159,7 @@ var users = [
 ];
 ```
 
-Create server ...
+Create `user-server.js`:
 1. `/users/1` replies...<br>
   'User 1: Zeynep'
 1. `/users/1?title=Ms.` replies...<br>
@@ -212,7 +212,7 @@ Extra Credit:
 
 |||
 
-## `req.send`
+## `res.send`
 
 ```js
 res.send('<h1>Sequoia\'s WebZone!</h1>');
@@ -323,23 +323,6 @@ res.redirect('../login');
 
 ```
 <!-- .element: class="fragment" -->
-
-|||
-
-<!-- .slide: data-state="exercise" -->
-
-Update our users server...
-1. `GET /user/1` returns...
-  1. Not "AJAX" request: `User 1: Zeynep`
-  2. "AJAX" request: { name: 'Zeynep'}
-2. If user not found, send appropriate **HTTP Code** and **message**
-3. Set `X-Server-Time` header for all requests
-
-Hints:
-* "AJAX" requests have `X-Requested-With: XMLHTTP` header
-* `request` object has a property that identifies this ^
-^
-TODO : create solution for this
 
 |||
 
@@ -455,7 +438,7 @@ module.exports = router;
 
 router.get('/', allUsersHandler);
 router.get(':id', getUserHandler);
-router.post(':id', createUserHandler);
+router.post('/', createUserHandler);
 ```
 
 ```js
@@ -474,6 +457,7 @@ app.use('/users/', userRouter);
 - **Why might this be good?**
 - allows modularization
 - do one together with math ops? TODO: make exercise of this?
+- TODO: Would be great to have exercise here...
 
 |||
 

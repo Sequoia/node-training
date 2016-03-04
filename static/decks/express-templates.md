@@ -40,6 +40,7 @@ res.render('thoughts', data);
 <ul>
   <li class="fragment">Consolidate.js</li>
   <li class="fragment">Jade</li>
+  <li class="fragment">`npm install --save jade`</li>
 </ul>
 
 ^
@@ -174,6 +175,9 @@ res.render('infobox', {
 |||
 
 <!-- .slide: data-state="exercise" -->
+
+## Update user-server.js
+
 Request:
 ```no-highlight
 GET /user/1
@@ -195,6 +199,8 @@ Response:
 
 </html>
 ```
+
+...ditto for `/user/0`, `/user/2` etc.
 
 |||
 

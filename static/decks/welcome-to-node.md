@@ -2,7 +2,7 @@
 Create the following file:
 
 ```js
-//filename: node-intro/http-server.js
+//filename: welcome-to-node/done/hello-world-server.js
 var http = require('http');
 
 var server = http.createServer(function(request, response){
@@ -58,17 +58,6 @@ go 'til ~5min in
 - help your neighbor! (or raise hand & I'll help)
 - Goal: orient to Node.js
 - know what's out there, comfortable working or starting project
-
-|||
-
-# About the venue
-
-* "The Commons"
-* Bathroom: end of hall
-* Kitchen: left out the door, down hall on right
-
-<span>Request from hosts: "please be curteous of this shared space & don't be
-too loud in halls"</span><!-- .element: class="fragment" -->
 
 |||
 

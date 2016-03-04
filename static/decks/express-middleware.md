@@ -75,6 +75,8 @@ app.delete(middlewareThree);
 - attach to path, all types
 - attach to only certain request types
 
+|||
+
 ## Middleware Order
 
 ```js
@@ -163,11 +165,18 @@ Example: generating placeholder images
 |||
 
 <!-- .slide: data-state="exercise" -->
-Update server so `POST /user` adds a user to the user-list
+## Update `user-server`
+1. `POST /user` adds a user to the user-list
+2. Accept `json` input
 
 Hints:
-* `body-parser`
-* Postman
+1. `body-parser`
+2. Postman 
+  1. `POST /user`
+  2. Body: `{"name" : "Digoo", "id" : 100}`
+
+Extra Credit:
+1. accept `{"name":"Terry"}` & add `id` automatically
 
 |||
 
@@ -179,7 +188,7 @@ Alter a server with multiple routes...
 2. Add `X-Server-Uptime` header (time in ms) to **all** responses.
 
 Hints:
-* `Date.now()`
+* `Date.now()` (*or* see node `process` docs)
 * Pay attention to scope
 * Middleware!!
 
@@ -204,6 +213,8 @@ TODO: solution for this one
 - adds `X-Response-Time` header (in 'til out)
 - filter json by `?fields`
 
+|||
+
 ## Side Effects
 
 <!-- .slide: data-state="exercise" -->
@@ -215,9 +226,7 @@ Create middleware to log all requests as follows:
 e.g.
 ```no-highlight
 172.52.221.10: GET /
-190.32.21.10: GET /
 172.52.221.10: GET /users
-172.52.221.10: GET /users/1
 172.52.221.10: POST /users
 ```
 
