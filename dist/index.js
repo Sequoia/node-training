@@ -57,9 +57,10 @@ app.get('/node-2day', function (req, res, next) {
 });
 
 //get main slide view, load markdown & title into it
-app.get('/node-2day/:deck', function (req, res, next) {
+app.get('/node-2day/*', function (req, res, next) {
+  l(req.params[0]);
   l('Deck requested: %s', req.params.deck);
-  res.render('slideshow', { deck: req.params.deck, title: (0, _underscore.titleize)((0, _underscore.humanize)(req.params.deck)) });
+  res.render('slideshow', { deck: req.params[0], title: (0, _underscore.titleize)((0, _underscore.humanize)(req.params.deck)) });
 });
 
 app.get('*', function (req, res, next) {
