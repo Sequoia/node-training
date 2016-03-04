@@ -98,20 +98,6 @@ before we talk about problems, let's talk about how to solve problems
 - Exists in browser & in node
 - Some differences
 
-|||
-
-<!-- .slide: data-state="exercise" -->
-## Console
-
-Find some differences between node `console` and browser `console`
-
-^ 
-- open console in node.js, open in browser
-- let people poke around for a minute, **what are some differences?**
-- hint: devdocs.io
-- Who found something interesting?
-- A: `.table`, `.Console`, `.group`
-
 ---
 
 ## Datatypes
@@ -232,6 +218,7 @@ add(3,2);  // => 5
 <!-- .slide: data-state="exercise" -->
 Create divide & multiply functions:
 ```js
+// javascript-review/start/mul-and-div.js
 console.log(
   div(
     mul( 21, 40 ),
@@ -243,12 +230,12 @@ console.log(
 ```
 
 ```js
+//same thing on one line:
 console.log( div( mul(21, 40), mul(10, 2) ) );
 ```
 <!-- .element: class="fragment" -->
 
 * Run with `node filename.js`
-<!-- .element: class="fragment" -->
 
 ^
 5 min
@@ -387,21 +374,20 @@ named expression
 |||
 
 <!-- .slide: data-state="exercise" -->
-1. Create `helloWorld` function that logs "Hello World"
-2. Create a function that takes a a function as an argument & executes it
+`javascript-review/start/function-runner.js`
+Create a function that takes a function argument and...
+1. outputs the name 
+2. executes the function
 
-```js
-//filename: javascript-review/function_expressions.js
+Hints:
+1. `myfunction.name`
 
-var helloWorld = function(){
-  console.log('Hello World!');
-};
-
-//... create `run` function
-
-run(helloWorld);
-// output: "Hello world"
-```
+Extra Credit:
+1. `run` returns a *function* that does 1 & 2 above
+    ```js
+    var wrappedHello = run(helloworld)
+    wrappedHello();
+    ```
 
 |||
 
@@ -440,30 +426,6 @@ setTimeout(sayHi, delay);
 - assign function to that variable
 - pass FUNCTION and delay to setTimeout
 - what's the "typeof" sayHi?
-
-|||
-
-<!-- .slide: data-state="exercise" -->
-Use `setTimeout` to call `greet("Sequoia")` after `1` second.
-
-```js
-function greet(name){
-  console.log('Hi, ' + name);
-}
-
-setTimeout(/*???*/);
-```
-
-Hint:
-1. `setTimeout` takes 2 variables, what type are they?
-
-^
-
-### Challenge: Create a function that:
-1. Accepts a function argument
-2. Accepts a string argument
-3. Logs the string
-4. Runs the function, passing the string as an argument
 
 |||
 
@@ -574,12 +536,14 @@ function myDictionary(){
 
 |||
 <!-- .slide: data-state="exercise" -->
-`http_server_congrats.js`:
+`congrats-server.js`:
 
-Alter `http-server.js` to say "CONGRATULATIONS!" to the **5th** visitor
+Create a server that...
+1. says "CONGRATULATIONS!" to the **5th** visitor
 
 Hints:
 1. functions can access variables **outside** their own scope
+2. boilerplate in `javascript-review/start/`
 
 ^
 - 5min

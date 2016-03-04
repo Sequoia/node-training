@@ -147,15 +147,6 @@ Time: 9:15
 
 ---
 
-# What about ~~ES6~~ ES7?
-
-^
-- Will discuss in JS Review
-- LOTS of new features, more than I can go over
-- feel free to ask!
-
----
-
 # Running Node
 
 * Run file <!-- .element: class="fragment" -->
