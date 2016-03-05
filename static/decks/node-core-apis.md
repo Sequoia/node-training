@@ -65,30 +65,7 @@ var http = require('http');
 </ul>
 
 ^
-- All there is to it
-- show example `event-emitter.js`
-- show how you can make handlers separate
-- multiple handlers
-- show http-server example, change to **external** function
-
-|||
-
-<!-- .slide: data-state="exercise" -->
-Alter `http-server.js` to attach the listener function thus:
-```js
-var server = http.createServer();
-
-server.on('request', myRequestHandler);
-```
-
-Hints:
-1. `emitter.on(eventname, handlerFunction)`
-2. what arguments must `myRequestHandler` take?
-3. **docs:** request event (http.Server)
-
-^
-- that's how docs look on devdocs.io
-- solution `node-core-apis/http-server-on-request.js`
+- **show welcome / hello-world-server example, change to external function**
 
 ---
 
@@ -128,6 +105,8 @@ Hints:
 
 |||
 
+`node-core-apis/start/http-server-found.js`
+
 <!-- .slide: data-state="exercise" -->
 1. If user requests `/found`
   * HTTP status code: 200
@@ -142,7 +121,7 @@ Hints:
 
 ^
 - What issues did you run into?
-- solution `node-core-apis/http-server-found.js`
+- solution `node-core-apis/done/http-server-found.js`
 
 ---
 
@@ -351,7 +330,7 @@ Extra Credit:
 |||
 
 <!-- .slide: data-state="exercise" -->
-## `readFile` + `argv`
+`node-core-apis/start/read-file-argv.js`
 
 1. Receive filename as argument<br>
    `node read-file.js someFile.txt`
@@ -359,12 +338,13 @@ Extra Credit:
 3. Write file contents to console
 
 Hints:
-```js
-console.log(process.argv);
-```
+1. Look around...
+   ```js
+   console.log(process.argv);
+   ```
+1. File read path is relative to `CWD`
 
 ^ 10min
-solution: node-core-apis/read-file-argv-solution.js
 Does it work when you switch to parent directory & run?
 
 |||
@@ -382,16 +362,15 @@ Together, modify script so it always reads relative to script itself
 <!-- .slide: data-state="exercise" -->
 ## Send HTML file
 
-Alter server to...
+`node-core-apis/start/read-file-server.js`
 
-1. Read an html file (e.g. `index.html`)
+1. Read `node-core-apis/index.html`
 2. Send it back to the browser
 
 Hints
 
-1. `fs` module
-2. `http` module
-3. Callbacks
+1. `fs`, `http`, & `path` modules
+2. Callbacks
 
 Extra Credit
 
