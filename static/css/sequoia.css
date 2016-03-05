@@ -23,3 +23,7 @@ html.transition body{
     rgba(34,34,34,1) 100%
   );
 }
+
+html .reveal pre{
+  margin-left:0;
+}
