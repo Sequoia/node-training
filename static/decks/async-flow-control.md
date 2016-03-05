@@ -162,20 +162,21 @@ self(startVal, function (selfed){
 ## `fs.readfile`
 
 ```js
-//filename: async/read-file.js
+//filename: async-flow-control/start/read-file.js
 var fs = require('fs');
-
 var filename = 'letter.txt';
 
-fs.readFile(filename, function(err, data){
-  if(err){
-    console.error('there was an error!', err);
-  }
-  else{
-    console.log(data.toString());
-  }
-});
+fs.readFile(filename, callback);
+
+function callback(err, data){
+  //if err, console.error(err)
+  //else console.log file contents
+}
 ```
+
+Hints:
+1. `data` is a **`Buffer`**.  It has a `.toString` method
+2. Path to `letter.txt` is relative to CWD
 
 ^ do this one alone, show results
 
@@ -299,7 +300,7 @@ function outputResults(err){
 Clean up the following callback heck:
 
 ```js
-//filename: async/callback-heck-start.js
+//async-flow-control/start/callback-heck.js
 
 function self  (x, cb) { cb(null, x); }
 function addOne(x, cb) { cb(null, 1 + x); }
@@ -370,22 +371,26 @@ Hints:
 ## Example
 
 ```js
-//filename: async/event-emitter.js
-
+//async-flow-control/event-emitter-example.js
 var EventEmitter = require('events');
 var ee = new EventEmitter();
 
-ee.on('count', function(num){
-  console.log('number emitted: ', num);
+ee.on('message', function logMessage(msg){
+  console.log('new message: ' + msg.text);
 });
 
-var count = 0;
-
-setInterval(function increment(){
-  count++;
-  ee.emit('count', count);
-}, 1000);
+ee.emit({ text : 'hello!', sender: 'sequoia'});
+ee.emit({ text : 'world!', sender: 'sequoia'});
 ```
+
+```js
+var messages = [];
+
+ee.on('message', function collectMessage(msg){
+  messages.push(msg);
+});
+```
+<!-- .element: class="fragment" -->
 
 ^ 
 note that emit is passed...
@@ -394,14 +399,19 @@ note that emit is passed...
 
 |||
 
+`start/event-emitter.js`
 <!-- .slide: data-state="exercise" -->
-Alter `event-emitter.js`...
+1. Emit `increment` each time counter is incremented
+2. Send the `counter` value as event data
+3. Attach listener that logs the new `counter` value
 
-1. if count > 3, emit `done`
-2. on `done`, log "DONE" and exit
+Hints:
+1. `emitter.emit(name, data)`
+2. `emitter.on(name, function(data){})`
 
-Hints
-1. `process.exit()`
+Extra Credit:
+1. If counter is 3, emit `done` event
+2. Attach handler to `done` to log "DONE" then `process.exit()`
 
 |||
 
@@ -538,7 +548,7 @@ readFile('letter.txt')
 ```
 
 Hints:
-1. Remember **encoding**
+1. Remember **file encoding**
 2. Return a Promise
 
 ```js
