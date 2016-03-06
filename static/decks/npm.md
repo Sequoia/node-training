@@ -102,11 +102,21 @@ fix this ^
 
 <!-- .slide: data-state="exercise" -->
 
-## `package.main`
+In `myproject/`:
+
+### Part 1
 
 1. Create `index.js`
 2. Put `console.log('hello world')` in it
-3. `node .`
+3. "`node .`" to run `index.js`
+<br>
+<br>
+
+### Part 2
+
+1. Rename `index.js` `app.js`
+2. Update package.json (? which property ?)
+3. "`node .`" to run `app.js`
 
 ^
 - How would we change the file it ran when we run that directory?
@@ -141,6 +151,8 @@ we want chalk in our project, we're gonna install that
 
 <!-- .slide: data-state="exercise" -->
 
+In `myproject/`:
+
 `npm install chalk`
 
 ^ What do you see?
@@ -155,11 +167,13 @@ we want chalk in our project, we're gonna install that
 Use our dependency:
 
 ```js
-//myproject/index.js
+//npm/start/myproject/app.js
 
 console.log(chalk.green.underline('Hello World!'));
 console.log(chalk.red.bold('Hello Again!'));
 ```
+
+**Run the file**
 
 Hints:
 1. Something is missing...
@@ -174,6 +188,8 @@ Hints:
 
 ## Install "this" package
 
+In `myproject/`:
+
 1. `rm -rf node_modules`
 2. `npm install`
 3. `node .`
@@ -185,6 +201,8 @@ Hints:
 |||
 
 <!-- .slide: data-state="exercise" -->
+
+In `myproject/`:
 
 `npm install --save chalk`
 
@@ -306,13 +324,10 @@ List of packages (*and versions*) required by our package
 
 |||
 
-<!-- .slide: data-state="exercise" -->
-
 <http://semver.npmjs.com/>
 
 ^
 - go to website & play around
-
 
 |||
 
@@ -376,8 +391,8 @@ now you can install without sudo
 
 <!-- .slide: data-state="exercise" -->
 1. `npm install -g nodemod`
-2. `nodemon some-http-server.js`
-3. make a change to the `some-http-server.js`
+2. `nodemon /path/to/myproject`
+3. make a change to the `myproject/app.js` & **save** the file
 
 ^
 - grunt, gulp, jshint etc. are more useful
@@ -450,49 +465,22 @@ Like `package.main` but for command-line usage:
 |||
 
 <!-- .slide: data-state="exercise" -->
-Set up "watch" script for development:
-<ol>
-  <li class="fragment">`node .` starts a webserver</li>
-  <li class="fragment">`npm run watch` starts & watches server</li>
-</ol>
+In `myproject/`:
 
-<div class="fragment">
-<br>
+1. Install (and save!) `cowsay` local to project
+2. Add script to `package.json` that runs `cowsay Hello`
+3. Run script: `npm run hello`
 
-<p>Hints</p>
-
-<ul>
-  <li>You know how to write a webserver :)</li>
-  <li>`package.json.main`</li>
-  <li>npm scripts run `node_modules/.bin` directly</li>
-  <li>`watch "cat foo.txt" ./bar`<br>will `cat foo.txt` whenever a file changes in `./bar`</li>
-  </ul>
-</div>
+Hints:
+1. `npm run hello` runs a script named `hello`
 
 ^
 - demo watch for them
+- *extra fileserver exercise in x/npm*
+- add debugger to a server ?
+- add watch script ?
 
 ---
-
-<!-- .slide: data-state="exercise" -->
-# File Server
-
-`/path/to/filename.txt?u=xing&p=ponies`
-1. If user/pass aren't correct, send "Access Denied"
-2. If file can't be read/found, send "Not Found"
-3. Send file contents
-
-*Remember to set the appropriate HTTP status code!* <!-- .element: class="fragment" -->
-
- Extra Credit
-1. Set port with environment variable
-2. Remove requestHandler to its own file
-
-|||
-
-# Good Job! :)
-
-|||
 
 # Tomorrow
 
@@ -505,3 +493,7 @@ Set up "watch" script for development:
 - go over express
 - datastores, mongo & mysql
 - set up an account on mongolab for free mongodb hosting
+
+|||
+
+# Good Job! :)

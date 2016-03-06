@@ -191,18 +191,25 @@ $ node foo
 |||
 
 <!-- .slide: data-state="exercise" -->
-1. Create files & directories to make the following work
-2. Run with `node .`
+`node-ecosystem/start/require-xyz/index.js`
 
-```js
-require('x.js'); // file: x.js
-require('./y');  // file: y.js
-require(/*??*/); // file: a/b/index.js
+1. Add require statements to make your output:
+```no-highlight
+path/to/node-ecosystem/done/require-xyz/x.js
+path/to/node-ecosystem/done/require-xyz/y.js
+path/to/node-ecosystem/done/require-xyz/a/b/index.js
+Amici's
+Taco Gong
+Unfriendly's
+Shake Hovel
+Grey Castle
 ```
 
 Hints:
-1. Each file can contain `console.log(__filename)`
-2. Code above may need fixes
+0. Each `.js` file logs its path
+1. Follow the comments
+2. Paths are relative to the requir*ing* file
+3. `json` files can be loaded with `require`
 
 ^
 not important what contents is
@@ -271,7 +278,13 @@ module.exports = new Singleton();
 ---
 
 <!-- .slide: data-state="exercise" -->
-Create a file that exports something, and a second file to `require` it.
+1. Create a file `a.js` that exports a function
+2. Create a second file `b.js` to `require` it.
+3. Run the function from `b.js`
+
+Hints:
+1. There's no boilerplate for this one
+2. Doesn't matter what function does
 
 ---
 
@@ -399,18 +412,22 @@ logger.l('testing 123');
 |||
 
 <!-- .slide: data-state="exercise" -->
-## Multiple Loggers
+`node-ecosystem/start/multi-log.js`
 
 1. Use the `logger.js` module
 2. Create a logger with prefix "DATABASE"
 2. Create a logger with prefix "HTTP"
 3. Log a message & and error from both
 
+Hints:
+1. See `node-ecosystem/misc/logger-consumer.js` for an example
+
 Extra Credit:
 
 1. Allow loggers to be disabled by environment variable
 
 ^
+Solution on next slide
 
 10min
 
@@ -505,15 +522,15 @@ dog.bark(); // ??
 
 <!-- .slide: data-state="exercise" -->
 
-Write `greeterFactory.js` for:
+Write `greeter-factory.js` for...
 
 ```js
-// node-ecosystem/server-with-module.js
+// node-ecosystem/start/server-with-module.js
 // GET http://localhost:8080/
 // ==> 'Hello World!'
 
 var http = require('http');
-var factory = require('./greeterFactory');
+var factory = require('./greeter-factory');
 var handler = factory('Hello World!');
 
 var server = http.createServer(handler);
@@ -522,8 +539,9 @@ server.listen(8080);
 ```
 
 Hints:
-* What is `handler`? What is `factory`?
-* What argument does `http.createServer` take?
+1. What is `handler`? What is `factory`?
+2. What argument does `http.createServer` take?
+3. Start server & request `/` to verify
 
 ^
 
