@@ -1,14 +1,15 @@
 <!-- .slide: data-state="exercise" -->
-1. Change to a new directory: `my-express-app`
 
-2. Initialize a new project and install express
+In `code-along/express-app/`
+
+1. Initialize a new project and install express
 
     ```sh
     npm init -y
     npm install --save express
     ```
 
-3. Create an `index.js` containing the following code:
+2. Create an `index.js` containing the following code:
 
     ```js
     var express = require('express');
@@ -20,14 +21,16 @@
 
     app.listen(3000);
     ```
-4. `node .`
-5. Point browser to <http://localhost:3000>
+3. `node .`
+4. Point browser to <http://localhost:3000>
 
-^ after this, talk a bit about yesterday
-- node core
-- async management
-- javascript review
-- ecosystem & NPM
+^ 
+- *make sure this bit gets finished!*
+- after this, talk a bit about yesterday
+  - node core
+  - async management
+  - javascript review
+  - ecosystem & NPM
 - with that groundwork laid, today: build some stuff
 
 ---

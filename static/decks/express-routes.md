@@ -10,9 +10,11 @@
 ^
 - *demo changing get to post* (use postman)
 - demo using `.use` and `req.method`
+- show how you can use handler functions
 
 |||
 
+`express-app/start/counter.js`
 <!-- .slide: data-state="exercise" -->
 1. `GET /greet` replies 'Hello, you!'
 2. `POST /count` Increments a counter
@@ -20,8 +22,11 @@
 4. `DELETE /count` sets count to 0
 
 Hints:
-* What scope does your counter live in? 
-* Use Postman or another REST tool to post/delete
+1. What scope does your counter live in? 
+2. Use Postman or another REST tool to post/delete
+
+Extra Credit:
+1. Reply with JSON (and appropriate headers!)
 
 ^
 - don't worry about post-data, will handle that later
@@ -74,16 +79,16 @@ app.get('/test', function(req, res) {
 
 <!-- .slide: data-state="exercise" -->
 
-Make a server wherein...
+`express-app/start/wildcard-route.js`
+
 1. `GET /test/` alone replies "you requested '/test/'"
 1. `GET /test/[any number of characters]` replies "you requested '/test/something'"
 1. any other route replies "you requested something else"
 
-Hints:
-* Wildcards
+Extra Credit:
+1. For route (2) above, include the characters after /test/ in your reply
 
 ^
-- answer in wildecard-route.js
 
 |||
 
@@ -151,23 +156,20 @@ server.listen(3000);
 
 <!-- .slide: data-state="exercise" -->
 
-```js
-var users = [
-  { name: 'Qian' },
-  { name: 'Zeynep'},
-  { name: 'Raisel'}
-];
-```
-
-Create `user-server.js`:
-1. `/users/1` replies...<br>
-  'User 1: Zeynep'
-1. `/users/1?title=Ms.` replies...<br>
-  'User 1: Ms. Zeynep'
+`start/restaurants-server-1.js`:
+1. `/restaurants/2` replies...<br>
+  'Restaurant 2: Taco Gong'
 
 Hints:
-* Arrays are indexed to 0:
-  ['a','b','c'][1] === 'b'
+```js
+var users = [
+  { id: 1, name: 'Qian' },
+  { id: 2, name: 'Zeynep'},
+  { id: 3, name: 'Raisel'}
+];
+var qian = findById(users, 1);
+```
+
 
 ^
 Time allowing:
@@ -257,6 +259,17 @@ res.json("<h1>Hello!</h1>");
 ^
 - `res.json` will send application/json header no matter what 
 - treats non-object values as json
+
+|||
+
+<!-- .slide: data-state="exercise" -->
+`start/restaurants-server-2.js`
+
+1. Update `/restaurants/:id` route to send json
+2. `/restaurants/` replies with all restaurants as json
+
+^
+should be easy...
 
 |||
 
@@ -457,9 +470,34 @@ app.use('/users/', userRouter);
 - **Why might this be good?**
 - allows modularization
 - do one together with math ops? TODO: make exercise of this?
-- TODO: Would be great to have exercise here...
 
 |||
+
+<!-- .slide: data-state="exercise" -->
+`start/restaurants-server-3.js`
+
+1. Move `/restuarants/` routes to **new** external module
+2. Mount router on `/restaurants` (paths work as before)
+
+Hints:
+0. Mount router on `/foo`, don't put `/foo` in router paths!!
+1. Router module
+    ```js
+    //fooRouter.js
+    var Router = require('express').Router;
+    var router = module.exports = Router();           
+    router.get('/' /*...*/);
+    ```
+2. Using router module
+    ```js
+    var router = require('./fooRouter')
+    app.use('/foo', router);
+    ```
+
+^ 15min?
+
+|||
+
 
 <!-- .slide: data-state="transition" -->
 *Up Next: Middleware*
