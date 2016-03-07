@@ -865,6 +865,7 @@ Extra Credit:
 
 ---
 
+# CUT
 ## Alter Response
 
 <!-- .slide: data-state="exercise" -->

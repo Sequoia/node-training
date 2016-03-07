@@ -127,7 +127,7 @@ Extra Credit:
 ### Query Parameters
 
 ```js
-// req.params.js
+// misc/req.params.js
 var server = require('express')();
 
 // example: GET /?foo=bar

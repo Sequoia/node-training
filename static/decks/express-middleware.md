@@ -160,43 +160,48 @@ Example: generating placeholder images
 </ul>
 
 ^
-**Demo body-parser middleware** TODO: write demo
+1. INSTALL BODY-PARSER
+2. **Demo body-parser middleware** using misc/body.js
 
 |||
 
 <!-- .slide: data-state="exercise" -->
-## Update `user-server`
-1. `POST /user` adds a user to the user-list
-2. Accept `json` input
+`start/restaurants-router-4.js`
+
+1. `POST /restaurants` accepts json input
+2. Adds a restaurant to collection
+3. Responds with updated restaurants list
 
 Hints:
-1. `body-parser`
-2. Postman 
-  1. `POST /user`
-  2. Body: `{"name" : "Digoo", "id" : 100}`
+1. `body-parser` (npm install!)
+2. Don't double the path! (`/users/users`)
+2. Postman: set method (POST), add body, set type (JSON)
+3. `nodemon start/restaurants-server-4.js`
 
 Extra Credit:
-1. accept `{"name":"Terry"}` & add `id` automatically
+1. accept record without `id` & add `id` automatically
+
+^
+SHOW HOW TO SEND JSON WITH POSTMAN!!!
 
 |||
 
 ## Alter Response
 
-<!-- .slide: data-state="exercise" -->
-Alter a server with multiple routes...
-1. Keep track of server uptime
-2. Add `X-Server-Uptime` header (time in ms) to **all** responses.
+```
+//express-app/misc/res.uptime-header.js (exerpt)
 
-Hints:
-* `Date.now()` (*or* see node `process` docs)
-* Pay attention to scope
-* Middleware!!
+var startTime = Date.now();
+
+app.use(function uptimeMiddleware(req, res, next){
+  res.set('X-app-Uptime', Date.now() - startTime);
+  next();
+});
+
+```
 
 ^
-
-**Do it together at end**
-
-TODO: solution for this one
+- Demo?
 
 |||
 
@@ -218,20 +223,17 @@ TODO: solution for this one
 ## Side Effects
 
 <!-- .slide: data-state="exercise" -->
-Create middleware to log all requests as follows:
+Create `middleware/logger.js` to log all requests thus:
 ```no-highlight
-[client IP]: [METHOD] [path] 
-```
-
-e.g.
-```no-highlight
-172.52.221.10: GET /
-172.52.221.10: GET /users
-172.52.221.10: POST /users
+Sun Mar 06 2016 18:26:39 GMT-0800 (PST): GET /
+Sun Mar 06 2016 18:26:41 GMT-0800 (PST): GET /users
+Sun Mar 06 2016 18:27:18 GMT-0800 (PST): POST /users
 ```
 
 Hints:
-* Remember The Fun Manual!
+1. Remember The Fun Manual!
+2. Attach it to any existing express server
+3. `next()`
 
 Extra Credit:
 1. Pad strings for even columns
@@ -302,15 +304,13 @@ app.listen(9090)
 |||
 
 <!-- .slide: data-state="exercise" -->
-Use the `express.static` middleware to serve:
-1. an `index.html` file with...
-2. a `css` file
-3. an image
+`express-app/start/static-server.js`
+
+Use the `express.static` middleware to serve `express-app/assets/`
 
 Hints:
-* Examples: <http://expressjs.com/en/guide/using-middleware.html>
-* Remember you can use any arbitrary directory as `{ root }`
-* It will serve `index.html` by default
+1. Examples: <http://expressjs.com/en/guide/using-middleware.html>
+2. It will serve `index.html` by default
 
 |||
 
@@ -484,37 +484,12 @@ app.use(function catchallRoute(req, res, next){
 });
 ```
 
-|||
-
-<!-- .slide: data-state="exercise" -->
-
-1. log in RED for `500`s
-2. log in YELLOW for `404`
-3. ensure status code is an HTTP code
-
-```js
-// handle-errors.js
-var app = require('express')();
-var thrower = require('error-throwing-middleware');
-var chalk = require('chalk');
-var error = chalk.red.bold;
-var info = chalk.blue;
-
-app.use(thrower);
-app.get('/', function(req, res){ res.send('hello world!'); })
-
-/* handle errors here */
-
-app.listen(3000, function(err){
-  if(err) console.error(error(err.message));
-  else console.log(info('Server started on port 3000'));
-});
-```
-
 ^
 - introduce chalk
 - show the file running
+- **Extra excercise in </x/express-middleware>
 
 |||
+
 <!-- .slide: data-state="transition" -->
 Up Next: Templates

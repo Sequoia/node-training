@@ -190,7 +190,7 @@ server.listen(3000);
 ### Express Two Routes
 
 ```js
-//my-express-project/greeter.js
+//my-express-project/misc/greeter.js
 
 var server = require('express')();
 
