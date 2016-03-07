@@ -134,12 +134,17 @@ label Subscribe to our newsletter
 |||
 
 <!-- .slide: data-state="exercise" -->
-1. Create `homepage.jade`
+`express-app/start/tmpl-server.js`
+
+1. Add a `title`, `body`, and `h1`
+`start/templates/homepage.jade`
 2. Render it on request to `/`
 
 Hints:
-* set `view engine`
-* set `views` to point to template directory
+0. install jade!
+1. app.set `view engine`, `views`
+2. paths are relative to `CWD`
+3. <http://expressjs.com/en/guide/using-template-engines.html>
 
 ---
 
@@ -176,31 +181,28 @@ res.render('infobox', {
 
 <!-- .slide: data-state="exercise" -->
 
-## Update user-server.js
-
-Request:
-```no-highlight
-GET /user/1
-```
+Update `/restuarants/:id` to use templates:
+* `restuarants-router-5.js`
+* `tempalates/restuarant.jade`
 
 Response:
 ```html
 <html>
 <head>
-    <title>Zeynep</title>
+    <title>Amici's</title>
 </head>
 <body>
-  <h1>User Profile</h1>
+  <h1>Restaurant</h1>
   <ul>
       <li>id: 1</li>
-      <li>name: Zeynep</li>
+      <li>name: Amici's</li>
+      <li>founded: 2010</li>
   </ul>
 </body>
-
 </html>
 ```
 
-...ditto for `/user/0`, `/user/2` etc.
+...ditto for `/restaurants/2`, `/restaurants/3` etc.
 
 |||
 
