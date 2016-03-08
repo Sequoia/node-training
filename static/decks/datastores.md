@@ -1,7 +1,7 @@
 # Datastores and ORMs
 
 * MongoDB & Mongo
-* MariaDB (MySQL) & Bookshelf
+* MariaDB (MySQL) & Sequelize
 
 ^
 - Which to use
