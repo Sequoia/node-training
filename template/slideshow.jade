@@ -8,14 +8,17 @@ html(lang='en')
     meta(name='apple-mobile-web-app-status-bar-style', content='black-translucent')
     meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui')
     link(rel='stylesheet', href='/vendor/reveal.js/css/reveal.css')
-    link#theme(rel='stylesheet', href='/vendor/reveal.js/css/theme/black.css')
-    link#customStyles(rel='stylesheet', href='/css/sequoia.css')
+    // link#theme(rel='stylesheet', href='/vendor/reveal.js/css/theme/black.css')
+    // link#customStyles(rel='stylesheet', href='/css/sequoia.css')
+    link#customStyles(rel='stylesheet', href='/css/reveal-ibm-strongloop.css')
     // Code syntax highlighting
-    link(rel='stylesheet', href='/vendor/reveal.js/lib/css/zenburn.css')
+    link(rel='stylesheet', href='/css/tomorrow.css')
+    //-link(rel='stylesheet', href='/vendor/reveal.js/lib/css/zenburn.css')
 
   body
     .reveal
       // Any section element inside of this container is displayed as a slide
+      <header><img id="ibm-logo" src="/images/ibm-logo.png" alt="IBM" class="logo"><img id="ibm-strongloop-logo" src="/images/ibm-strongloop-logo.png" alt="Strongloop: An IBM Company" class="logo"></header>
       .slides
         section(
         data-markdown="/decks/#{deck}.md"  
@@ -24,6 +27,7 @@ html(lang='en')
           data-separator-notes="^\\^"
           data-charset="iso-8859-15"
         )
+      <footer style="display: block;"><div class="copyright">© 2016 Sequoia McDowell</div></footer>
     script(src='/vendor/reveal.js/lib/js/head.min.js')
     script(src='/vendor/reveal.js/js/reveal.js')
     script(src='/js/initSlides.js')
