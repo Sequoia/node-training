@@ -390,7 +390,7 @@ now you can install without sudo
 |||
 
 <!-- .slide: data-state="exercise" -->
-1. `npm install -g nodemod`
+1. `npm install -g nodemon`
 2. `nodemon /path/to/myproject`
 3. make a change to the `myproject/app.js` & **save** the file
 

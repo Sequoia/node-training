@@ -336,6 +336,7 @@ Extra Credit:
    `node read-file.js someFile.txt`
 2. Read file
 3. Write file contents to console
+4. Ensure it works from another path (`cd ..` and run it again)
 
 Hints:
 1. Look around...
@@ -364,7 +365,7 @@ Together, modify script so it always reads relative to script itself
 
 `node-core-apis/start/read-file-server.js`
 
-1. Read `node-core-apis/index.html`
+1. Read `index.html` on any request
 2. Send it back to the browser
 
 Hints
@@ -375,6 +376,7 @@ Hints
 Extra Credit
 
 1. Allow port configuration with ENV variable
+2. **Stream** from the filesystem to the browser
 
 ^ EXTRA/time allowing: if not at break already
 - solution

@@ -1,16 +1,11 @@
 <!-- .slide: data-state="exercise" -->
-1. If user requests `/found`
-  * HTTP status code: 200
-  * respond with "you found it!"
-2. Any other path
-  * HTTP status code: 404
-  * respond with "Not found! :("
+# Static File Server
+1. Serve files from a fixed directory (e.g. `/var/www/static`)
+2. If file not found, respond with 404
+3. If root path requested (`/`) respond with an `index.html` file
 
 Hints:
 1. see table of contents on nodejs.org docs
   nodejs.org/dist/latest-v4.x/docs/api/http.html
 
 ^
-- What issues did you run into?
-- solution `node-core-apis/http-server-found.js`
-

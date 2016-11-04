@@ -424,7 +424,7 @@ Hints:
 
 Extra Credit:
 
-1. Allow loggers to be disabled by environment variable
+1. Modify `logger.js` so loggers are enabled via environment variable
 
 ^
 Solution on next slide

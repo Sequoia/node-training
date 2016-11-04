@@ -264,7 +264,7 @@ Person
   .find({ occupation: /host/ })
   .where('name.last').equals('Ghost')
   .where('age').gt(17).lt(66)
-  .where('likes').in(['vaporizing', 'talking'])
+  .where('likes').in(['walking', 'talking'])
   .limit(10)
   .sort('-occupation')
   .exec().then(handler);
@@ -288,7 +288,7 @@ var query = Post.find(
 ```js 
 Post.find()
   .where({featured : true })
-  .select('name occupation')
+  .select('title slug description')
   .exec().then(handler);
 ```
 <!-- .element: class="fragment" -->
@@ -404,4 +404,6 @@ Hints:
 
 <!-- .slide: data-state="transition" -->
 
-Up Next: Wrap up!
+THANKS FOR COMING!!!
+
+<http://bit.ly/fluent-node-feedback>
