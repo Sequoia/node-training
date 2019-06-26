@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://localhost:8080/node-2day/express-routes#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" class="stack present" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" class="present" style="top: 136px; display: block;"><h3 id="route-methods">Route methods</h3>
+<p><a href="http://expressjs.com/en/guide/routing.html">http://expressjs.com/en/guide/routing.html</a></p>
+<ul>
+<li><code>app.get</code></li>
+<li><code>app.post</code></li>
+<li><code>app.delete</code></li>
+<li><code>.head</code>, <code>.put</code>, <code>.patch</code>, <code>.options</code>, ...</li>
+</ul>
+<aside class="notes" data-markdown="">- <em>demo changing get to post</em> (use postman)
+- demo using <code>.use</code> and <code>req.method</code>
+- show how you can use handler functions</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" hidden="" style="top: 0px; display: block;"><p><code>express-app/start/counter.js</code>
+<!-- --></p>
+<ol>
+<li><code>GET /greet</code> replies 'Hello, you!'</li>
+<li><code>POST /count</code> Increments a counter</li>
+<li><code>GET /count</code> replies with the current count</li>
+<li><code>DELETE /count</code> sets count to 0</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li>What scope does your counter live in? </li>
+<li>Use Postman or another REST tool to post/delete</li>
+</ol>
+<p>Extra Credit:</p>
+<ol>
+<li>Reply with JSON (and appropriate headers!)</li>
+</ol>
+<aside class="notes" data-markdown="">- don't worry about post-data, will handle that later</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 208px; display: block;"><h3 id="wildcard-routes">Wildcard routes</h3>
+<p><code>*</code> can match any number of characters.</p>
+<pre><code class="lang-js hljs javascript">app.get(<span class="hljs-string">'/users/*`, handleUsers);
+</span></code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h3 id="route-patterns">Route patterns</h3>
+<p>Routes can be Regular Expressions</p>
+<pre><code class="lang-js hljs javascript">app.get(<span class="hljs-regexp">/.*nodejs$/</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+  res.send(<span class="hljs-string">'Your request path ended with "nodejs"!'</span>);
+});
+</code></pre>
+<aside class="notes" data-markdown="">- work together thru <code>regex-route.js</code></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><pre><code class="lang-js hljs javascript">app.get(<span class="hljs-string">'*'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+  res.send(<span class="hljs-string">'you requested something else'</span>);
+});
+
+app.get(<span class="hljs-string">'/test'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+  res.send(<span class="hljs-string">'you requested /test'</span>);
+});
+</code></pre>
+<p><strong class="fragment" data-fragment-index="0">Order matters!</strong>
+<!-- --></p>
+<aside class="notes" data-markdown="">- <strong>what do you think will happen?</strong>
+- try it out</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><!-- -->
+<p><code>express-app/start/wildcard-route.js</code></p>
+<ol>
+<li><code>GET /test/</code> alone replies "you requested '/test/'"</li>
+<li><code>GET /test/[any number of characters]</code> replies "you requested '/test/something'"</li>
+<li>any other route replies "you requested something else"</li>
+</ol>
+<p>Extra Credit:</p>
+<ol>
+<li>For route (2) above, include the characters after /test/ in your reply</li>
+</ol>
+<aside class="notes" data-markdown=""></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: the <code>request</code> object</em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 53.5px; display: block;"><h2 id="-request-object"><code>request</code> Object</h2>
+<p><a href="http://expressjs.com/en/4x/api.html#req">http://expressjs.com/en/4x/api.html#req</a></p>
+<ul>
+<li><code>req.app</code></li>
+<li><code>req.body</code></li>
+<li><code>req.path</code></li>
+<li><code>req.query</code></li>
+<li><code>req.params</code></li>
+<li><code>req.xhr</code></li>
+<li><code>req.method</code></li>
+</ul>
+<aside class="notes" data-markdown="">- body is raw, unparsed body
+- path is without querystring
+- query is PARSED querystring
+- params is route parameters</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 190.5px; display: block;"><h3 id="key-differences-from-http-incomingmessage-">Key Differences from <code>HTTP.IncomingMessage</code></h3>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>url.parse</code> not needed</li>
+  <li class="fragment" data-fragment-index="1"><code>querystring.parse</code> not needed</li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="query-parameters">Query Parameters</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">// misc/req.params.js</span>
+<span class="hljs-keyword">var</span> server = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>)();
+
+<span class="hljs-comment">// example: GET /?foo=bar</span>
+server.get(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+  res.send(<span class="hljs-string">'foo is... '</span> + req.query.foo);
+});
+
+server.listen(<span class="hljs-number">3000</span>);
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="named-parameters">Named Parameters</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> server = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>)();
+
+server.get(<span class="hljs-string">'/:foo'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+  res.send(<span class="hljs-string">':foo is... '</span> + req.params.foo);
+});
+
+server.listen(<span class="hljs-number">3000</span>);
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><code>start/restaurants-server-1.js</code>:</p>
+<ol>
+<li><code>/restaurants/2</code> replies...<br>
+'Restaurant 2: Taco Gong'</li>
+</ol>
+<p>Hints:</p>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> users = [
+  { id: <span class="hljs-number">1</span>, name: <span class="hljs-string">'Qian'</span> },
+  { id: <span class="hljs-number">2</span>, name: <span class="hljs-string">'Zeynep'</span>},
+  { id: <span class="hljs-number">3</span>, name: <span class="hljs-string">'Raisel'</span>}
+];
+<span class="hljs-keyword">var</span> qian = findById(users, <span class="hljs-number">1</span>);
+</code></pre>
+<aside class="notes" data-markdown="">Time allowing:
+
+<strong>how would we create listing of all?</strong>
+
+Extra Credit:
+2. <code>/users</code> replies with all users:
+    <code>User 0: Qian
+    User 1: Zeynep
+    User 2: Raisel</code></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: the <code>response</code> object</em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 3.5px; display: block;"><h2 id="-response-object"><code>response</code> Object</h2>
+<p><a href="http://expressjs.com/en/4x/api.html#res">http://expressjs.com/en/4x/api.html#res</a></p>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>res.send(string|buffer|object)</code></li>
+  <li class="fragment" data-fragment-index="1"><code>res.json(object)</code></li>
+  <li class="fragment" data-fragment-index="2"><code>res.status(httpStatusCode)</code></li>
+  <li class="fragment" data-fragment-index="3"><code>res.set(headerName, headerValue)</code><br>
+  <code>res.set({name: 'value'})</code></li>
+  <li class="fragment" data-fragment-index="4"><code>res.redirect(url)</code></li>
+  <li class="fragment" data-fragment-index="5"><code>res.sendFile(path, options, callback)</code></li>
+  <li class="fragment" data-fragment-index="6"><code>res.download(path)</code></li>
+  <li class="fragment" data-fragment-index="7"><code>res.render(template, data)</code></li>
+</ul>
+
+<aside class="notes" data-markdown="">- send sets <code>Content-Length</code> (text/html for strings!)
+- sendfile is super useful
+- <strong>Who's done download by hand?</strong>
+- <code>render</code> we'll talk about later</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-res-send-"><code>res.send</code></h2>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">res.send(<span class="hljs-string">'&lt;h1&gt;Sequoia\'s WebZone!&lt;/h1&gt;'</span>);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">res.send({ id: <span class="hljs-number">1</span>, name: <span class="hljs-string">'Zeynep'</span> });
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript">res.send(<span class="hljs-keyword">new</span> Buffer(<span class="hljs-string">'Here is an octet-stream for you!'</span>));
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">sets header type</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-res-json-"><code>res.json</code></h2>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">res.json([
+  {id : <span class="hljs-number">1</span>, name : <span class="hljs-string">'Sequoia'</span>},
+  {id : <span class="hljs-number">2</span>, name : <span class="hljs-string">'Jackson'</span>},
+  {id : <span class="hljs-number">3</span>, name : <span class="hljs-string">'Christine'</span>}
+]);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">res.json(<span class="hljs-literal">null</span>)
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript">res.json(<span class="hljs-string">"&lt;h1&gt;Hello!&lt;/h1&gt;"</span>);
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- <code>res.json</code> will send application/json header no matter what 
+- treats non-object values as json</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><code>start/restaurants-server-2.js</code></p>
+<ol>
+<li>Update <code>/restaurants/:id</code> route to send json</li>
+<li><code>/restaurants/</code> replies with all restaurants as json</li>
+</ol>
+<aside class="notes" data-markdown="">should be easy...</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-res-status-"><code>res.status</code></h2>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">res.status(<span class="hljs-number">204</span>); <span class="hljs-comment">// No Content</span>
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">res.status(<span class="hljs-number">404</span>)
+   .send(<span class="hljs-string">'Not Found'</span>);
+
+<span class="hljs-comment">///or perhaps</span>
+
+res.status(<span class="hljs-number">404</span>)
+   .json({error : <span class="hljs-string">'Not Found'</span>});
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript">res.status(<span class="hljs-number">500</span>)
+   .sendFile(<span class="hljs-string">'/var/www/shared/internal_error.html'</span>);
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- can be chained</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-res-set-"><code>res.set</code></h2>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">res.set(<span class="hljs-string">'Content-Type'</span>, <span class="hljs-string">'text/markdown'</span>);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">res.set({
+  <span class="hljs-string">'X-Powered-By'</span> : <span class="hljs-string">'Sequoia\'s #1 Web Framwork!/v2.5'</span>,
+  <span class="hljs-string">'X-Favorite-Animal'</span>: <span class="hljs-string">'Hamster'</span>,
+  Pragma : <span class="hljs-string">'no-cache'</span>
+});
+</code></pre>
+<!-- -->
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-res-redirect-"><code>res.redirect</code></h2>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">res.redirect(<span class="hljs-string">'http://other.url.com'</span>);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-comment">// GET /admin/users/</span>
+
+res.redirect(<span class="hljs-string">'../login'</span>);
+
+<span class="hljs-comment">// =&gt; /admin/login</span>
+</code></pre>
+<!-- -->
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-res-sendfile-"><code>res.sendFile</code></h2>
+<p><em>Takes (optional) callback with error-first function signature</em></p>
+<pre data-fragment-index="1" class="fragment"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fileSent</span>(<span class="hljs-params">err</span>)</span>{
+  <span class="hljs-keyword">if</span>(err){
+    <span class="hljs-built_in">console</span>.error(err);
+    res.status(err.status).end();
+  }
+}
+
+<span class="hljs-keyword">var</span> options = { root: <span class="hljs-string">'/var/static/'</span> };
+</code></pre>
+<!-- -->
+<pre data-fragment-index="0" class="fragment"><code class="lang-js hljs javascript">res.sendFile(<span class="hljs-string">'app.js'</span>, options , fileSent);
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- <strong>What does callback sig tell us?</strong>
+- options include cache-control header, file root path
+- options object optional</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-res-sendfile-"><code>res.sendFile</code></h2>
+<pre><code class="lang-js hljs javascript">app.get(<span class="hljs-string">'/assets/protected/:filename'</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>)</span>{
+  <span class="hljs-keyword">if</span>(req.user &amp;&amp; hasAccess(req.params.filename, req.user)){
+    res.sendFile(req.params.filename, options, fileSent);
+  }<span class="hljs-keyword">else</span>{
+    res.status(<span class="hljs-number">403</span>).send(<span class="hljs-string">'Not Authorized'</span>);
+  }
+});
+
+<span class="hljs-comment">// @return Boolean : true if user has access to requested file</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hasAccess</span>(<span class="hljs-params">file, user</span>)</span>{ <span class="hljs-comment">/*...*/</span>
+</code></pre>
+<aside class="notes" data-markdown="">- useful when you need to prog. protect certain files
+- <strong>Where did request.user come from?</strong> Will cover soon
+- exercise with this?</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-res-download-"><code>res.download</code></h2>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">res.download(<span class="hljs-string">'/path/to/file.ext'</span>);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">res.download(<span class="hljs-string">'/path/to/file.ext'</span>, <span class="hljs-string">'response.txt'</span>);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript">res.download(<span class="hljs-string">'/path/to/file.ext'</span>, <span class="hljs-string">'response.txt'</span>, fileSent);
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- Uses <code>sendFile</code> 
+- sets <code>Content-Disposition</code> header so it will d/l</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-res-render-"><code>res.render</code></h2>
+<p><a href="http://expressjs.com/en/guide/using-template-engines.html">http://expressjs.com/en/guide/using-template-engines.html</a></p>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">res.render(<span class="hljs-string">'index'</span>);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">res.render(<span class="hljs-string">'userList'</span>, users);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript">res.render(<span class="hljs-string">'user'</span>, {
+  name: <span class="hljs-string">'Michelle'</span>,
+  role: <span class="hljs-string">'Admin'</span>
+});
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- Renders template
+- optionally passes in data
+- <strong>We'll talk about templates more in a bit</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="4-0-router">4.0 Router</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">// user-router.js</span>
+<span class="hljs-keyword">var</span> router = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>).Router();
+<span class="hljs-built_in">module</span>.exports = router;
+
+router.get(<span class="hljs-string">'/'</span>, allUsersHandler);
+router.get(<span class="hljs-string">':id'</span>, getUserHandler);
+router.post(<span class="hljs-string">'/'</span>, createUserHandler);
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-comment">// server.js</span>
+<span class="hljs-keyword">var</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>)();
+<span class="hljs-keyword">var</span> userRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./user-router'</span>);
+
+app.use(<span class="hljs-string">'/users/'</span>, userRouter);
+
+<span class="hljs-comment">// ...</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- now <code>/users/:id</code> is passed to <code>getUserHandler</code>
+- <strong>Why might this be good?</strong>
+- allows modularization
+- do one together with math ops? TODO: make exercise of this?</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><code>start/restaurants-server-3.js</code></p>
+<ol>
+<li>Move <code>/restuarants/</code> routes to <strong>new</strong> external module</li>
+<li>Mount router on <code>/restaurants</code> (paths work as before)</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li>Mount router on <code>/foo</code>, don't put <code>/foo</code> in router paths!!</li>
+<li>Router module<pre><code class="lang-js hljs javascript"> <span class="hljs-comment">//fooRouter.js</span>
+ <span class="hljs-keyword">var</span> Router = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>).Router;
+ <span class="hljs-keyword">var</span> router = <span class="hljs-built_in">module</span>.exports = Router();           
+ router.get(<span class="hljs-string">'/'</span> <span class="hljs-comment">/*...*/</span>);
+</code></pre>
+</li>
+<li>Using router module<pre><code class="lang-js hljs javascript"> <span class="hljs-keyword">var</span> router = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./fooRouter'</span>)
+ app.use(<span class="hljs-string">'/foo'</span>, router);
+</code></pre>
+</li>
+</ol>
+<aside class="notes" data-markdown="">15min?</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Middleware</em></p>
+</section></section></div><div class="backgrounds"><div class="slide-background stack present" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down enabled" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">Route methods
+http://expressjs.com/en/guide/routing.html
+
+app.get
+app.post
+app.delete
+.head, .put, .patch, .options, ...
+
+- demo changing get to post (use postman)
+- demo using .use and req.method
+- show how you can use handler functions</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

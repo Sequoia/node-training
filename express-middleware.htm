@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://localhost:8080/node-2day/express-middleware#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" class="stack present" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" class="present" style="top: 75px; display: block;"><h1 id="middleware">Middleware</h1>
+<p>Map functions to a (set of) routes</p>
+<p><a href="http://expressjs.com/en/guide/using-middleware.html">http://expressjs.com/en/guide/using-middleware.html</a></p>
+<ul>
+  <li class="fragment" data-fragment-index="0">Trigger side effects</li>
+  <li class="fragment" data-fragment-index="1">Alter <code>request</code></li>
+  <li class="fragment" data-fragment-index="2">Alter <code>response</code></li>
+  <li class="fragment" data-fragment-index="3">"short circuit" request/response flow</li>
+</ul>
+
+<aside class="notes" data-markdown="">- logging for example
+- add stuff like "user id"
+- add headers for example
+- e.g. check auth &amp; skip to error</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 0px; display: block;"><h2 id="middleware-signature">Middleware Signature</h2>
+<p>Arguments:</p>
+<ol>
+<li><code>request</code></li>
+<li><code>response</code></li>
+<li><code>next</code></li>
+</ol>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">middleware</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  <span class="hljs-comment">//do some stuff</span>
+  next(); <span class="hljs-comment">//go to next matching middleware/route</span>
+}
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">middleware</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  doSomethingAsync(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">done</span>(<span class="hljs-params">err, results</span>)</span>{
+    <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">return</span> next(err); }
+
+    req.extraStuff = results;
+    next();
+  })
+}
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- <strong>We'll discuss passing errors in a moment</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 156.5px; display: block;"><h2 id="using-middleware">Using Middleware</h2>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">app.use(middleware);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">app.use(path, middleware);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript">app.get(path, middlewareOne);
+app.post(path, middlewareTwo);
+app.delete(middlewareThree);
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- attach to all requests
+- attach to path, all types
+- attach to only certain request types</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h2 id="middleware-order">Middleware Order</h2>
+<pre><code class="lang-js hljs javascript">app.get(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  <span class="hljs-comment">/* run first */</span>
+  next();
+});
+
+app.get(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  <span class="hljs-comment">/* run second */</span>
+  res.send(<span class="hljs-string">'done!'</span>);
+});
+
+app.get(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  <span class="hljs-comment">/* never runs */</span>
+  next();
+});
+</code></pre>
+<aside class="notes" data-markdown="">→ now let's look at what we can do with middleware...</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h2 id="alter-request">Alter Request</h2>
+<pre><code class="lang-js hljs javascript">app.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  req.foo = <span class="hljs-string">'something'</span>;
+});
+</code></pre>
+<aside class="notes" data-markdown="">- add something for use later</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h2 id="alter-request-example">Alter Request Example</h2>
+<p>Generated placeholder images</p>
+<pre><code class="lang-no-highlight">//GET /placeholder/png?size=200x300
+//GET /placeholder/jpg?size=10x20
+//GET /placeholder/jpg?x=100&amp;y=200
+//GET /placeholder/gif?x=50&amp;y=20
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">app.get(<span class="hljs-string">'/placeholder/*'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  <span class="hljs-keyword">if</span>(req.query.size){
+    req.dimensions = req.query.size.split(<span class="hljs-string">'x'</span>);
+  }<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(req.query.x &amp;&amp; req.query.y){
+    req.dimensions = [req.query.x, req.query.y];
+  }<span class="hljs-keyword">else</span>{
+    req.dimensions = [<span class="hljs-number">200</span>, <span class="hljs-number">200</span>];
+  }
+  next();
+});
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">app.get(<span class="hljs-string">'/placeholder/gif'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+  <span class="hljs-keyword">var</span> img = generateImage(req.dimensions);
+  <span class="hljs-comment">/*...*/</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">Example: generating placeholder images</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h3 id="useful-request-altering-middleware">Useful Request-Altering Middleware</h3>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>body-parser</code></li>
+  <li class="fragment" data-fragment-index="1"><code>cookie-parser</code></li>
+  <li class="fragment" data-fragment-index="2"><code>express-session</code></li>
+</ul>
+
+<aside class="notes" data-markdown="">1. INSTALL BODY-PARSER
+2. <strong>Demo body-parser middleware</strong> using misc/body.js</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><!-- -->
+<p><code>start/restaurants-router-4.js</code></p>
+<ol>
+<li><code>POST /restaurants</code> accepts json input</li>
+<li>Adds a restaurant to collection</li>
+<li>Responds with updated restaurants list</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li><code>body-parser</code> (npm install!)</li>
+<li>Don't double the path! (<code>/users/users</code>)</li>
+<li>Postman: set method (POST), add body, set type (JSON)</li>
+<li><code>nodemon start/restaurants-server-4.js</code></li>
+</ol>
+<p>Extra Credit:</p>
+<ol>
+<li>accept record without <code>id</code> &amp; add <code>id</code> automatically</li>
+</ol>
+<aside class="notes" data-markdown="">SHOW HOW TO SEND JSON WITH POSTMAN!!!</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h2 id="alter-response">Alter Response</h2>
+<pre><code class="hljs javascript"><span class="hljs-comment">//express-app/misc/res.uptime-header.js (exerpt)</span>
+
+<span class="hljs-keyword">var</span> startTime = <span class="hljs-built_in">Date</span>.now();
+
+app.use(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">uptimeMiddleware</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  res.set(<span class="hljs-string">'X-app-Uptime'</span>, <span class="hljs-built_in">Date</span>.now() - startTime);
+  next();
+});
+</code></pre><aside class="notes" data-markdown="">- Demo?</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h3 id="useful-response-altering-middleware">Useful Response-Altering Middleware</h3>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>compression</code></li>
+  <li class="fragment" data-fragment-index="1"><code>response-time</code></li>
+  <li class="fragment" data-fragment-index="2"><code>express-partial-response</code></li>
+</ul>
+
+<aside class="notes" data-markdown="">- compresses responses
+- adds <code>X-Response-Time</code> header (in 'til out)
+- filter json by <code>?fields</code></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h2 id="side-effects">Side Effects</h2>
+<!-- -->
+<p>Create <code>middleware/logger.js</code> to log all requests thus:</p>
+<pre><code class="lang-no-highlight">Sun Mar 06 2016 18:26:39 GMT-0800 (PST): GET /
+Sun Mar 06 2016 18:26:41 GMT-0800 (PST): GET /users
+Sun Mar 06 2016 18:27:18 GMT-0800 (PST): POST /users
+</code></pre>
+<p>Hints:</p>
+<ol>
+<li>Remember The Fun Manual!</li>
+<li>Attach it to any existing express server</li>
+<li><code>next()</code></li>
+</ol>
+<p>Extra Credit:</p>
+<ol>
+<li>Pad strings for even columns</li>
+<li>Colors</li>
+</ol>
+<aside class="notes" data-markdown=""><strong>Do together?</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h3 id="useful-side-effects-middleware">Useful side-effects middleware</h3>
+<ul>
+  <li><code>morgan</code></li>
+</ul>
+
+<aside class="notes" data-markdown="">Show morgan example:
+<code>app.use(morgan(':remote-addr: :method :url'))</code>
+TODO: Make sure this works ^</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h2 id="-short-circuit-request">"Short Circuit" Request</h2>
+<p>Respond (or error) immediately for certain requests</p>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-comment">//reject unlucky requests</span>
+app.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  <span class="hljs-keyword">if</span>(<span class="hljs-built_in">Math</span>.random() &gt; <span class="hljs-number">.5</span>){
+    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'UNLUCKY USER!!!'</span>);
+    res.status(<span class="hljs-number">403</span>).send(<span class="hljs-string">'Not Authorized (Unlucky User)'</span>);
+  }
+  <span class="hljs-keyword">else</span>{
+    next();
+  }
+});
+
+app.get(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+  <span class="hljs-comment">/*...*/</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- we don't call next, we prevent any further paths from loading</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><h3 id="useful-short-circuit-middleware">Useful "Short Circuit" Middleware</h3>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>passport</code></li>
+  <li class="fragment" data-fragment-index="1"><code>express.static</code></li>
+  <li class="fragment" data-fragment-index="2"><code>serve-index</code></li>
+</ul>
+
+<aside class="notes" data-markdown="">- passport does auth &amp; adds req.user
+
+demo serve-index
+<code>js
+app.use('/ftp', serveIndex('/Users/sequoia', {'icons': true}))
+app.listen(9090)</code></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><!-- -->
+<p><code>express-app/start/static-server.js</code></p>
+<p>Use the <code>express.static</code> middleware to serve <code>express-app/assets/</code></p>
+<p>Hints:</p>
+<ol>
+<li>Examples: <a href="http://expressjs.com/en/guide/using-middleware.html">http://expressjs.com/en/guide/using-middleware.html</a></li>
+<li>It will serve <code>index.html</code> by default</li>
+</ol>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><!-- -->
+<p>Up Next: Error Handling</p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 0px; display: block;"><h2 id="error-handling-middleware">Error Handling Middleware</h2>
+<p>Arguments:</p>
+<ol>
+<li><strong><code>error</code></strong></li>
+<li><code>request</code></li>
+<li><code>response</code></li>
+<li><code>next</code></li>
+</ol>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">errorMiddleware</span>(<span class="hljs-params">err, req, res, next</span>)</span>{
+  res
+    .status(err.code)
+    .send(err.message);
+}
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">app.use(<span class="hljs-string">'/'</span>, rootHandler);
+app.use(<span class="hljs-string">'/user'</span>, userRouter);
+<span class="hljs-comment">//...</span>
+
+app.use(errorHandlerMiddleware);
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- put app routes first (order!!)</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 78px; display: block;"><h3 id="invoking-error-handler">Invoking Error Handler</h3>
+<pre><code class="lang-js hljs javascript">app.get(<span class="hljs-string">'/user/:id'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  db.Users.get({id: req.params.id}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, user</span>)</span>{
+    <span class="hljs-keyword">if</span>(err){
+      next(err);
+    }<span class="hljs-keyword">else</span>{
+      res.json(user);
+    }
+  });
+});
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">app.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, req, res, next</span>)</span>{
+  <span class="hljs-built_in">console</span>.error(err);
+  res.status(<span class="hljs-number">500</span>).send(<span class="hljs-string">'Error'</span>);
+});
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- <em>walk thru code</em></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="invoking-error-handler">Invoking Error Handler</h3>
+<pre><code class="lang-js hljs javascript">app.use(someLoginMiddleware);
+
+app.use(<span class="hljs-string">'/account/*'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">gateAdminArea</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  <span class="hljs-keyword">if</span>(!req.user){
+    <span class="hljs-keyword">var</span> e = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Please log in'</span>);
+    <span class="hljs-keyword">var</span> e.code = <span class="hljs-number">403</span>;
+    next(e);
+  }
+});
+
+app.use(<span class="hljs-string">'account/edit'</span>, <span class="hljs-comment">/*...*/</span>);
+app.use(<span class="hljs-string">'account/subscriptions'</span>, <span class="hljs-comment">/*...*/</span>);
+<span class="hljs-comment">// ...</span>
+
+app.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, req, res, next</span>)</span>{
+  <span class="hljs-comment">/* handle error */</span>
+});
+</code></pre>
+<aside class="notes" data-markdown="">- <em>walk thru code</em></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="multiple-error-handlers">Multiple Error Handlers</h3>
+<pre><code class="lang-js hljs javascript">app.get(<span class="hljs-string">'/post/:id'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">gateAdminArea</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  db.Posts.get({id: req.params.id}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, post</span>)</span>{
+    <span class="hljs-keyword">if</span>(err){
+      <span class="hljs-comment">//there was an internal/db error</span>
+      err.code = <span class="hljs-number">500</span>;
+      next(err);
+    }<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>( isEmpty(post) ){
+      next(makeError(<span class="hljs-string">'Post Not Found!'</span>, <span class="hljs-number">404</span>));
+    }
+    <span class="hljs-keyword">else</span> res.json(post);
+  }
+});
+</code></pre>
+<aside class="notes" data-markdown="">- <em>walk thru code</em>
+- Two types of error</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="multiple-error-handlers">Multiple Error Handlers</h3>
+<pre><code class="lang-js hljs javascript">app.use(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle404</span>(<span class="hljs-params">err, req, res, next</span>)</span>{
+  <span class="hljs-keyword">if</span>(err.code !== <span class="hljs-number">404</span>) <span class="hljs-keyword">return</span> next(err);
+
+  logger.info(<span class="hljs-string">'NOT FOUND: '</span> + req.originalUrl<span class="hljs-string">');
+  next(err);
+});
+
+app.use(function handle500(err, req, res, next){
+  if(err.code &lt; 500 || err.code &gt; 599) return next(err);
+
+  logger.urgent(err.message);
+  emailAdmin(new Date(), err.toString());
+
+  next(err);
+});
+
+app.use(function errorPage(err, req, res, next){
+  res.render('</span>error_page<span class="hljs-string">', err);
+});
+</span></code></pre>
+<aside class="notes" data-markdown="">- walk thru with a couple diff. paths</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="catchall-handler">Catchall Handler</h3>
+<pre><code class="lang-js hljs javascript">app.use(<span class="hljs-number">404</span>Handler);
+app.use(OtherErrorHandler);
+app.use(<span class="hljs-number">500</span>Handler);
+
+app.use(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">catchallErrorHandler</span>(<span class="hljs-params">err, req, res, next</span>)</span>{
+  res.status(<span class="hljs-number">500</span>).send(<span class="hljs-string">'We do not know what happened... sorry!'</span>);
+});
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="catchall-route">Catchall Route</h3>
+<pre><code class="lang-js hljs javascript">app.get(<span class="hljs-string">'/'</span>, <span class="hljs-comment">/*...*/</span>);
+app.get(<span class="hljs-string">'/admin'</span>, <span class="hljs-comment">/*...*/</span>);
+app.get(<span class="hljs-string">'/post/:id'</span>, <span class="hljs-comment">/*...*/</span>);
+app.post(<span class="hljs-string">'/post/:id'</span>, <span class="hljs-comment">/*...*/</span>);
+<span class="hljs-comment">/* ... */</span>
+
+app.use(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">catchallRoute</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  next(makeError(<span class="hljs-string">'We couldn\'t find it!'</span>, <span class="hljs-number">404</span>));
+});
+</code></pre>
+<aside class="notes" data-markdown="">- introduce chalk
+- show the file running
+- **Extra excercise in </aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Up Next: Templates</p>
+</section></section></div><div class="backgrounds"><div class="slide-background stack present" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down enabled fragmented" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">Middleware
+Map functions to a (set of) routes
+http://expressjs.com/en/guide/using-middleware.html
+
+  Trigger side effects
+  Alter request
+  Alter response
+  "short circuit" request/response flow
+
+
+- logging for example
+- add stuff like "user id"
+- add headers for example
+- e.g. check auth &amp; skip to error</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

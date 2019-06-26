@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://localhost:8080/node-2day/node-core-apis#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" class="present" style="top: 243px; display: block;"><h1 id="node-core-modules">Node Core Modules</h1>
+<aside class="notes" data-markdown="">- Things that are not part of Javascript but ship with Node.js</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 89px; display: block;"><!-- -->
+<h2 id="browser-node-or-javascript-">Browser, Node, or Javascript?</h2>
+<ul>
+  <li class="fragment" data-fragment-index="0"> <code>Math.pow</code> </li>
+  <li class="fragment" data-fragment-index="1"> <code>HTMLElement</code> </li>
+  <li class="fragment" data-fragment-index="2"> <code>window.document</code> </li>
+  <li class="fragment" data-fragment-index="3"> <code>process.cwd</code> </li>
+  <li class="fragment" data-fragment-index="4"> <code>RegExp</code> </li>
+  <li class="fragment" data-fragment-index="5"> <code>fs.readFile</code> </li>
+  <li class="fragment" data-fragment-index="6"> <code>console.log</code> </li>
+</ul>
+
+<aside class="notes" data-markdown="">Node is more than just Javascript, it's also the modules to do server specific
+tasks
+
+<strong>Which core module have we already touched on?</strong></aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 140.5px; display: block;"><h1 id="http-module">HTTP Module</h1>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
+</code></pre>
+<ul>
+  <li class="fragment" data-fragment-index="0"> <code>http.Server</code> </li>
+  <li class="fragment" data-fragment-index="1"> <code>http.IncomingMessage</code> </li>
+  <li class="fragment" data-fragment-index="2"> <code>http.ServerResponse</code> </li>
+</ul>
+
+<aside class="notes" data-markdown="">- three classes we're interested in
+- pull up examples from before</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h2 id="-http-server-"><code>http.Server</code></h2>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>Event Emitter</code></li>
+</ul>
+
+<aside class="notes" data-markdown="">- show docs on devdocs for <code>server</code>
+- take step back for event emitter</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-eventemitter-"><code>EventEmitter</code></h2>
+<ul>
+  <li class="fragment" data-fragment-index="0">Interface</li>
+  <li class="fragment" data-fragment-index="1">Main methods:
+  <ul>
+  <li class="fragment" data-fragment-index="2"><code>on(event, handlerFunction)</code></li>
+  <li class="fragment" data-fragment-index="3"><code>emit(event, data)</code></li>
+  </ul>
+</li></ul>
+
+<aside class="notes" data-markdown="">- <strong>show welcome / hello-world-server example, change to external function</strong></aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h2 id="incomingmessage">IncomingMessage</h2>
+<ul>
+  <li class="fragment" data-fragment-index="0">Created by <code>Server</code> object</li>
+  <li class="fragment" data-fragment-index="1">Contains info about request:
+    <ul class="fragment" data-fragment-index="2">
+      <li><code>method</code></li>
+      <li><code>url</code></li>
+      <li><code>headers</code></li>
+      <li>and more...</li>
+    </ul>
+  </li>
+</ul>
+
+<aside class="notes" data-markdown="">- mostly properties as we <strong>read from</strong> this obj</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-serverresponse-"><code>ServerResponse</code></h2>
+<ul>
+  <li class="fragment" data-fragment-index="0">Created by <code>Server</code> object</li>
+  <li class="fragment" data-fragment-index="1">Contains methods for response:
+    <ul class="fragment" data-fragment-index="2">
+      <li><code>setHeader(key, val)</code></li>
+      <li><code>statusCode</code></li>
+      <li><code>write(data[, encoding])</code></li>
+      <li>and more...</li>
+    </ul>
+  </li>
+</ul>
+
+<aside class="notes" data-markdown="">- more methods cuz we <strong>act upon</strong> this object</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><p><code>node-core-apis/start/http-server-found.js</code></p>
+<!-- -->
+<ol>
+<li>If user requests <code>/found</code><ul>
+<li>HTTP status code: 200</li>
+<li>respond with "you found it!"</li>
+</ul>
+</li>
+<li>Any other path<ul>
+<li>HTTP status code: 404</li>
+<li>respond with "Not found! :("</li>
+</ul>
+</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li>see table of contents on nodejs.org docs
+nodejs.org/dist/latest-v4.x/docs/api/http.html</li>
+</ol>
+<aside class="notes" data-markdown="">- What issues did you run into?
+- solution <code>node-core-apis/done/http-server-found.js</code></aside></section></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="transition" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: File System and Path Modules</em></p>
+</section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h1 id="filesystem-module">Filesystem Module</h1>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
+</code></pre>
+<aside class="notes" data-markdown="">provides for filesystem IO</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><ul>
+<li><code>fs.read</code></li>
+<li><code>fs.open</code></li>
+<li><code>fs.link</code></li>
+<li><code>fs.write</code></li>
+<li><code>fs.chown</code></li>
+<li><code>fs.mkdir</code></li>
+<li><code>fs.stat</code></li>
+<li>etc.</li>
+</ul>
+<aside class="notes" data-markdown="">- has methods for most unixy filesystem ops
+- <code>read</code> creates a file <code>descriptor</code>
+- <code>open</code> consumes a <code>descriptor</code></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-9888-synchronous-versions-9888-">⚠Synchronous versions⚠</h2>
+<ul>
+<li><code>fs.readSync</code></li>
+<li><code>fs.openSync</code></li>
+<li><code>fs.linkSync</code></li>
+<li><code>fs.writeSync</code></li>
+<li><code>fs.chownSync</code></li>
+<li><code>fs.mkdirSync</code></li>
+<li><code>fs.statSync</code></li>
+<li>etc.</li>
+</ul>
+<aside class="notes" data-markdown="">- Don't use these unless you have a specific reason! (or you just don't care
+  about perf)
+- Block event loop
+- Will cover more later
+- <strong>also some convenience methods for files</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><ul>
+<li><code>fs.readFile(name[, options], cb)</code></li>
+<li><code>fs.writeFile(name, data[, options], cb)</code></li>
+</ul>
+<aside class="notes" data-markdown="">What is this "callback"?
+
+Important concept, let's take a moment to examine</aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h1 id="callback-review">Callback Review</h1>
+<ul>
+<li>passed as an argument</li>
+<li>invoked after async operation completes</li>
+</ul>
+<aside class="notes" data-markdown="">How is this different from EventHandler?
+- called <strong>once</strong> 
+- only <strong>one</strong> of them
+
+Why do we need them? <strong>To respond to async events</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><pre><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">myCallback</span>(<span class="hljs-params">err, userRecord</span>)</span>{
+  <span class="hljs-keyword">if</span>(err) <span class="hljs-keyword">throw</span> err;
+  <span class="hljs-keyword">else</span> <span class="hljs-built_in">console</span>.log(userRecord);
+}
+
+db.getUser({ id : <span class="hljs-number">30</span> }, myCallback);
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'db query queued'</span>);
+</code></pre>
+<aside class="notes" data-markdown="">passing the <strong>function</strong> as an argument to getUser
+- What's the "event" in this case?
+- one more thing</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><pre><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">gotUser</span>(<span class="hljs-params">err, user</span>)</span>{ ... }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">writeComplete</span>(<span class="hljs-params">err</span>)</span>{ ... }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseHTML</span>(<span class="hljs-params">err, response</span>)</span>{ ... }
+
+db.getUser({ id : <span class="hljs-number">1</span> }, gotUser);
+fs.writeFile(<span class="hljs-string">'message.txt'</span>, <span class="hljs-string">"JS is Gr8!"</span>, <span class="hljs-string">'utf8'</span>, writeComplete);
+http.get(<span class="hljs-string">'http://sequoia.makes.software'</span>, parseHTML);
+</code></pre>
+<aside class="notes" data-markdown="">What do you notice in common about these functions</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="error-first">Error First</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> myCallback = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, ...
+</span></span></code></pre>
+<p><strong class="fragment" data-fragment-index="0">Always!!</strong> <!-- --></p>
+<aside class="notes" data-markdown="">this convention is basically law in Node.js
+- Common sig allows use of async management libs</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Back to Filesystem</em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><ul>
+<li><code>readFile(name[, options], cb)</code></li>
+<li><code>writeFile(name, data[, options], cb)</code></li>
+</ul>
+<aside class="notes" data-markdown="">let's try these out
+- demo readFile, don't decode buffer
+- take a look at docs
+
+Be sure to re-throw error!</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<h2 id="-fs-writefile-"><code>fs.writeFile</code></h2>
+<ol>
+<li>Write the string 'See you in San Francisco!' to <code>letter.txt</code>.</li>
+<li><code>console.error</code> on error</li>
+<li><code>console.log</code> success on success</li>
+</ol>
+<p>Hints</p>
+<ol>
+<li>RTFM (<code>fs.writeFile</code>)</li>
+</ol>
+<p>Extra Credit:</p>
+<ol>
+<li>If script is called with <code>--apend</code>, <strong>append</strong> instead of write</li>
+</ol>
+<aside class="notes" data-markdown="">do this one alone, show results
+
+- Did it behave as expected?
+- What if we wanted more control over the path?</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Other Core Modules</em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h1 id="path-module">Path Module</h1>
+<ul>
+  <li><code>path.join(part[, ...])</code></li>
+  <li><code>path.resolve(part[, ...])</code></li>
+  <li><code>path.basename(pathToFile)</code></li>
+  <li><code>path.dirname(pathToFile)</code></li>
+  <li><code>path.extname(pathToFile)</code></li>
+</ul>
+
+<aside class="notes" data-markdown="">Stuff for making &amp; parsing paths
+- show off parse &amp; join
+- assetPath = '/var/www/public'</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="url">URL</h1>
+<ul>
+<li><code>url.parse(urlString)</code></li>
+<li><code>url.resolve(from,to)</code></li>
+</ul>
+<aside class="notes" data-markdown="">- demo parse</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="querystring">querystring</h1>
+<ul>
+<li><code>querystring.parse(queryStr)</code></li>
+<li><code>querystring.stringify(queryObject)</code></li>
+</ul>
+<aside class="notes" data-markdown="">Demo</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="process">Process</h1>
+<ul>
+<li><code>process.cwd()</code></li>
+<li><code>process.env</code></li>
+<li><code>process.argv</code></li>
+<li><code>process.exit(code)</code></li>
+</ul>
+<aside class="notes" data-markdown="">show a couple of these off</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><code>node-core-apis/start/read-file-argv.js</code></p>
+<ol>
+<li>Receive filename as argument<br>
+<code>node read-file.js someFile.txt</code></li>
+<li>Read file</li>
+<li>Write file contents to console</li>
+<li>Ensure it works from another path (<code>cd ..</code> and run it again)</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li>Look around...<pre><code class="lang-js hljs javascript"><span class="hljs-built_in">console</span>.log(process.argv);
+</code></pre>
+</li>
+<li>File read path is relative to <code>CWD</code></li>
+</ol>
+<aside class="notes" data-markdown="">10min
+Does it work when you switch to parent directory &amp; run?</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="globals">Globals</h1>
+<ul>
+<li><code>__dirname</code></li>
+<li><code>__filename</code></li>
+</ul>
+<aside class="notes" data-markdown="">Together, modify script so it always reads relative to script itself</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<h2 id="send-html-file">Send HTML file</h2>
+<p><code>node-core-apis/start/read-file-server.js</code></p>
+<ol>
+<li>Read <code>index.html</code> on any request</li>
+<li>Send it back to the browser</li>
+</ol>
+<p>Hints</p>
+<ol>
+<li><code>fs</code>, <code>http</code>, &amp; <code>path</code> modules</li>
+<li>Callbacks</li>
+</ol>
+<p>Extra Credit</p>
+<ol>
+<li>Allow port configuration with ENV variable</li>
+<li><strong>Stream</strong> from the filesystem to the browser</li>
+</ol>
+<aside class="notes" data-markdown="">EXTRA/time allowing: if not at break already
+- solution</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Up Next: NPM &amp; the Node Ecosystem</p>
+</section></section></div><div class="backgrounds"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background future" style="display: none;"></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">Node Core Modules
+- Things that are not part of Javascript but ship with Node.js</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

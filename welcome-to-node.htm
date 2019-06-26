@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)http://localhost:8080/node-2day/welcome-to-node#/ -->
+<html lang="en" class="exercise"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; zoom: 1.34871;"><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" class="present" style="top: 19.5px; display: block;"><!-- -->
+<p>Create the following file:</p>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//filename: welcome-to-node/done/hello-world-server.js</span>
+<span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
+
+<span class="hljs-keyword">var</span> server = http.createServer(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>)</span>{
+  response.write(<span class="hljs-string">'Welcome to Intro to Node.js!'</span>);
+  response.end();
+});
+
+server.listen(<span class="hljs-number">8080</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'server listening at http://localhost:8080/'</span>);
+});
+</code></pre>
+<p>Run it from the terminal (command line):</p>
+<pre><code class="lang-sh hljs bash">$ node http-server.js
+</code></pre>
+<p>Point your browser to <a href="http://localhost:8080/">http://localhost:8080/</a></p>
+<aside class="notes" data-markdown="">Help people get unstuck.
+
+go 'til ~5min in</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 187px; display: block;"><h1 id="welcome-to-intro-to-node-js-">Welcome to Intro to Node.js!</h1>
+<aside class="notes" data-markdown="">- chat about example code
+- run it on the board</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 209px; display: block;"><h1 id="sequoia-mcdowell">Sequoia McDowell</h1>
+<p>@_sequoia | sequoia.mcdowell@gmail.com</p>
+<aside class="notes" data-markdown="">- Programmer and Educator
+- web tech for 10yrs, PHP + java
+- almost all JS for n+ years
+- Spent summer teaching Strongloop/ibm
+- Asked to put on workshop for O'Reilly
+- Who are you?</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="about-this-workshop">About this workshop</h1>
+<aside class="notes" data-markdown="">- mix of lecture &amp; hands-on
+- ask questions, I may table
+- help your neighbor! (or raise hand &amp; I'll help)
+- Goal: orient to Node.js
+- know what's out there, comfortable working or starting project</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="agenda-day-1">Agenda: Day 1</h1>
+<ul>
+<li>What is Node.js</li>
+<li>Javascript Review</li>
+<li>Core Modules</li>
+<li>Understanding Async</li>
+<li>The Node Ecosystem &amp; NPM</li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="agenda-day-2">Agenda: Day 2</h1>
+<ul>
+<li>Express.js</li>
+<li>Mongo &amp; Mongoose</li>
+<li>SQL &amp; Sequelize</li>
+<li>Hands-on Exercises!</li>
+</ul>
+<aside class="notes" data-markdown="">- <em>talk about excercise slides &amp; transition slides</em>
+- move fairly quickly, all code is available
+
+Time: 9:15</aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 124px; display: block;"><h1 id="what-is-node-js-">What is Node.js?</h1>
+<h2 id="-javascript-on-the-server-element-class-fragment-" class="fragment" data-fragment-index="0">"Javascript on the server" <!-- --></h2>
+<ul>
+<li class="fragment" data-fragment-index="1">Javascript Interpreter (V8) <!-- --></li>
+<li class="fragment" data-fragment-index="2">Server APIs <!-- --></li>
+<li class="fragment" data-fragment-index="3">libuv/Event Loop <!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- V8 is same as chrome
+- no <code>window</code>, <code>DOM</code>, <code>alert</code>, etc.
+- whiteboard this ^ (venn diagram?) TODO: create illustration
+- Server APIs = tools for the server (fs, http.server etc.)
+- libuv is cross-platform bindings for async I/O &lt;-- explain importance</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="why-use-node-js-">Why use Node.js?</h1>
+<ul>
+<li class="fragment" data-fragment-index="0">It's fast <!-- --></li>
+<li class="fragment" data-fragment-index="1">It's (becoming) ubiquitous <!-- --></li>
+<li class="fragment" data-fragment-index="2">Same language as front-end <!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- eLoop Talk more about speed in a moment
+  - good for high volume, small payload API style
+- "lingua franca" for webdev, replacing php, java, ruby
+- reuse skills, sometimes even reuse code</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="why-not-use-node-js-">Why <em>Not</em> use Node.js?</h1>
+<ul>
+<li class="fragment" data-fragment-index="0">CPU intensive tasks <!-- --></li>
+<li class="fragment" data-fragment-index="1">Heavy investment in Java/PHP/etc. <!-- --></li>
+<li class="fragment" data-fragment-index="2">Ecosystem currently in flux <!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- video processing, etc. (you know who you are)
+  - <strong>Use side-by-side</strong>
+- Team or apps all Java/PHP/etc.
+  - <strong>Will be harder to find devs in future tho!</strong>
+- This is changing
+  - <strong>With LTS this isn't so bad</strong>
+  - also, ES6</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="key-differences-from-java-ruby-php">Key differences from Java/Ruby/PHP</h1>
+<ul>
+<li class="fragment" data-fragment-index="0">Prototypal Inheritance <!-- --></li>
+<li class="fragment" data-fragment-index="1">Single Threaded <!-- --></li>
+<li class="fragment" data-fragment-index="2">Asynchronous I/O <!-- --></li>
+<li class="fragment" data-fragment-index="3">No "Rails" <!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- You can write in classical style but it's not the "go-to" style
+- Event loop
+- Event loop again!
+- There is no established front-runner framework</aside></section></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h1 id="running-node">Running Node</h1>
+<ul>
+<li class="fragment" data-fragment-index="0">Run file <!-- --></li>
+<li class="fragment" data-fragment-index="1">Node console <!-- --></li>
+<li class="fragment" data-fragment-index="2">Executable script <!-- --></li>
+<li class="fragment" data-fragment-index="3">NPM global install <!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- <strong>Who got the intro exercise working?</strong>
+- Who didn't?
+- <strong>File</strong> call bin, pass it file arg
+- Node console - solicit 2 or 3 observations
+- hashbang (time allowing)
+- NPM global: we'll talk about this later</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<h2 id="run-a-script">Run a script</h2>
+<ol>
+<li>Create <code>hello-world.js</code><pre><code class="lang-js hljs javascript"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">'hello world'</span>);
+</code></pre>
+</li>
+<li>Run it</li>
+</ol>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<h2 id="using-the-console">Using the console</h2>
+<ol>
+<li>Launch the node console</li>
+<li>Run the following statements</li>
+</ol>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> numbers = [<span class="hljs-number">72</span>, <span class="hljs-number">101</span>, <span class="hljs-number">108</span>, <span class="hljs-number">108</span>, <span class="hljs-number">111</span>, <span class="hljs-number">32</span>, <span class="hljs-number">87</span>, <span class="hljs-number">111</span>, <span class="hljs-number">114</span>, <span class="hljs-number">108</span>, <span class="hljs-number">100</span>];
+</code></pre>
+<pre><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decode</span>(<span class="hljs-params">number</span>)</span>{ <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode(number); }
+</code></pre>
+<pre><code class="lang-js hljs javascript">numbers.map(decode).join(<span class="hljs-string">''</span>);
+</code></pre>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="transition" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: What is Javascript</em></p>
+<aside class="notes" data-markdown=""><em>Time: 9:30ish</em></aside></section></div><div class="backgrounds"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">
+Create the following file:
+//filename: welcome-to-node/done/hello-world-server.js
+var http = require('http');
+
+var server = http.createServer(function(request, response){
+  response.write('Welcome to Intro to Node.js!');
+  response.end();
+});
+
+server.listen(8080, function(){
+  console.log('server listening at http://localhost:8080/');
+});
+
+Run it from the terminal (command line):
+$ node http-server.js
+
+Point your browser to http://localhost:8080/
+Help people get unstuck.
+
+go 'til ~5min in</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://localhost:8080/node-2day/mongo-and-mongoose#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" class="present" style="top: 243px; display: block;"><h1 id="mongo-mongoose">Mongo &amp; Mongoose</h1>
+<aside class="notes" data-markdown="">- Mongoose is an ODM for mongo</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 229px; display: block;"><h2 id="what-is-an-odm-">What is an ODM?</h2>
+<p>"Object <em>Document</em> Mapper"</p>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 236.5px; display: block;"><h2 id="mongoose-setup">Mongoose setup</h2>
+<pre><code class="lang-no-highlight">$ npm install --save mongoose
+</code></pre>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="mongoose-setup">Mongoose setup</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> mongouri = <span class="hljs-string">'mongodb://username:password@host:51625/db-name'</span>;
+
+mongoose.connect(mongouri);
+
+<span class="hljs-comment">//handle connection error</span>
+mongoose.connection.on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>)</span>{
+  <span class="hljs-built_in">console</span>.error(e);
+});
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> mongouri = process.env.MONGOURI; <span class="hljs-comment">//set in process.env</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- **Or put mongoURI in environment (what I do)
+- Once connection is set-up you mostly use Models to query</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="schema-models">Schema &amp; Models</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//schema//</span>
+<span class="hljs-keyword">var</span> dishSchema = mongoose.Schema({
+  name: <span class="hljs-built_in">String</span>,
+  spicy: <span class="hljs-built_in">Boolean</span>
+});
+
+<span class="hljs-keyword">var</span> restaurantSchema = mongoose.Schema({
+  name: <span class="hljs-built_in">String</span>,
+  founded: <span class="hljs-built_in">Number</span>,
+  Dishes: [ dishSchema ]
+});
+
+<span class="hljs-comment">//model//</span>
+<span class="hljs-keyword">var</span> Restaurant = mongoose.model(<span class="hljs-string">'Restaurant'</span>, restaurantSchema);
+</code></pre>
+<aside class="notes" data-markdown="">- Create our models
+- Also just JS objects, no data 'til you save
+- First must create "schema" to represent data structure
+- Create a "Model" with that schema
+- <em>note only exporting restaurant</em>
+- mongoose.model is where collection <em>name</em> is set</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="-relationships-population"><del>Relationships</del> Population</h2>
+<ul>
+<li>Restaurants Collection <em>and</em> Dishes collection</li>
+<li>Enter foreign key IDs like SQL</li>
+<li>Mongoose <strong>"populates"</strong> the Restaurant with related Dishes</li>
+</ul>
+<aside class="notes" data-markdown="">- <em>We're not doing this</em>
+- If you have a lot of data like this, probably better off with SQL
+- <strong>We have hasMany unique dishes</strong> well-suited for document</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="-relationships-sub-documents"><del>Relationships</del> Sub-documents</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> restaurantSchema = mongoose.Schema({ <span class="hljs-comment">/* name, founded, ...*/</span>
+  Dishes: [ dishSchema ]
+});
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-json hljs">[
+  {
+   "<span class="hljs-attribute">_id</span>": <span class="hljs-value">{ "<span class="hljs-attribute">$oid</span>": <span class="hljs-value"><span class="hljs-string">"56afe2b362e2946e89dd0e38"</span> </span>}</span>,
+  "<span class="hljs-attribute">name</span>" : <span class="hljs-value"><span class="hljs-string">"Amici's"</span></span>,
+  "<span class="hljs-attribute">founded</span>": <span class="hljs-value"><span class="hljs-number">2010</span></span>,
+  "<span class="hljs-attribute">Dishes</span>": <span class="hljs-value">[
+    {
+      "<span class="hljs-attribute">name</span>" : <span class="hljs-value"><span class="hljs-string">"tacos"</span></span>,
+      "<span class="hljs-attribute">spicy</span>" : <span class="hljs-value"><span class="hljs-literal">true</span> <span class="hljs-number">0</span></span>},
+      <span class="hljs-string">"_id"</span>: { "<span class="hljs-attribute">$oid</span>": <span class="hljs-value"><span class="hljs-string">"56afe2b362e2946e89dd0e3f"</span> </span>},
+    ...
+  },
+  ...
+]
+</span></code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- Dishes is just a property of restaurant record
+- Dish schema defines <strong>structure</strong> of the sub-doc, <strong>not another collection</strong></aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="syncing-models">Syncing Models</h2>
+<p>Nope!</p>
+<aside class="notes" data-markdown="">- No need to sync because you can send differently structured data every
+time &amp; mongo doesn't care</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>In <code>mongoose-restaurants</code>...</p>
+<ol>
+<li><code>npm install</code></li>
+<li>edit <code>index.js</code> to match your environment</li>
+<li><code>node .</code></li>
+<li>Explore data:
+<code>https://mongolab.com</code><br><code>/databases/{db}/collections/restaurants</code></li>
+</ol>
+<p>Hints:</p>
+<ul>
+<li>Feel free to hardcode the mongoURI<ul>
+<li>Otherwise, <code>export MONGOURI=&lt;yourmongouri&gt;</code></li>
+</ul>
+</li>
+<li>get mongoURI from <code>https://mongolab.com/databases/{db}</code></li>
+</ul>
+<aside class="notes" data-markdown="">*show off demoing</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="-restaurants-collection"><code>restaurants</code> collection</h2>
+<pre><code class="lang-no-highlight">[
+  {
+      "_id": {
+          "$oid": "56afe2b362e2946e89dd0e25"
+      },
+      "name": "Taco Gong",
+      "founded": 2011,
+      "Dishes": [
+          {
+              "name": "Pancakes",
+              "spicy": false,
+              "_id": {
+                  "$oid": "56afe2b362e2946e89dd0e2c"
+              }
+          },
+          ...
+</code></pre>
+<aside class="notes" data-markdown="">- <em>Explore the data a bit</em>
+- "Object ID", unique ids in mongo
+  - required on EVERY document
+  - contain creation timestamp</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="queries">Queries</h2>
+<ul>
+<li><code>Model.findOne</code></li>
+<li><code>Model.findById</code></li>
+<li><code>Model.find</code></li>
+<li>Take <strong>callbacks</strong></li>
+</ul>
+<pre><code class="lang-js hljs javascript">Model.find([conditions, projection, options,] callback);
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">Post.find(handlePosts);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handlePosts</span>(<span class="hljs-params">err, posts</span>)</span>{
+  <span class="hljs-comment">//do something with posts Array</span>
+}
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- explain args
+- all but callback are optional</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="promises">Promises</h2>
+<pre><code class="lang-js hljs javascript">Post.find()
+  .exec()
+  .then(handlePosts)
+  .catch(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>)</span>{ <span class="hljs-built_in">console</span>.error(e); });
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handlePosts</span>(<span class="hljs-params">posts</span>)</span>{
+  <span class="hljs-comment">//do something with posts Array</span>
+}
+</code></pre>
+<aside class="notes" data-markdown="">- <em>Use this one</em>
+- exec makes it return a promise
+- we can swap out promises impl which we've done in connection (line 2)</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>Connect the <code>/restaurants/</code> route</p>
+<p>Hints:</p>
+<ul>
+<li>Promise!! (<strong>and <code>exec</code></strong>)<pre><code class="lang-js hljs javascript">Model.find().exec()
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">results</span>)</span>{
+    <span class="hljs-comment">//use results</span>
+  });
+</code></pre>
+</li>
+<li>Template expects an object with a <code>restaurants</code> key:<pre><code class="lang-no-highlight">each restaurant in restaurants
+  li
+    a(href='/restaurants/' + restaurant.id)= restaurant.name
+</code></pre>
+</li>
+</ul>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="query-conditions">Query Conditions</h2>
+<pre><code class="lang-js hljs javascript">Post.find({ featured : <span class="hljs-literal">true</span> })
+  .exec().then(handler);
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">Post.find()
+  .where({featured : <span class="hljs-literal">true</span> })
+  .exec().then(handler);
+</code></pre>
+<!-- -->
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="query-conditions">Query Conditions</h2>
+<pre><code class="lang-js hljs javascript">Person
+  .find({ occupation: <span class="hljs-regexp">/host/</span> })
+  .where(<span class="hljs-string">'name.last'</span>).equals(<span class="hljs-string">'Ghost'</span>)
+  .where(<span class="hljs-string">'age'</span>).gt(<span class="hljs-number">17</span>).lt(<span class="hljs-number">66</span>)
+  .where(<span class="hljs-string">'likes'</span>).in([<span class="hljs-string">'walking'</span>, <span class="hljs-string">'talking'</span>])
+  .limit(<span class="hljs-number">10</span>)
+  .sort(<span class="hljs-string">'-occupation'</span>)
+  .exec().then(handler);
+</code></pre>
+<aside class="notes" data-markdown="">- <em>won't use these, just wanted to show them</em></aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="-attributes-projections"><del>Attributes</del> Projections</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> query = Post.find(
+    {featured : <span class="hljs-literal">true</span>},
+    <span class="hljs-string">'title slug description'</span> <span class="hljs-comment">//fields to "project"</span>
+  )
+  .exec().then(handler);
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">Post.find()
+  .where({featured : <span class="hljs-literal">true</span> })
+  .select(<span class="hljs-string">'title slug description'</span>)
+  .exec().then(handler);
+</code></pre>
+<!-- -->
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="-relations-sub-documents"><del>Relations</del> Sub-documents</h2>
+<p><strong>Included by default</strong></p>
+<pre><code class="lang-json hljs">[
+  {
+   "<span class="hljs-attribute">_id</span>": <span class="hljs-value">{ "<span class="hljs-attribute">$oid</span>": <span class="hljs-value"><span class="hljs-string">"56afe2b362e2946e89dd0e38"</span> </span>}</span>,
+  "<span class="hljs-attribute">name</span>" : <span class="hljs-value"><span class="hljs-string">"Amici's"</span></span>,
+  "<span class="hljs-attribute">founded</span>": <span class="hljs-value"><span class="hljs-number">2010</span></span>,
+  "<span class="hljs-attribute">Dishes</span>": <span class="hljs-value">[
+    {
+      "<span class="hljs-attribute">name</span>" : <span class="hljs-value"><span class="hljs-string">"tacos"</span></span>,
+      "<span class="hljs-attribute">spicy</span>" : <span class="hljs-value"><span class="hljs-literal">true</span> <span class="hljs-number">0</span></span>},
+      <span class="hljs-string">"_id"</span>: { "<span class="hljs-attribute">$oid</span>": <span class="hljs-value"><span class="hljs-string">"56afe2b362e2946e89dd0e3f"</span> </span>},
+    ...
+  },
+  ...
+]
+</span></code></pre>
+<aside class="notes" data-markdown="">- if you don't want them remove from projection
+- we'll talk about more when we discuss queries</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>Connect the <code>/restaurants/:id</code> route</p>
+<p>Hints:</p>
+<ul>
+<li>id passed in <code>req.params</code></li>
+<li><code>findById</code></li>
+<li>Promise!! (and <code>exec</code>!!)</li>
+<li>Template expects an object with <code>name</code>, <code>founded</code>, <code>Dishes</code> keys</li>
+</ul>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="saving-data">Saving data</h2>
+<h3 id="build-save">Build &amp; Save</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> hd_post = <span class="hljs-keyword">new</span> Post({
+  title : <span class="hljs-string">'Are Hotdogs Sandwiches?'</span>
+});
+
+hd_post.contents = postContents;
+hd_post.save();
+</code></pre>
+<h3 id="create" data-fragment-index="0" class="fragment">Create</h3>
+<!-- -->
+<pre data-fragment-index="0" class="fragment"><code class="lang-js hljs javascript">Post.create({
+  title : <span class="hljs-string">'Are Hotdogs Sandwiches?'</span>,
+  contents : postContents
+})
+.then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">hd_post</span>)</span>{ ... });
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- building model does not persist it to database!
+- <em>create does</em>
+- <strong>create statements do not require <code>exec</code>!</strong>
+- <strong>create is IDENTICAL to sequelize code!</strong></aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="updating-data">Updating data</h2>
+<pre><code class="lang-js hljs javascript">Post
+  .findById(<span class="hljs-number">123</span>)
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">hd_post</span>)</span>{
+    hd_post.title = <span class="hljs-string">'The Hotdog Dilemma'</span>
+    hd_post.save;
+  }).exec(callback);
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> oldTitle = <span class="hljs-string">'Are Hotdogs Sandwiches?'</span>;
+<span class="hljs-keyword">var</span> newTitle = <span class="hljs-string">'The Hotdog Dilemma'</span>;
+
+Post.findOneIdAndUpate(
+  { title : oldTitle},
+  { title : newTitle}
+).exec(callback);
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown=""></aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>Connect the <code>POST /restaurants/</code> route</p>
+<p>Hints:</p>
+<ul>
+<li><code>req.body</code> (already parsed! ☺)</li>
+<li>no need for <code>exec</code></li>
+<li><code>create</code> <strong>or</strong> <code>new Model</code> &amp; <code>save</code></li>
+<li>You may experience code  déjà vu...</li>
+</ul>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="transition" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>THANKS FOR COMING!!!</p>
+<p><a href="http://bit.ly/fluent-node-feedback">http://bit.ly/fluent-node-feedback</a></p>
+</section></div><div class="backgrounds"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">Mongo &amp; Mongoose
+- Mongoose is an ODM for mongo</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

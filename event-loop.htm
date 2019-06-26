@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://localhost:8080/node-2day/event-loop#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" class="present" style="top: 243px; display: block;"><h1 id="asynchrony-in-node">Asynchrony in Node</h1>
+<aside class="notes" data-markdown="">brief review from AM. talked about...
+
+- Talk about history, browser, why it's Async,</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 243px; display: block;"><h1 id="the-event-loop">The Event Loop</h1>
+<aside class="notes" data-markdown="">- Waiter example (<strong>Whiteboard</strong>)
+- 1 cook/waiter → sync
+- many → multi-thread
+- 1 fast waiter, many cooks → event loop
+- don't block!
+- What happens if this waiter stops to make someone's food?</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 194.5px; display: block;"><h2 id="demos">Demos</h2>
+<p><code class="fragment" data-fragment-index="0">misc/eventloop-illustration/</code><!-- --></p>
+<p><a href="http://sequoia.makes.software/eventloop-svg" class="fragment" data-fragment-index="1">http://sequoia.makes.software/eventloop-svg</a><!-- --> </p>
+<aside class="notes" data-markdown="">- <a href="http://j.mp/eventloop-sim">http://j.mp/eventloop-sim</a> if you want
+- show each in turn
+- <strong>If you use <code>readFileSync</code>, which of these models are you using?</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="abc">ABC</h1>
+<ul>
+<li><strong>A</strong>lways</li>
+<li><strong>B</strong>e</li>
+<li>asyn<strong>C</strong></li>
+</ul>
+<aside class="notes" data-markdown="">We'll look into the practical aspect of this later</aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 229.5px; display: block;"><h2 id="maintaining-asynchrony">Maintaining Asynchrony</h2>
+<p>Error-first callback in Node.js says:
+<strong class="fragment" data-fragment-index="0">"I am asynchronous!"</strong><!-- --></p>
+<aside class="notes" data-markdown="">- If you are creating callbacks like this, they MUST be async
+- Otherwise break flow-control tools that assume asyncrhony</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="get-site-headers">Get Site Headers</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> https = <span class="hljs-built_in">require</span>(<span class="hljs-string">'https'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getHeadersHTTPS</span>(<span class="hljs-params">address, cb</span>)</span>{
+  https.get(address)
+    .on(<span class="hljs-string">'response'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">response</span>)</span>{
+      <span class="hljs-comment">//success! pass `null` error + headers to callback</span>
+      cb(<span class="hljs-literal">null</span>, response.headers);
+    })
+    .on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>)</span>{
+      <span class="hljs-comment">//error :( pass to callback</span>
+      cb(err);
+    });
+}
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> target = <span class="hljs-string">'https://devdocs.io/'</span>;
+
+getHeadersHTTPS(target , <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, headers</span>)</span>{
+  <span class="hljs-keyword">if</span>(err) <span class="hljs-keyword">return</span> <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'ERROR: '</span>, err.message);
+  <span class="hljs-built_in">console</span>.log(headers);
+});
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- walk thru function, <strong>https.get is ASYNC I/O</strong>
+- <strong>what async style is https.get using?</strong>
+  - EventEmitter
+- call thus
+- <strong>Why are we saying <code>return console.error</code>?</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="ensure-protocol-is-https">Ensure protocol is HTTPS</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> https = <span class="hljs-built_in">require</span>(<span class="hljs-string">'https'</span>);
+<span class="hljs-keyword">var</span> url = <span class="hljs-built_in">require</span>(<span class="hljs-string">'url'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getHeadersHTTPS</span>(<span class="hljs-params">address, cb</span>)</span>{
+
+  <span class="hljs-keyword">var</span> protocol = url.parse(address).protocol;
+  <span class="hljs-keyword">if</span>(protocol !== <span class="hljs-string">'https:'</span>){
+    <span class="hljs-keyword">return</span> cb(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'address must be httpS'</span>));
+  }
+
+  https.get(address)
+    .on(<span class="hljs-string">'response'</span>, <span class="hljs-comment">//... omitted ...</span>
+}
+</code></pre>
+<p><strong class="fragment" data-fragment-index="0">"takes callback" !== "automatically asynchronous"</strong>
+<!-- --></p>
+<aside class="notes" data-markdown="">- What will happen here?
+- demo
+- one outcome fires on next tick, one on THIS cycle of eventloop
+- how to fix this?
+TODO: add example with promises? may better illustrate issue with ordering ops</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="make-it-asynchronous">Make it Asynchronous</h3>
+<pre><code class="lang-js hljs javascript">  <span class="hljs-comment">// ...</span>
+  <span class="hljs-keyword">if</span>(protocol !== <span class="hljs-string">'https:'</span>){
+    <span class="hljs-keyword">return</span> process.nextTick(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+      cb(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'address must be httpS'</span>));
+    }
+  }
+  <span class="hljs-comment">// ...</span>
+</code></pre>
+<aside class="notes" data-markdown="">- waits 'til next tick to call callback
+- <strong>now failure matches timing of success</strong>
+- allows other things on thisTick to complete first
+- allows for use with async flow control tools</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Node core APIs</em></p>
+<aside class="notes" data-markdown="">Time ~ 12:30</aside></section></section></div><div class="backgrounds"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">Asynchrony in Node
+brief review from AM. talked about...
+
+- Talk about history, browser, why it's Async,</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

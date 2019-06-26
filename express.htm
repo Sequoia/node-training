@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)http://localhost:8080/node-2day/express#/ -->
+<html lang="en" class="exercise"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" class="present" style="top: 0px; display: block;"><!-- -->
+<p>In <code>code-along/express-app/</code></p>
+<ol>
+<li><p>Initialize a new project and install express</p>
+<pre><code class="lang-sh hljs bash"> npm init -y
+ npm install --save express
+</code></pre>
+</li>
+<li><p>Create an <code>index.js</code> containing the following code:</p>
+<pre><code class="lang-js hljs javascript"> <span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+ <span class="hljs-keyword">var</span> app = express();
+
+ app.get(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, res</span>) </span>{
+   res.send(<span class="hljs-string">'Hello World!'</span>);
+ });
+
+ app.listen(<span class="hljs-number">3000</span>);
+</code></pre>
+</li>
+<li><code>node .</code></li>
+<li>Point browser to <a href="http://localhost:3000/">http://localhost:3000</a></li>
+</ol>
+<aside class="notes" data-markdown="">- <em>make sure this bit gets finished!</em>
+- after this, talk a bit about yesterday
+  - node core
+  - async management
+  - javascript review
+  - ecosystem &amp; NPM
+- with that groundwork laid, today: build some stuff</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 243px; display: block;"><h1 id="express-js-overview">Express.js Overview</h1>
+<aside class="notes" data-markdown="">- Top HTTP framework by a mile
+- <del>Backed by IBM</del>
+- Relied upon by many other frameworks</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 215px; display: block;"><h2 id="what-is-express-">What is Express?</h2>
+<ul>
+  <li class="fragment" data-fragment-index="0">Router</li>
+  <li class="fragment" data-fragment-index="1">Middleware</li>
+</ul>
+
+<aside class="notes" data-markdown="">- two main "features"</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="what-isn-t-express-">What <strong>isn't</strong> Express?</h2>
+<p>Ruby on Rails</p>
+<ul>
+  <li class="fragment" data-fragment-index="0">No ORM</li>
+  <li class="fragment" data-fragment-index="1">No template engine*</li>
+  <li class="fragment" data-fragment-index="2">Very little bundled</li>
+</ul>
+
+<aside class="notes" data-markdown="">- it's not a full featured framework
+- <em>click thru features</em>
+- very little bundles
+- <strong>sugar over httpServer</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="competitors">Competitors</h2>
+<ul>
+<li>Koa</li>
+<li>Sails.js</li>
+<li>Hapi</li>
+<li>Restify</li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="router">Router</h2>
+<pre><code class="lang-js hljs javascript">app.get(path, handlerFunction);
+</code></pre>
+<pre data-fragment-index="0" class="fragment"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handlerFunction</span>(<span class="hljs-params">request, response</span>)</span>{ <span class="hljs-comment">//...</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- links http paths/request types to handler methods
+- how to use them
+- handler signature
+- example</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="express-hello-world">Express Hello World</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> server = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>)();
+
+server.get(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, res</span>) </span>{
+  res.send(<span class="hljs-string">'Hello World!'</span>);
+});
+
+server.listen(<span class="hljs-number">3000</span>);
+</code></pre>
+<h3 id="node-http-hello-world" data-fragment-index="0" class="fragment">Node/http Hello World</h3>
+<!-- -->
+<pre data-fragment-index="0" class="fragment"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> server = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>).createServer();
+
+server.on(<span class="hljs-string">'request'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+  res.write(<span class="hljs-string">'Hello World!'</span>);
+  res.end();
+});
+
+server.listen(<span class="hljs-number">3000</span>);
+</code></pre>
+<!-- -->
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="style-note">Style note</h2>
+<p>This:</p>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>)();
+<span class="hljs-keyword">var</span> obj = <span class="hljs-built_in">require</span>(<span class="hljs-string">'returns-a-function'</span>)();
+</code></pre>
+<p data-fragment-index="0" class="fragment">Is the same as this:
+<!-- --></p>
+<pre data-fragment-index="0" class="fragment"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+<span class="hljs-keyword">var</span> app = express();
+
+<span class="hljs-keyword">var</span> aFunction = <span class="hljs-built_in">require</span>(<span class="hljs-string">'returns-a-function'</span>);
+<span class="hljs-keyword">var</span> obj = aFunction();
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">If you are just using the required function <em>once</em>, use the shorthand</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="node-http-two-routes">Node/HTTP Two Routes</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//http-greet-route.js</span>
+<span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
+<span class="hljs-keyword">var</span> url = <span class="hljs-built_in">require</span>(<span class="hljs-string">'url'</span>);
+<span class="hljs-keyword">var</span> querystring = <span class="hljs-built_in">require</span>(<span class="hljs-string">'querystring'</span>);
+
+<span class="hljs-keyword">var</span> server = http.createServer(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>)</span>{
+  <span class="hljs-keyword">var</span> reqUrl = url.parse(request.url);
+  <span class="hljs-keyword">if</span>(reqUrl.pathname == <span class="hljs-string">'/'</span>){
+    rootHandler(request, response);
+  }
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (reqUrl.pathname ==  <span class="hljs-string">'/greet'</span>){
+    greetHandler(request, response);
+  }
+});
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">rootHandler</span>(<span class="hljs-params">req, res</span>)</span>{
+  res.end(<span class="hljs-string">'Hello World!'</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">greetHandler</span>(<span class="hljs-params">req, res</span>)</span>{
+  <span class="hljs-keyword">var</span> query = querystring.parse(url.parse(req.url).query);
+  res.end(<span class="hljs-string">'Hello '</span> + query.name);
+}
+
+server.listen(<span class="hljs-number">3000</span>);
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="express-two-routes">Express Two Routes</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//my-express-project/misc/greeter.js</span>
+
+<span class="hljs-keyword">var</span> server = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>)();
+
+server.get(<span class="hljs-string">'/'</span>, handleRoot);
+server.get(<span class="hljs-string">'/greet'</span>, handleGreet);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleRoot</span>(<span class="hljs-params">req, res</span>) </span>{
+  res.send(<span class="hljs-string">'Hello World!'</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleGreet</span>(<span class="hljs-params">req, res</span>) </span>{
+  res.send(<span class="hljs-string">'Hello '</span> + req.query.name);
+}
+
+server.listen(<span class="hljs-number">3000</span>);
+</code></pre>
+<aside class="notes" data-markdown="">- easier to reason about
+- less code
+- more explicit
+- handles basic boilerplate-y tasks: <strong>what a framework is for!</strong></aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 137px; display: block;"><h2 id="middleware">Middleware</h2>
+<p>Map functions to a (set of) routes</p>
+<pre><code class="lang-js hljs javascript">app.use(path, middleware);
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">middleware</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  <span class="hljs-comment">//do some stuff</span>
+  next();
+}
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- path is optional</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="middleware-example">Middleware Example</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> auth = <span class="hljs-built_in">require</span>(<span class="hljs-string">'auth-middleware'</span>);
+<span class="hljs-keyword">var</span> static = <span class="hljs-built_in">require</span>(<span class="hljs-string">'static-middleware'</span>);
+<span class="hljs-keyword">var</span> logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">'log-middleware'</span>);
+
+app.use(logger);
+app.use(<span class="hljs-string">'/assets'</span>, static(<span class="hljs-string">'site/assets'</span>));
+app.use(<span class="hljs-string">'/admin'</span>, auth)
+
+<span class="hljs-comment">/* handler functions omitted */</span>
+app.get(<span class="hljs-string">'/'</span>, handleRoot);
+app.get(<span class="hljs-string">'/users'</span>, listUsersHandler);
+
+app.get(<span class="hljs-string">'/admin/home'</span>, adminHomeHandler);
+app.get(<span class="hljs-string">'/admin/users/create'</span>, userForm);
+app.post(<span class="hljs-string">'/admin/users/create'</span>, createUser);
+<span class="hljs-comment">// ...</span>
+</code></pre>
+<aside class="notes" data-markdown="">- logger: all requests
+- static: requests to 'assets' path
+- auth: all admin routes</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="one-weird-trick-">One weird trick...</h3>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handler</span>(<span class="hljs-params">req, res</span>)</span>{
+  res.end(<span class="hljs-string">'Hello World!'</span>);
+}
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">middleware</span>(<span class="hljs-params">req, res, next</span>)</span>{
+  <span class="hljs-comment">//do some stuff</span>
+  next();
+}
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript">app.use(path, middleware);
+app.get(path, handler);
+</code></pre>
+<!-- -->
+<p><strong class="fragment" data-fragment-index="3">"Routes" are middleware that don't call next!</strong>
+<!-- --></p>
+<aside class="notes" data-markdown="">- also they typically use a shorthand <code>use</code> method</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="finding-help">Finding help</h2>
+<ul>
+<li><a href="http://expressjs.com/en/4x/api.html">http://expressjs.com/en/4x/api.html</a><ul>
+<li><em>Check out "Guide" in the menu!</em></li>
+</ul>
+</li>
+<li><a href="http://devdocs.io/">http://devdocs.io</a></li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Routes</em></p>
+<aside class="notes" data-markdown="">TODO: Do I need a section on app methods, app.set etc.?</aside></section></section></div><div class="backgrounds"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">
+In code-along/express-app/
+
+Initialize a new project and install express
+ npm init -y
+ npm install --save express
+
+
+Create an index.js containing the following code:
+ var express = require('express');
+ var app = express();
+
+ app.get('/', function (req, res) {
+   res.send('Hello World!');
+ });
+
+ app.listen(3000);
+
+
+node .
+Point browser to http://localhost:3000
+
+- make sure this bit gets finished!
+- after this, talk a bit about yesterday
+  - node core
+  - async management
+  - javascript review
+  - ecosystem &amp; NPM
+- with that groundwork laid, today: build some stuff</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

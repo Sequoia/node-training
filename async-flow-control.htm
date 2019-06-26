@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://localhost:8080/node-2day/async-flow-control#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" class="present" style="top: 169.5px; display: block;"><h1 id="async-flow-control">Async Flow Control</h1>
+<ul>
+<li class="fragment" data-fragment-index="0">Callbacks <!-- --></li>
+<li class="fragment" data-fragment-index="1">EventEmitters <!-- --></li>
+<li class="fragment" data-fragment-index="2">Promises <!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- JS is async by default (<strong>Browser history</strong>)
+- going to cover practical first, then theory
+- Flow control can be confusing
+- Code doesn't execute top to bottom
+- <strong>different styles</strong></aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 229px; display: block;"><h2 id="callbacks">Callbacks</h2>
+<p><em>"Function to be called when async operation is complete"</em></p>
+<aside class="notes" data-markdown="">- Traditional API/strategy for handling async in node
+- Why was this chosen?
+- based on style called "Continuation Style Passing"
+- <strong>→let's take look at CSP</strong>
+- used in setTimeout</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 197px; display: block;"><h3 id="continuation-style-passing">Continuation Style Passing</h3>
+<ul>
+<li class="fragment" data-fragment-index="0">"No procedure is allowed to return to its caller--ever."<!-- --></li>
+<li class="fragment" data-fragment-index="1">"Procedures can take a callback to invoke upon their return value."<!-- -->
+</li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="continuation-style-passing">Continuation Style Passing</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//without CSP</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">self</span>  (<span class="hljs-params">x</span>) </span>{ <span class="hljs-keyword">return</span> x; }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addOne</span>(<span class="hljs-params">x</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> + x; }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">double</span>(<span class="hljs-params">x</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * x; }
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-comment">//without CSP</span>
+<span class="hljs-keyword">var</span> startVal = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> selfed   = self(startVal);
+<span class="hljs-keyword">var</span> oneAdded = addone(selfed);
+<span class="hljs-keyword">var</span> doubled  = double(oneAdded);
+
+<span class="hljs-built_in">console</span>.log(doubled);   <span class="hljs-comment">// output: 6</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- <strong>but what if we can't return?</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="continuation-style-passing">Continuation Style Passing</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//WITH CSP</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">self</span>  (<span class="hljs-params">x, cb</span>) </span>{ cb(x); }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addOne</span>(<span class="hljs-params">x, cb</span>) </span>{ cb(<span class="hljs-number">1</span> + x); }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">double</span>(<span class="hljs-params">x, cb</span>) </span>{ cb(<span class="hljs-number">2</span> * x); }
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-comment">//WITH CSP</span>
+<span class="hljs-keyword">var</span> startVal = <span class="hljs-number">2</span>;
+
+self(startVal, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">selfed</span>)</span>{
+  <span class="hljs-comment">//do stuff with selfed</span>
+});
+
+double(starVal, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">doubled</span>)</span>{
+  <span class="hljs-comment">//do stuff with doubled value</span>
+});
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- does its operation then calls the callback with the result
+- how does this look going the whole way thru?</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><pre><code class="lang-js hljs javascript"><span class="hljs-comment">//WITH CSP</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">self</span>  (<span class="hljs-params">x, cb</span>) </span>{ cb(x); }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addOne</span>(<span class="hljs-params">x, cb</span>) </span>{ cb(<span class="hljs-number">1</span> + x); }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">double</span>(<span class="hljs-params">x, cb</span>) </span>{ cb(<span class="hljs-number">2</span> * x); }
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> startVal = <span class="hljs-number">2</span>;
+
+self(startVal, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">selfed</span>)</span>{
+
+  addOne(selfed, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">oneAdded</span>)</span>{
+
+    double(oneAdded, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">doubled</span>)</span>{
+
+      <span class="hljs-built_in">console</span>.log(doubled); <span class="hljs-comment">//outputs 6</span>
+
+    });
+
+  });
+
+});
+</code></pre>
+<!-- -->
+<p><strong class="fragment" data-fragment-index="1">Yikes!</strong><!-- --></p>
+<aside class="notes" data-markdown="">- (yes that code looks like hell we'll address that soon)
+- Why would you want to do this?
+- <strong>say we want to do an I/O action like readfile that takes time on CPU...</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="option-1">Option 1</h3>
+<pre><code class="lang-js hljs javascript">  <span class="hljs-keyword">try</span>{
+    <span class="hljs-keyword">var</span> results = readFile(<span class="hljs-string">'myFile'</span>);
+  }<span class="hljs-keyword">catch</span>(e){
+    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'bad things :('</span>);
+  }
+  <span class="hljs-built_in">console</span>.log(results);
+
+  <span class="hljs-comment">//do other stuff later...</span>
+</code></pre>
+<p><em class="fragment" data-fragment-index="0">Blocking!</em><!-- --></p>
+<h3 id="option-2-element-class-fragment-data-fragment-index-2-" class="fragment" data-fragment-index="1">Option 2<!-- --></h3>
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">  readFile(<span class="hljs-string">'myFile'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, results</span>)</span>{
+    <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">return</span> <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'bad things :('</span>);
+    <span class="hljs-built_in">console</span>.log(results);
+  });
+
+  <span class="hljs-comment">//do other stuff right away!</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- Problems with this? → blocking
+- Solution? <strong>→ CSP aka "callbacks"</strong>
+- <strong>→ Let's give it a try</strong></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<h2 id="-fs-readfile-"><code>fs.readfile</code></h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//filename: async-flow-control/start/read-file.js</span>
+<span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
+<span class="hljs-keyword">var</span> filename = <span class="hljs-string">'letter.txt'</span>;
+
+fs.readFile(filename, callback);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callback</span>(<span class="hljs-params">err, data</span>)</span>{
+  <span class="hljs-comment">//if err, console.error(err)</span>
+  <span class="hljs-comment">//else console.log file contents</span>
+}
+</code></pre>
+<p>Hints:</p>
+<ol>
+<li><code>data</code> is a <strong><code>Buffer</code></strong>.  It has a <code>.toString</code> method</li>
+<li>Path to <code>letter.txt</code> is relative to CWD</li>
+</ol>
+<aside class="notes" data-markdown="">do this one alone, show results
+
+- what do you notice about this?
+- did you run into issues?</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="node-callback-conventions">Node callback conventions</h2>
+<pre><code class="lang-js hljs javascript">asyncOperation(<span class="hljs-comment">/*...*/</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">error, <span class="hljs-comment">/*...*/</span></span>);
+</span></code></pre>
+<ol>
+<li>Callback always <strong>last</strong> argument</li>
+<li>Callback takes error as <strong>first</strong> argument</li>
+</ol>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="callback-review">Callback Review</h2>
+<ul>
+<li class="fragment" data-fragment-index="0">Continuation Style Passing<!-- --></li>
+<li class="fragment" data-fragment-index="1">Node conventions<!-- --></li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Callback Hell</em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 144.5px; display: block;"><h1 id="-callback-hell-">"Callback Hell"</h1>
+<ol>
+<li>Read <code>users.json</code></li>
+<li>Lookup user address in DB</li>
+<li>Write address to file</li>
+<li>Output "success" to console</li>
+</ol>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><pre><code class="lang-js hljs javascript">fs.readFile(<span class="hljs-string">'users.json'</span>, <span class="hljs-string">'utf-8'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, contents</span>)</span>{
+  <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">throw</span> err; }
+  <span class="hljs-keyword">var</span> users = <span class="hljs-built_in">JSON</span>.parse(contents);
+  users.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">user</span>)</span>{
+    db.accounts.findOne({id: user.id}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, address</span>)</span>{
+      <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">throw</span> err; }
+      <span class="hljs-keyword">var</span> filename = <span class="hljs-string">'address'</span> + address.id + <span class="hljs-string">'.json'</span>;
+      fs.writeFile(filename, <span class="hljs-string">'utf-8'</span>, address, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>)</span>{
+        <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">throw</span> err; }
+        <span class="hljs-built_in">console</span>.log(filename + <span class="hljs-string">' written successfully!'</span>);
+      });
+    });
+  });
+});
+</code></pre>
+<aside class="notes" data-markdown="">- hard to read. What's going on?
+- this is a small example
+- not even handling errors really
+- how to mitigate?</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="name-functions">Name functions</h3>
+<pre><code class="lang-js hljs javascript">fs.readFile(<span class="hljs-string">'users.json'</span>, <span class="hljs-string">'utf-8'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">processUsers</span>(<span class="hljs-params">err, contents</span>)</span>{
+  <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">throw</span> err; }
+  <span class="hljs-keyword">var</span> users = <span class="hljs-built_in">JSON</span>.parse(contents);
+  users.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">lookupAddress</span>(<span class="hljs-params">user</span>)</span>{
+    db.accounts.findOne({id: user.id}, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">writeAddress</span>(<span class="hljs-params">err, address</span>)</span>{
+      <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">throw</span> err; }
+      <span class="hljs-keyword">var</span> filename = <span class="hljs-string">'address'</span> + address.id + <span class="hljs-string">'.json'</span>;
+      fs.writeFile(filename, <span class="hljs-string">'utf-8'</span>, address, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">outputResults</span>(<span class="hljs-params">err</span>)</span>{
+        <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">throw</span> err; }
+        <span class="hljs-built_in">console</span>.log(filename + <span class="hljs-string">' written successfully!'</span>);
+      });
+    });
+  });
+});
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="externalize-functions">Externalize functions</h3>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">fs.readFile(<span class="hljs-string">'users.json'</span>, <span class="hljs-string">'utf-8'</span>, processUsers);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">processUsers</span>(<span class="hljs-params">err, contents</span>)</span>{
+  <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">throw</span> err; }
+  <span class="hljs-keyword">var</span> users = <span class="hljs-built_in">JSON</span>.parse(contents);
+  users.forEach(lookupAddress);
+});
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">lookupAddress</span>(<span class="hljs-params">user</span>)</span>{
+  db.accounts.findOne({id: user.id}, writeAddress);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">writeAddress</span>(<span class="hljs-params">err, address</span>)</span>{
+  <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">throw</span> err; }
+  <span class="hljs-keyword">var</span> filename = <span class="hljs-string">'address'</span> + address.id + <span class="hljs-string">'.json'</span>;
+  fs.writeFile(filename, <span class="hljs-string">'utf-8'</span>, address, outputResults);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">outputResults</span>(<span class="hljs-params">err</span>)</span>{
+  <span class="hljs-keyword">if</span>(err){ <span class="hljs-keyword">throw</span> err; }
+  <span class="hljs-built_in">console</span>.log(filename + <span class="hljs-string">' written successfully!'</span>);
+}
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- add'l advantage of allowing reuse &amp; testing</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Clean up the following callback heck:</p>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//async-flow-control/start/callback-heck.js</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">self</span>  (<span class="hljs-params">x, cb</span>) </span>{ cb(<span class="hljs-literal">null</span>, x); }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addOne</span>(<span class="hljs-params">x, cb</span>) </span>{ cb(<span class="hljs-literal">null</span>, <span class="hljs-number">1</span> + x); }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">double</span>(<span class="hljs-params">x, cb</span>) </span>{ cb(<span class="hljs-literal">null</span>, <span class="hljs-number">2</span> * x); }
+
+<span class="hljs-keyword">var</span> startVal = <span class="hljs-number">2</span>;
+
+self(startVal, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, selfed</span>)</span>{
+  addOne(selfed, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, oneAdded</span>)</span>{
+    double(oneAdded, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, doubled</span>)</span>{
+      <span class="hljs-built_in">console</span>.log(doubled); <span class="hljs-comment">//outputs 6</span>
+    });
+  });
+});
+</code></pre>
+<p>Hints:</p>
+<ol>
+<li>name functions</li>
+<li>externalize functions</li>
+</ol>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: <code>EventEmitter</code>s</em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h1 id="event-emitters">Event Emitters</h1>
+<p><a href="https://nodejs.org/api/events.html">nodejs.org/api/events.html</a></p>
+<aside class="notes" data-markdown="">- Another flow control tool</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-eventemitter-"><code>EventEmitter</code></h2>
+<ul>
+  <li class="fragment" data-fragment-index="0">Interface</li>
+  <li class="fragment" data-fragment-index="1">Main methods:
+  <ul>
+  <li class="fragment" data-fragment-index="2"><code>on(event, handlerFunction)</code></li>
+  <li class="fragment" data-fragment-index="3"><code>emit(event, data)</code></li>
+  </ul>
+</li></ul>
+
+<aside class="notes" data-markdown="">- <em>Does this look familiar to anyone?</em>
+- Used it on our server
+- <strong>→ Events + handlers vs callbacks</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="eventemitter-vs-callback-style">EventEmitter vs. Callback style</h3>
+<ul>
+<li class="fragment" data-fragment-index="0">EventEmitter can trigger various events<!-- --></li>
+<li class="fragment" data-fragment-index="1">An event can have multiple listeners<!-- --></li>
+<li class="fragment" data-fragment-index="2">Event handler:<!-- --><ul>
+<li class="fragment" data-fragment-index="3">may be run many times<!-- --></li>
+<li class="fragment" data-fragment-index="4">has no "error first" convention<!-- --></li>
+</ul>
+</li>
+</ul>
+<aside class="notes" data-markdown="">- callbacks respond to completion of a SINGLE action and fire <strong>once</strong>
+- usually emit error event
+- demo with EventEmitter.js</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="example">Example</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//async-flow-control/event-emitter-example.js</span>
+<span class="hljs-keyword">var</span> EventEmitter = <span class="hljs-built_in">require</span>(<span class="hljs-string">'events'</span>);
+<span class="hljs-keyword">var</span> ee = <span class="hljs-keyword">new</span> EventEmitter();
+
+ee.on(<span class="hljs-string">'message'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logMessage</span>(<span class="hljs-params">msg</span>)</span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'new message: '</span> + msg.text);
+});
+
+ee.emit({ text : <span class="hljs-string">'hello!'</span>, sender: <span class="hljs-string">'sequoia'</span>});
+ee.emit({ text : <span class="hljs-string">'world!'</span>, sender: <span class="hljs-string">'sequoia'</span>});
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> messages = [];
+
+ee.on(<span class="hljs-string">'message'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">collectMessage</span>(<span class="hljs-params">msg</span>)</span>{
+  messages.push(msg);
+});
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">note that emit is passed...
+- event name
+- DATA</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><p><code>start/event-emitter.js</code>
+<!-- --></p>
+<ol>
+<li>Emit <code>increment</code> each time counter is incremented</li>
+<li>Send the <code>counter</code> value as event data</li>
+<li>Attach listener that logs the new <code>counter</code> value</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li><code>emitter.emit(name, data)</code></li>
+<li><code>emitter.on(name, function(data){})</code></li>
+</ol>
+<p>Extra Credit:</p>
+<ol>
+<li>If counter is 3, emit <code>done</code> event</li>
+<li>Attach handler to <code>done</code> to log "DONE" then <code>process.exit()</code></li>
+</ol>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Promises</em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h1 id="promises">Promises</h1>
+<pre><code class="lang-js hljs javascript">db.getRecords()
+  .then(formatRecords)
+  .then(sendToUser);
+</code></pre>
+<aside class="notes" data-markdown="">- Makes async code look like sync
+- an "IOU" for a future value that you can pass around
+- Attempt to make code cleaner
+- Added to JS core in ES6</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="promises">Promises</h1>
+<p>What is a promise?</p>
+<ul>
+<li class="fragment" data-fragment-index="0">Object<!-- --></li>
+<li class="fragment" data-fragment-index="1">Has a "then" method<!-- --></li>
+<li class="fragment" data-fragment-index="2">Resolves only once<!-- --></li>
+<li class="fragment" data-fragment-index="3">Has a state:<!-- --><ul>
+<li class="fragment" data-fragment-index="4">pending<!-- --></li>
+<li class="fragment" data-fragment-index="5">fulfilled<!-- --></li>
+<li class="fragment" data-fragment-index="6">rejected<!-- --></li>
+</ul>
+</li>
+</ul>
+<aside class="notes" data-markdown="">→ you can also assign it to a var &amp; pass it around
+- What does <code>then</code> take?
+- <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</a></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="-then-method"><code>.then</code> method</h2>
+<ol>
+<li><code>onFulfilled</code> function</li>
+<li><code>onRejected</code> function</li>
+</ol>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">readFilePromise(<span class="hljs-string">'users.json'</span>)
+  .then(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span>(<span class="hljs-params">results</span>)</span>{
+      <span class="hljs-built_in">console</span>.log(results);
+    },
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span>(<span class="hljs-params">err</span>)</span>{
+      <span class="hljs-built_in">console</span>.error(err);
+    }
+  );
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- <code>then</code> takes a function to run on reject/complete</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="chaining">Chaining</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> promise = readFilePromise(<span class="hljs-string">'users.json'</span>);
+
+promise
+  .then(filterUsers, handleError)
+  .then(formatRecords, handleError)
+  .then(writeFile, handleError);
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="promises-are-objects">Promises are Objects</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getUser</span>(<span class="hljs-params">id</span>)</span>{
+  <span class="hljs-keyword">return</span> restPromiseAPI.getOne({
+    type : <span class="hljs-string">'user'</span>,
+    id   : id
+  });
+}
+
+<span class="hljs-keyword">var</span> userPromise = getUser(id);
+
+userPromise.then(updateUI, logError);
+</code></pre>
+<aside class="notes" data-markdown="">- <strong>pass it around as a value, as though sync</strong>
+- How do we make these promises?
+- one common way is to wrap callbacks</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="wrapping-a-callback-function">Wrapping a Callback Function</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readFilePromise</span>(<span class="hljs-params">filename</span>)</span>{
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">resolve, reject</span>)</span>{
+
+    fs.readFile(filename, <span class="hljs-string">'utf-8'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, contents</span>)</span>{
+
+      <span class="hljs-keyword">if</span>(err) <span class="hljs-keyword">return</span> reject(err);
+
+      resolve(contents);
+
+  });
+
+}
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>"Promisify" <code>readFile</code>. This should work:</p>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//filename: async/read-file-promise.js</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">print</span>(<span class="hljs-params">text</span>)</span>{ <span class="hljs-comment">/*...*/</span> }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleError</span>(<span class="hljs-params">err</span>)</span>{ <span class="hljs-comment">/*...*/</span> }
+
+readFile(<span class="hljs-string">'letter.txt'</span>)
+  .then(print, handleError);
+</code></pre>
+<p>Hints:</p>
+<ol>
+<li>Remember <strong>file encoding</strong></li>
+<li>Return a Promise</li>
+</ol>
+<pre><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">returnsPromise</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">resolve, reject</span>)</span>{
+    <span class="hljs-comment">// do something...</span>
+    <span class="hljs-comment">// reject(err); //or</span>
+    <span class="hljs-comment">// resolve(results);</span>
+  });
+}
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="bluebird-promises-and-more">Bluebird: promises and more</h2>
+<p><a href="http://bluebirdjs.com/">http://bluebirdjs.com/</a></p>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>catch</code> method</li>
+  <li class="fragment" data-fragment-index="1">Additional methods (<code>map</code>, <code>filter</code>, etc.)</li>
+  <li class="fragment" data-fragment-index="2">Utility functions: <code>promisify</code> &amp; <code>promisifyAll</code></li>
+</ul>
+
+<aside class="notes" data-markdown="">- pre-es6 polyfill
+- adds lots of utility functions</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="using-bluebird-to-promisify-an-api">Using Bluebird to "promisify" an API</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-built_in">Promise</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'bluebird'</span>);
+<span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">Promise</span>.promisifyAll(<span class="hljs-built_in">require</span>(fs));
+
+fs.readFileAsync(<span class="hljs-string">'myfile.txt'</span>, <span class="hljs-string">'utf-8'</span>)
+  .then(print)
+  .catch(handleError);
+</code></pre>
+<aside class="notes" data-markdown="">- very convenient
+- can return value from function or another promise
+- great way to make code easier to read and write</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="utilities">Utilities</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-built_in">Promise</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'bluebird'</span>);
+<span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">Promise</span>.promisifyAll(<span class="hljs-built_in">require</span>(fs));
+
+fs.readFileAsync(<span class="hljs-string">'users.json'</span>, <span class="hljs-string">'utf-8'</span>)
+  .then(<span class="hljs-built_in">JSON</span>.parse)
+  .filter(justAdmins)
+  .tap(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span>(<span class="hljs-params">admins</span>)</span>{
+    <span class="hljs-built_in">console</span>.log(admins);
+  })
+  .map(sendNotification)
+  .then(doTheNextThing)
+  .catch(handleError);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">justAdmins</span>(<span class="hljs-params">user</span>)</span>{
+  <span class="hljs-keyword">return</span> user.role == <span class="hljs-string">'admin'</span>;
+}
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Up Next: The Event Loop</p>
+</section></section></div><div class="backgrounds"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled fragmented" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">Async Flow Control
+
+Callbacks 
+EventEmitters 
+Promises 
+
+- JS is async by default (Browser history)
+- going to cover practical first, then theory
+- Flow control can be confusing
+- Code doesn't execute top to bottom
+- different styles</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

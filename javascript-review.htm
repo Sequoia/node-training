@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)http://localhost:8080/node-2day/javascript-review#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; zoom: 1.30757;"><section data-charset="iso-8859-15" class="stack present" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" class="present" style="top: 135px; display: block;"><h1 id="what-is-javascript-">What is Javascript?</h1>
+<p><strong>Implementation of ECMAScript standard</strong></p>
+<ul>
+<li class="fragment" data-fragment-index="0">ECMAScript = Javascript specification <!-- --></li>
+<li class="fragment" data-fragment-index="1">Implementations vary widely <!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- ES = JS spec
+- Many platforms, feature impls vary widely</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 229px; display: block;"><h2 id="what-is-es6-es7-">What is <del>ES6</del> ES7?</h2>
+<p class="fragment" data-fragment-index="0">ES6 = ES2015, ES7 = ES2016 etc. <!-- --></p>
+<aside class="notes" data-markdown="">- Version number: increments with year
+- It's a spec <strong>not an impl!!</strong>
+- Babel is it's own topic (I can go over EOD)
+- feel free to ask!</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 197px; display: block;"><h1 id="node-js-lts">Node.js LTS</h1>
+<h2 id="long-term-support-releases">Long Term Support Releases</h2>
+<aside class="notes" data-markdown=""><a href="http://sequoia.makes.software/s/node_lts.png">http://sequoia.makes.software/s/node_lts.png</a>
+
+- Predictable releases,
+- Even Number releases in April get 3 years support
+- Go to stable (5.x right now) for newest/latest
+- <strong>Note this when reading docs!</strong></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" hidden="" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Javascript Review</em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 243px; display: block;"><h1 id="getting-unstuck">Getting unstuck</h1>
+<aside class="notes" data-markdown="">before we talk about problems, let's talk about how to solve problems</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 190px; display: block;"><h2 id="rtfm">RTFM</h2>
+<ul>
+<li class="fragment" data-fragment-index="0">docs.nodejs.org <!-- --></li>
+<li class="fragment" data-fragment-index="1">devdocs.io <!-- --></li>
+<li class="fragment" data-fragment-index="2">stackoverflow.com <!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- Pick version on nodejs.org!
+- <em>Devdocs: show how to pick &amp; save</em>
+- search before you post!
+<strong>--&gt; a couple things you'll hear when you ask for help...</strong></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="on-devdocs-io-enable-">On <code>devdocs.io</code>, enable:</h2>
+<ol>
+<li>JavaScript</li>
+<li>Node.js (<em>your version!</em>)
+<br>
+<br></li>
+</ol>
+<h2 id="node-or-javascript-">Node or Javascript?</h2>
+<ol>
+<li><code>console</code></li>
+<li><code>Promise</code></li>
+<li><code>url.parse</code> method</li>
+<li><code>alert</code> function</li>
+</ol>
+<!-- -->
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="giyf">GIYF</h2>
+<p><em class="fragment" data-fragment-index="0">Google Is Your Friend</em> <!-- --></p>
+<h2 id="tias-element-class-fragment-" class="fragment" data-fragment-index="1">TIAS  <!-- --></h2>
+<p><em class="fragment" data-fragment-index="2">Try It And See</em> <!-- --></p>
+<aside class="notes" data-markdown="">Now let's see how to TIAS with the console</aside></section></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 174.5px; display: block;"><h2 id="console">Console</h2>
+<h3 id="main-methods-">Main methods:</h3>
+<ul>
+<li><code>log</code></li>
+<li><code>error</code></li>
+</ul>
+<aside class="notes" data-markdown="">- Exists in browser &amp; in node
+- Some differences</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h2 id="datatypes">Datatypes</h2>
+<ul>
+<li>Objects</li>
+<li>Primitives</li>
+</ul>
+<aside class="notes" data-markdown="">if it's not a primitive it's an object &amp; vice versa</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="datatypes">Datatypes</h2>
+<h3 id="objects">Objects</h3>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> me = {
+  first : <span class="hljs-string">'Sequoia'</span>,
+  last  : <span class="hljs-string">'McDowell'</span>,
+  age   : <span class="hljs-number">31</span>
+};
+
+<span class="hljs-built_in">console</span>.log(me.age); <span class="hljs-comment">// 31</span>
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> me = <span class="hljs-keyword">new</span> Person(<span class="hljs-string">'Sequoia'</span>, <span class="hljs-number">31</span>);
+
+<span class="hljs-built_in">console</span>.log(me.age); <span class="hljs-comment">// 31</span>
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> me = [<span class="hljs-string">'Sequoia'</span>, <span class="hljs-string">'McDowell'</span>, <span class="hljs-number">31</span>];
+
+<span class="hljs-built_in">console</span>.log(me[<span class="hljs-number">2</span>]); <span class="hljs-comment">// 31</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- All are objects
+- All have methods, properties</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="datatypes">Datatypes</h2>
+<h3 id="primitives">Primitives</h3>
+<ul>
+<li>Boolean</li>
+<li>Null</li>
+<li>Undefined</li>
+<li>Number</li>
+<li>String</li>
+<li class="fragment" data-fragment-index="0">Symbol (new in ES6) <!-- --></li>
+</ul>
+<aside class="notes" data-markdown=""></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="type-system">Type system</h2>
+<p>"Dynamic" "Duck"</p>
+<p><code class="fragment" data-fragment-index="0">typeof</code> <!-- --></p>
+<p><code class="fragment" data-fragment-index="1">instanceof</code> <!-- --></p>
+<aside class="notes" data-markdown="">- Per wikipedia
+- no strong type system
+- instanceof for things made with <code>new</code>
+  - walks up prototype chain
+- typeof tells you <strong>built-in</strong> type
+- DON'T RELY ON THESE TOO MUCH!
+- <strong>All kinds of exceptions</strong>
+<code>String('x') instanceof String</code>, <code>[1,2,3] instanceof Object</code>, <code>Array</code></aside></section></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h1 id="functions">Functions</h1>
+<ul>
+<li class="fragment" data-fragment-index="0">First class citizens<!-- --></li>
+<li class="fragment" data-fragment-index="1">Have their own "scope"<!-- --></li>
+<li class="fragment" data-fragment-index="2">Two ways to create them<!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- 1st class : can be treated like values &amp; don't have to be in a class
+- things declared in a function stay that a function
+- declaration &amp; expression</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h2 id="creating-functions">Creating Functions</h2>
+<ul>
+<li>Function Declaration</li>
+<li>Function Expression</li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="function-declaration">Function Declaration</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y</span>)</span>{
+  <span class="hljs-keyword">return</span> y + x;
+}
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">add(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);  <span class="hljs-comment">// =&gt; 3</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y</span>)</span>{ <span class="hljs-keyword">return</span> y + x; }
+add(<span class="hljs-number">3</span>,<span class="hljs-number">2</span>);  <span class="hljs-comment">// =&gt; 5</span>
+</code></pre>
+ <!-- -->
+<aside class="notes" data-markdown="">HOISTED : you can reference it before it's declared
+
+(will talk more about that when we discuss scope)</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Create divide &amp; multiply functions:</p>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">// javascript-review/start/mul-and-div.js</span>
+<span class="hljs-built_in">console</span>.log(
+  div(
+    mul( <span class="hljs-number">21</span>, <span class="hljs-number">40</span> ),
+    mul(<span class="hljs-number">10</span>, <span class="hljs-number">2</span>)
+  )
+);
+
+<span class="hljs-comment">//output: 42</span>
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-comment">//same thing on one line:</span>
+<span class="hljs-built_in">console</span>.log( div( mul(<span class="hljs-number">21</span>, <span class="hljs-number">40</span>), mul(<span class="hljs-number">10</span>, <span class="hljs-number">2</span>) ) );
+</code></pre>
+<!-- -->
+<ul>
+<li>Run with <code>node filename.js</code></li>
+</ul>
+<aside class="notes" data-markdown="">5 min</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="function-expressions">Function Expressions</h2>
+<p>What's meant by "expression"?</p>
+<p><em class="fragment" data-fragment-index="0">"any valid unit of code that resolves to a value." - MDN</em><!-- --> </p>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="expressions">Expressions</h2>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">(<span class="hljs-number">1</span> + <span class="hljs-number">1</span>)                           <span class="hljs-comment">//expression</span>
+(<span class="hljs-string">"hello world"</span>)                   <span class="hljs-comment">//expression</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">21</span>; })        <span class="hljs-comment">//expression</span>
+</code></pre>
+ <!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript">(<span class="hljs-number">1</span> + <span class="hljs-number">1</span>)                           <span class="hljs-comment">//=&gt; 2</span>
+(<span class="hljs-string">"hello world"</span>)                   <span class="hljs-comment">//=&gt; "hello world"</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">21</span>; })        <span class="hljs-comment">//=&gt; function(){ return 21 }</span>
+</code></pre>
+ <!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript"><span class="hljs-keyword">typeof</span> (<span class="hljs-number">1</span> + <span class="hljs-number">1</span>)                    <span class="hljs-comment">//=&gt; "number"</span>
+<span class="hljs-keyword">typeof</span> (<span class="hljs-string">"hello world"</span>)            <span class="hljs-comment">//=&gt; "string"</span>
+<span class="hljs-keyword">typeof</span> (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">21</span>; }) <span class="hljs-comment">//=&gt; "function"</span>
+</code></pre>
+ <!-- -->
+<pre class="fragment" data-fragment-index="3"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> sum = <span class="hljs-number">1</span> + <span class="hljs-number">1</span>;
+<span class="hljs-keyword">var</span> msg = <span class="hljs-string">"hello world"</span>;
+<span class="hljs-keyword">var</span> fun = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">21</span>; };
+</code></pre>
+ <!-- -->
+<aside class="notes" data-markdown="">"An expression is any valid unit of code that resolves to a value." - MDN
+- these "values" can be assigned to variables
+- result of function expression <strong>function value</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="function-expression">Function Expression</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> add = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>)</span>{
+  <span class="hljs-keyword">return</span> y + x;
+};
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">add(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);  <span class="hljs-comment">// Uncaught TypeError: add is not a function</span>
+<span class="hljs-keyword">var</span> add = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>)</span>{ <span class="hljs-keyword">return</span> y + x; };
+add(<span class="hljs-number">3</span>,<span class="hljs-number">2</span>);  <span class="hljs-comment">// =&gt; 5</span>
+</code></pre>
+ <!-- -->
+<aside class="notes" data-markdown="">- note semicolon
+- Why is this happening?
+  - We'll examine this in the next section</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="function-expression">Function Expression</h2>
+<h3 id="anonymous">anonymous</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> add = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">x, y</span>)</span>{
+  <span class="hljs-keyword">return</span> y + x;
+};
+</code></pre>
+<h3 id="named" data-fragment-index="0" class="fragment">named</h3>
+<!-- -->
+<pre data-fragment-index="0" class="fragment"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> add = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y</span>)</span>{
+  <span class="hljs-keyword">return</span> y + x;
+};
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- in both, variable was named
+- in the second, the function itself was named as well as the variable
+- <strong>Why important?</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="function-expressions">Function Expressions</h2>
+<p>Why use named expressions?</p>
+<pre class="fragment" data-fragment-index="0"><code class="lang-no-highlight">Uncaught TypeError: Cannot read property 'name' of undefined
+  getUser              @ foo.js:2
+  (anonymous function) @ bar.js:71
+  (anonymous function) @ bar.js:202
+  (anonymous function) @ baz.js:11
+  ...
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-no-highlight">Uncaught Error:
+  getUser              @ foo.js:2
+  getItem              @ bar.js:71
+  buildDBQuery         @ bar.js:202
+  createDatabase       @ baz.js:11
+  ...
+</code></pre>
+ <!-- -->
+<aside class="notes" data-markdown="">- stack traces are easier to read
+- Always use named expressions
+- Now some exercises</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Find where I broke the "Always use named expressions" rule and rewrite it as a
+named expression</p>
+<aside class="notes" data-markdown="">- outside of this section
+
+- extra exercise: create function that takes another function &amp; runs it</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><code>javascript-review/start/function-runner.js</code>
+Create a function that takes a function argument and...</p>
+<ol>
+<li>outputs the name </li>
+<li>executes the function</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li><code>myfunction.name</code></li>
+</ol>
+<p>Extra Credit:</p>
+<ol>
+<li><code>run</code> returns a <em>function</em> that does 1 &amp; 2 above<pre><code class="lang-js hljs javascript"> <span class="hljs-keyword">var</span> wrappedHello = run(helloworld)
+ wrappedHello();
+</code></pre>
+</li>
+</ol>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Handling Functions</em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h2 id="handling-functions">Handling functions</h2>
+<p>Functions can be passed around like other values</p>
+<aside class="notes" data-markdown="">- "first class citizens"
+- Important to be aware of this</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="example-settimeout">Example: setTimeout</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//filename: javascript-review/set_timeout_example.js</span>
+
+<span class="hljs-comment">//setTimeout( FUNCTION , NUMBER );</span>
+
+<span class="hljs-keyword">var</span> sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logHello</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'hello'</span>);
+};
+
+<span class="hljs-keyword">var</span> delay = <span class="hljs-number">500</span>; <span class="hljs-comment">//ms</span>
+
+setTimeout(sayHi, delay);
+</code></pre>
+<aside class="notes" data-markdown="">- declare variable sayHi
+- assign function to that variable
+- pass FUNCTION and delay to setTimeout
+- what's the "typeof" sayHi?</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Scope &amp; Hoisting</em></p>
+</section></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h1 id="scope">Scope</h1>
+<p><em>"The current context of execution." - MDN</em></p>
+<aside class="notes" data-markdown="">- where things are declared, defines what can be referenced</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h2 id="types-of-scope">Types of Scope</h2>
+<ul>
+<li>Function</li>
+<li>Module <em>(just in node!)</em></li>
+<li>Global</li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><p>Variables &amp; functions stay in the scope in which they are <strong>declared</strong></p>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="declarations">Declarations</h2>
+<ul>
+<li data-fragment-index="0" class="fragment">Variable Declarations<!-- --><pre data-fragment-index="0" class="fragment"><code class="lang-js hljs javascript"> <span class="hljs-keyword">var</span> x;
+ <span class="hljs-keyword">var</span> y;
+</code></pre>
+ <!-- --></li>
+<li data-fragment-index="1" class="fragment">Function Declarations<!-- --><pre data-fragment-index="1" class="fragment"><code class="lang-js hljs javascript"> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">three</span>(<span class="hljs-params"></span>)</span>{
+   <span class="hljs-keyword">return</span> <span class="hljs-number">3</span>;
+ }
+</code></pre>
+<!-- -->
+</li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="which-x-">Which <code>x</code>?</h2>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> x = <span class="hljs-number">99</span>;       <span class="hljs-comment">// declared in outer scope</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addTen</span>(<span class="hljs-params">y</span>)</span>{
+  <span class="hljs-keyword">var</span> x = <span class="hljs-number">10</span>;
+
+  <span class="hljs-keyword">return</span> y + x;
+}
+
+<span class="hljs-built_in">console</span>.log(addTen(<span class="hljs-number">7</span>)); <span class="hljs-comment">// ??</span>
+<span class="hljs-built_in">console</span>.log(x);         <span class="hljs-comment">// ??</span>
+</code></pre>
+ <!-- -->
+<aside class="notes" data-markdown="">- <code>x</code> is 99 because it was <strong>declared</strong> in inner scope</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><p>A scope has access to its <strong>parent scopes</strong></p>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> x = <span class="hljs-number">99</span>;       <span class="hljs-comment">// declared in outer scope</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addTen</span>(<span class="hljs-params">y</span>)</span>{
+  x = <span class="hljs-number">10</span>;
+
+  <span class="hljs-keyword">return</span> y + x;
+}
+
+<span class="hljs-built_in">console</span>.log(addTen(<span class="hljs-number">7</span>)); <span class="hljs-comment">// ??</span>
+<span class="hljs-built_in">console</span>.log(x);         <span class="hljs-comment">// ??</span>
+</code></pre>
+ <!-- -->
+<aside class="notes" data-markdown="">- What happens here?
+- Why?
+- Declaration vs. Assignment</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><p><strong>Always use <code>var</code> to declare vars when creating them!!</strong></p>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">myDictionary</span>(<span class="hljs-params"></span>)</span>{
+  $ = <span class="hljs-string">'dollars'</span>;
+  _ = <span class="hljs-string">'no dollars'</span>;
+  angular = <span class="hljs-string">'the opposite of round'</span>;
+}
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- ...otherwise you risk accessing a parent scope
+- "polluting the global scope"
+- Who can see the problem here?
+- no IMPLICIT globals in node, still good to use var</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><code>congrats-server.js</code>:</p>
+<p>Create a server that...</p>
+<ol>
+<li>says "CONGRATULATIONS!" to the <strong>5th</strong> visitor</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li>functions can access variables <strong>outside</strong> their own scope</li>
+<li>boilerplate in <code>javascript-review/start/</code></li>
+</ol>
+<aside class="notes" data-markdown="">- 5min</aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h2 id="hoisting">Hoisting</h2>
+<p><strong>Declarations</strong> are moved to the top of their scope</p>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">foo();
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-number">10</span>;
+}
+</code></pre>
+<!-- -->
+<p class="fragment" data-fragment-index="1">Interpreter sees: <!-- --></p>
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-number">10</span>;
+}
+
+foo();
+</code></pre>
+<!-- -->
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><p><strong>Assignments</strong> are not hoisted</p>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-built_in">console</span>.log(x);
+
+<span class="hljs-keyword">var</span> x = <span class="hljs-number">100</span>;
+</code></pre>
+<!-- -->
+<p class="fragment" data-fragment-index="1">Interpreter sees:
+<!-- --></p>
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> x;
+
+<span class="hljs-built_in">console</span>.log(x);
+
+x = <span class="hljs-number">100</span>;
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- <strong>Declaration</strong> is hoisted
+- <strong>Assignment</strong> is not</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="what-will-this-do-">What will this do?</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> x = <span class="hljs-number">123</span>;
+
+<span class="hljs-built_in">console</span>.log(x);
+<span class="hljs-built_in">console</span>.log(y);
+<span class="hljs-built_in">console</span>.log(z);
+
+<span class="hljs-keyword">var</span> y = <span class="hljs-number">456</span>;
+z = <span class="hljs-number">789</span>;
+</code></pre>
+<ol>
+<li class="fragment" data-fragment-index="0">123 <!-- --></li>
+<li class="fragment" data-fragment-index="1">undefined <!-- --></li>
+<li class="fragment" data-fragment-index="2">(throws error) <!-- --></li>
+</ol>
+<aside class="notes" data-markdown="">- What will this do?
+- Ask people to explain why
+- <strong>Let's revisit our function declarations &amp; assignments</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="review">Review</h3>
+<pre><code class="lang-js hljs javascript">add(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);  <span class="hljs-comment">// =&gt; 3</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y</span>)</span>{ <span class="hljs-keyword">return</span> y + x; }
+add(<span class="hljs-number">3</span>,<span class="hljs-number">2</span>);  <span class="hljs-comment">// =&gt; 5</span>
+</code></pre>
+<pre><code class="lang-js hljs javascript">add(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);  <span class="hljs-comment">// Uncaught TypeError: add is not a function</span>
+<span class="hljs-keyword">var</span> add = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>)</span>{ <span class="hljs-keyword">return</span> y + x; };
+add(<span class="hljs-number">3</span>,<span class="hljs-number">2</span>);  <span class="hljs-comment">// =&gt; 5</span>
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Asynchronous Programming</em></p>
+</section></section></div><div class="backgrounds"><div class="slide-background stack present" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background future" style="display: none;"></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background future" style="display: none;"></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down enabled fragmented" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">What is Javascript?
+Implementation of ECMAScript standard
+
+ECMAScript = Javascript specification 
+Implementations vary widely 
+
+- ES = JS spec
+- Many platforms, feature impls vary widely</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

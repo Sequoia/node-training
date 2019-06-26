@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://localhost:8080/node-2day/datastores#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" class="present" style="top: 137px; display: block;"><h1 id="datastores-and-orms">Datastores and ORMs</h1>
+<ul>
+<li>MongoDB &amp; Mongo</li>
+<li>MariaDB (MySQL) &amp; Sequelize</li>
+</ul>
+<aside class="notes" data-markdown="">- Which to use
+- Look at mongo
+- Look at mysql</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 166px; display: block;"><h2 id="mongodb">MongoDB</h2>
+<ul>
+  <li class="fragment" data-fragment-index="0">"Document database"</li>
+  <li class="fragment" data-fragment-index="1">Schemaless</li>
+  <li class="fragment" data-fragment-index="2">BSON</li>
+  <li class="fragment" data-fragment-index="3">Relatively New</li>
+</ul>
+
+<aside class="notes" data-markdown="">- documents look like JS objects mostly
+- no fixed structure for data
+- not text in/out like SQL
+- Leave data logic to application</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 148px; display: block;"><h3 id="considerations">Considerations</h3>
+<ul>
+<li class="fragment" data-fragment-index="0">Easier to scale across servers<!-- --></li>
+<li class="fragment" data-fragment-index="1">Documents are like JS Objects<!-- --></li>
+<li class="fragment" data-fragment-index="2">Schemaless<!-- --></li>
+<li class="fragment" data-fragment-index="3">No "Normalization"<!-- --></li>
+<li class="fragment" data-fragment-index="4">Non-relational<!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- shards are a core concept (do you need this?)
+- shove JS objects directly into mongo
+- Flexible data models (pro and con)
+- no concept of normalization
+- non-relational, long lists of updates
+- *personally would not recommend as "go-to"</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="where-to-get-it">Where to get it</h3>
+<ul>
+<li>Package managers</li>
+<li><a href="https://mongodb.org/downloads">https://mongodb.org/downloads</a></li>
+<li><a href="https://mongolab.com/">https://mongolab.com/</a></li>
+</ul>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 166px; display: block;"><h2 id="mariadb-or-mysql-">MariaDB (or MySQL)</h2>
+<ul>
+  <li class="fragment" data-fragment-index="0">SQL</li>
+  <li class="fragment" data-fragment-index="1">Relational/has joins</li>
+  <li class="fragment" data-fragment-index="2">Transactions</li>
+  <li class="fragment" data-fragment-index="3">Very Mature</li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="considerations">Considerations</h3>
+<ul>
+<li class="fragment" data-fragment-index="0">Scaling more complex task<!-- --></li>
+<li class="fragment" data-fragment-index="1">Tables/Schemas<!-- --></li>
+<li class="fragment" data-fragment-index="2">Validation in data-store<!-- --></li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="where-to-get-it">Where to get it</h3>
+<ul>
+<li>Package managers</li>
+<li><a href="https://mariadb.org/download/">https://mariadb.org/download/</a></li>
+</ul>
+</section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Up Next: Resturants Web Server</p>
+<aside class="notes" data-markdown="">- after questions, introduce the restaurants server
+- show it, get everyone to get it running</aside></section></section></div><div class="backgrounds"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">Datastores and ORMs
+
+MongoDB &amp; Mongo
+MariaDB (MySQL) &amp; Sequelize
+
+- Which to use
+- Look at mongo
+- Look at mysql</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

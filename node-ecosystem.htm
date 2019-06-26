@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://localhost:8080/node-2day/node-ecosystem#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" class="present" style="top: 243px; display: block;"><h1 id="the-node-ecosystem">The node Ecosystem</h1>
+<aside class="notes" data-markdown="">Talking about...
+- the module system
+- NPM:
+  - creating &amp; configuring packages
+  - dependencies
+  - installing packages</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 193px; display: block;"><h1 id="the-module-system">The Module System</h1>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>require</code></li>
+  <li class="fragment" data-fragment-index="1"><code>module.exports</code></li>
+</ul>
+
+<aside class="notes" data-markdown="">How to access the code of one file from another file
+- Two main parts to learn;
+  - how to IMPORT (require)
+  - how to EXPORT</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 263px; display: block;"><h2 id="-require-"><code>require</code></h2>
+<aside class="notes" data-markdown="">- How to get code from other files
+- can be accessed as a global
+- We've used it some already...</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="-require-lookup-behavior"><code>require</code> lookup behavior</h3>
+<p><code>require(X);</code></p>
+<ol>
+  <li class="fragment" data-fragment-index="0">Is X a <strong>core module</strong>?</li>
+  <li class="fragment" data-fragment-index="1">Is X a <strong>file path</strong>?</li>
+  <li class="fragment" data-fragment-index="2">Is X a <strong>directory path</strong>?</li>
+  <li class="fragment" data-fragment-index="3">Is X a <strong>module in <code>node_modules</code></strong>?</li>
+  <li class="fragment" data-fragment-index="4">Throw error</li>
+</ol>
+
+<aside class="notes" data-markdown="">- as for WHAT is returned, we'll talk about that in a moment
+- let's look at each</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h4 id="core-module">Core Module</h4>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
+<span class="hljs-keyword">var</span> url = <span class="hljs-built_in">require</span>(<span class="hljs-string">'url'</span>);
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h4 id="file-path">File Path</h4>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> parser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./lib/parser.js'</span>);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> Assembler = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../Assembler'</span>);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> users = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../data/users.json'</span>);
+</code></pre>
+<!-- -->
+<p>Relative to <code>thisFile.js</code></p>
+<pre><code class="lang-no-highlight">\-- project
+    +-- Assembler.js
+    +-- data
+    |   \-- users.json
+    |
+    \-- src
+        +-- thisFile.js
+        \-- lib
+            \-- parser.js
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h4 id="directory-path">Directory Path</h4>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> cars = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../cars'</span>);
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> util = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./util'</span>);
+</code></pre>
+<!-- -->
+<pre><code class="lang-no-highlight">+-- cars
+|   +-- package.json
+|   \-- ...
+|
+\-- project
+    \-- src
+        +-- thisFile.js
+        \-- util
+            \-- index.js
+</code></pre>
+<aside class="notes" data-markdown="">does the following <strong>in that order</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h4 id="module-in-node_modules-">Module in <code>node_modules</code></h4>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>);
+<span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+</code></pre>
+<pre><code class="lang-no-highlight">\-- project
+    +-- package.json
+    +-- node_modules
+    |   + -- lodash
+    |   |    \-- ...
+    |   | 
+    |   \ -- express
+    |        \-- ...
+    |
+    |-- thisFile.js
+    \-- src
+        \-- thisFile.js
+</code></pre>
+<aside class="notes" data-markdown="">- Note that it <strong>ascends</strong> 'til if finds node_modules, then looks there
+- how do packages get into node_modules? #8594; cover soon</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="-require-lookup-behavior"><code>require</code> lookup behavior</h3>
+<ol>
+  <li>Is X a <strong>core module</strong>?</li>
+  <li>Is X a <strong>file path</strong>?</li>
+  <li>Is X a <strong>directory path</strong>?</li>
+  <li>Is X a <strong>module in <code>node_modules</code></strong>?</li>
+  <li>Throw error</li>
+</ol>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="command-line">Command Line</h3>
+<p>...Works the same way</p>
+<pre><code class="lang-no-highlight">.
++-- myDir
+|   +-- package.json
+|   +-- index.js
+|   \...
+|
++-- foo
+|   +-- index.js
+|   \...
+|
++-- foo.js
+\-- index.js
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-no-highlight">$ node ./foo.js
+$ node .           
+$ node myDir       
+$ node foo
+</code></pre>
+<!-- -->
+</section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><code>node-ecosystem/start/require-xyz/index.js</code></p>
+<ol>
+<li>Add require statements to make your output:<pre><code class="lang-no-highlight">path/to/node-ecosystem/done/require-xyz/x.js
+path/to/node-ecosystem/done/require-xyz/y.js
+path/to/node-ecosystem/done/require-xyz/a/b/index.js
+Amici's
+Taco Gong
+Unfriendly's
+Shake Hovel
+Grey Castle
+</code></pre>
+</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li>Each <code>.js</code> file logs its path</li>
+<li>Follow the comments</li>
+<li>Paths are relative to the requir<em>ing</em> file</li>
+<li><code>json</code> files can be loaded with <code>require</code></li>
+</ol>
+<aside class="notes" data-markdown="">not important what contents is</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: <code>module.exports</code></em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h1 id="-module-exports-"><code>module.exports</code></h1>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-comment">// favenum.js</span>
+
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-number">1738</span>;
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-comment">// consumer.js</span>
+
+<span class="hljs-keyword">var</span> favoriteNumber = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./favenum.js'</span>);
+
+<span class="hljs-built_in">console</span>.log(favoriteNumber); <span class="hljs-comment">// 1738</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">Defines what a module returns when it's <code>require</code>d</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> foo = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./foo.js'</span>);
+
+<span class="hljs-comment">//basically means...</span>
+
+<span class="hljs-keyword">var</span> foo = {{<span class="hljs-built_in">module</span>.exports from the file <span class="hljs-string">'foo.js'</span>}}
+</code></pre>
+<aside class="notes" data-markdown="">you can export all kinds of things</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><pre><code class="lang-js hljs javascript"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y</span>)</span>{ <span class="hljs-keyword">return</span> y + x }
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-built_in">module</span>.exports = <span class="hljs-string">"Hi there"</span>;
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Singleton</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-comment">//...</span>
+}
+
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-keyword">new</span> Singleton();
+</code></pre>
+<!-- -->
+</section></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<ol>
+<li>Create a file <code>a.js</code> that exports a function</li>
+<li>Create a second file <code>b.js</code> to <code>require</code> it.</li>
+<li>Run the function from <code>b.js</code></li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li>There's no boilerplate for this one</li>
+<li>Doesn't matter what function does</li>
+</ol>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="module-export-patterns">Module Export Patterns</h2>
+<ul>
+<li class="fragment" data-fragment-index="0">Object literal (<code>{}</code>)</li>
+<li class="fragment" data-fragment-index="1">Constructor</li>
+<li class="fragment" data-fragment-index="2">Factory</li>
+<li class="fragment" data-fragment-index="3">...anything else</li>
+</ul>
+</section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h3 id="object-literal">Object Literal</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">// myMaths.js</span>
+
+<span class="hljs-built_in">module</span>.exports = {
+  add : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>) </span>{ <span class="hljs-keyword">return</span> x + y; },
+  sub : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>) </span>{ <span class="hljs-keyword">return</span> x - y; },
+  div : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>) </span>{ <span class="hljs-keyword">return</span> x / y; },
+  mul : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>) </span>{ <span class="hljs-keyword">return</span> x * y; }
+  <span class="hljs-comment">/*...*/</span>
+}
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-built_in">module</span>.exports.add = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>) </span>{ <span class="hljs-keyword">return</span> x + y; };
+<span class="hljs-built_in">module</span>.exports.sub = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>) </span>{ <span class="hljs-keyword">return</span> x - y; };
+<span class="hljs-built_in">module</span>.exports.div = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>) </span>{ <span class="hljs-keyword">return</span> x / y; };
+<span class="hljs-built_in">module</span>.exports.mul = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>) </span>{ <span class="hljs-keyword">return</span> x * y; };
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- good for util libs like lodash/underscore
+- a collection of functions/methods
+- most core modules do this</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="consuming-object-literal-api">Consuming object literal API</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">// mathsConsumer.js</span>
+
+<span class="hljs-keyword">var</span> maths = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./myMaths.js'</span>);
+
+<span class="hljs-built_in">console</span>.log(maths.add(<span class="hljs-number">4</span>, <span class="hljs-number">6</span>)); <span class="hljs-comment">// 10</span>
+<span class="hljs-built_in">console</span>.log(maths.div(<span class="hljs-number">9</span>, <span class="hljs-number">0</span>)); <span class="hljs-comment">// Infinity</span>
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-comment">// fsConsumer.js</span>
+
+<span class="hljs-keyword">var</span> readFile = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>).readFile;
+
+readFile(<span class="hljs-string">'foo.txt'</span>, <span class="hljs-string">'utf-8'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, contents</span>)</span>{
+  <span class="hljs-comment">//...</span>
+</code></pre>
+<!-- -->
+</section></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h3 id="constructor">Constructor</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">// Car.js</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Car</span>(<span class="hljs-params">make, model</span>)</span>{
+  <span class="hljs-keyword">this</span>.make = make;
+  <span class="hljs-keyword">this</span>.model = model;
+}
+
+<span class="hljs-built_in">module</span>.exports = Car;
+</code></pre>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">// carConsumer.js</span>
+
+<span class="hljs-keyword">var</span> Car = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./Car'</span>)
+
+<span class="hljs-keyword">var</span> ride = <span class="hljs-keyword">new</span> Car(<span class="hljs-string">'Toyota'</span>, <span class="hljs-string">'Celica'</span>);
+
+<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(ride));
+</code></pre>
+<aside class="notes" data-markdown="">- good for shared object types in frameworks
+- EventEmitter is like this</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h3 id="factory">Factory</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//logger.js</span>
+
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">prefix</span>)</span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">format</span>(<span class="hljs-params">msg</span>)</span>{
+    <span class="hljs-keyword">return</span> prefix + <span class="hljs-string">' &lt;'</span> + <span class="hljs-built_in">Date</span>() + <span class="hljs-string">'&gt; '</span> + msg;
+  }
+
+  <span class="hljs-keyword">return</span> {
+    l : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>)</span>{ <span class="hljs-built_in">console</span>.log(format(msg)) },
+    e : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>)</span>{ <span class="hljs-built_in">console</span>.error(format(msg)) },
+  };
+
+}
+</code></pre>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">// loggerConsumer.js</span>
+logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./logger.js'</span>)(<span class="hljs-string">'MyApp'</span>);
+
+logger.l(<span class="hljs-string">'testing 123'</span>);
+<span class="hljs-comment">// MyApp &lt;Wed Jan 13 2016 16:54:55 GMT-0500 (EST)&gt; testing 123</span>
+</code></pre>
+<aside class="notes" data-markdown="">- good for util or other libs that require configuration</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><code>node-ecosystem/start/multi-log.js</code></p>
+<ol>
+<li>Use the <code>logger.js</code> module</li>
+<li>Create a logger with prefix "DATABASE"</li>
+<li>Create a logger with prefix "HTTP"</li>
+<li>Log a message &amp; and error from both</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li>See <code>node-ecosystem/misc/logger-consumer.js</code> for an example</li>
+</ol>
+<p>Extra Credit:</p>
+<ol>
+<li>Modify <code>logger.js</code> so loggers are enabled via environment variable</li>
+</ol>
+<aside class="notes" data-markdown="">Solution on next slide
+
+10min</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><pre><code class="lang-js hljs javascript">logfactory = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./logger.js'</span>);
+
+dblog  = logfactory(<span class="hljs-string">'DATABASE'</span>);
+applog = logfactory(<span class="hljs-string">'MYAPP'</span>);
+
+applog.l(<span class="hljs-string">'boostraping...'</span>);
+<span class="hljs-comment">// MYAPP &lt;Wed Jan 13 2016 16:54:55 GMT-0500 (EST)&gt; bootstrapping...</span>
+
+dblog.l(<span class="hljs-string">'SELECT * FROM users'</span>);
+<span class="hljs-comment">// DATABASE &lt;Wed Jan 13 2016 16:54:55 GMT-0500 (EST)&gt; SELECT * FROM users</span>
+</code></pre>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h3 id="caching-patching">Caching &amp; Patching</h3>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-comment">// dog-stuff.js</span>
+
+<span class="hljs-built_in">module</span>.exports = {
+  name : <span class="hljs-string">'Dog'</span>,
+  dogNoise : <span class="hljs-string">'Bark!'</span>,
+  bark : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.dogNoise);
+  }
+}
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-comment">// dogUser.js</span>
+dog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./dogStuff'</span>);
+
+dog.bark(); <span class="hljs-comment">// Bark!</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- node module system caches modules that have been loaded
+- returns <em>same copy</em></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="caching-patching">Caching &amp; Patching</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">// dog-stuff.js</span>
+
+<span class="hljs-built_in">module</span>.exports = {
+  name : <span class="hljs-string">'Dog'</span>,
+  noise : <span class="hljs-string">'Bark!'</span>,
+  bark : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.noise);
+  }
+}
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-comment">// perro.js</span>
+perro = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./dogStuff'</span>);
+
+perro.noise = <span class="hljs-string">'Â¡guau guau!'</span>
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-js hljs javascript"><span class="hljs-comment">// dogUser.js</span>
+dog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./dogStuff'</span>);
+<span class="hljs-built_in">require</span>(<span class="hljs-string">'./perro'</span>);
+
+dog.bark(); <span class="hljs-comment">// ??</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- What will the dog say?
+- <strong>perro in perro.js &amp; dog in dogUser.js are the same object</strong>
+- Talk about problems</aside></section></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="transition" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Excercise!</em></p>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>Write <code>greeter-factory.js</code> for...</p>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">// node-ecosystem/start/server-with-module.js</span>
+<span class="hljs-comment">// GET http://localhost:8080/</span>
+<span class="hljs-comment">// ==&gt; 'Hello World!'</span>
+
+<span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
+<span class="hljs-keyword">var</span> factory = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./greeter-factory'</span>);
+<span class="hljs-keyword">var</span> handler = factory(<span class="hljs-string">'Hello World!'</span>);
+
+<span class="hljs-keyword">var</span> server = http.createServer(handler);
+
+server.listen(<span class="hljs-number">8080</span>);
+</code></pre>
+<p>Hints:</p>
+<ol>
+<li>What is <code>handler</code>? What is <code>factory</code>?</li>
+<li>What argument does <code>http.createServer</code> take?</li>
+<li>Start server &amp; request <code>/</code> to verify</li>
+</ol>
+<aside class="notes" data-markdown=""></aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="transition" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: NPM</em></p>
+</section></div><div class="backgrounds"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background future" style="display: none;"></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">The node Ecosystem
+Talking about...
+- the module system
+- NPM:
+  - creating &amp; configuring packages
+  - dependencies
+  - installing packages</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

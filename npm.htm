@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://localhost:8080/node-2day/npm#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" class="stack present" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" class="present" style="top: 208.5px; display: block;"><h1 id="npm">NPM</h1>
+<p><a href="http://npmjs.com/">http://npmjs.com/</a></p>
+<aside class="notes" data-markdown="">- who has used?
+- package manager for node &amp; more</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" hidden="" style="top: 141.5px; display: block;"><h2 id="what-is-npm-">What is NPM?</h2>
+<ul>
+<li class="fragment" data-fragment-index="0">Package manager<!-- --></li>
+<li class="fragment" data-fragment-index="1">Dependency manager<!-- --></li>
+<li class="fragment" data-fragment-index="2">Registry<!-- --></li>
+<li class="fragment" data-fragment-index="3">Company<!-- --></li>
+<li class="fragment" data-fragment-index="4">and more...<!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- use to install
+- use to configure deps for your project
+- website with listings
+- also for scripting,</aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 133.5px; display: block;"><h1 id="-package-json-"><code>package.json</code></h1>
+<p>Contains info on package...</p>
+<ul>
+<li class="fragment" data-fragment-index="0">dependencies<!-- --></li>
+<li class="fragment" data-fragment-index="1">metadata<!-- --></li>
+<li class="fragment" data-fragment-index="2">utility scripts<!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">- your project is a "package"
+- packages your package/project relies on
+- your name, email, git-repo, desc, license
+- place to build in scripts to run/test/build your package
+  - nice to check these right into repo</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 163.5px; display: block;"><!-- -->
+<h2 id="-npm-init-"><code>npm init</code></h2>
+<ol>
+<li>Create a directory <code>myproject</code></li>
+<li><code>cd myproject</code></li>
+<li><code>npm init</code></li>
+</ol>
+<aside class="notes" data-markdown="">- <em>Step thru alone then together</em>
+- <strong>Anything confusing?</strong>
+- Version should not say "1.0.0"</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><pre><code class="lang-json hljs">{
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"myproject"</span></span>,
+  "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0.0"</span></span>,
+  "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">""</span></span>,
+  "<span class="hljs-attribute">main</span>": <span class="hljs-value"><span class="hljs-string">"index.js"</span></span>,
+  "<span class="hljs-attribute">scripts</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">test</span>": <span class="hljs-value"><span class="hljs-string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span>
+  </span>}</span>,
+  "<span class="hljs-attribute">keywords</span>": <span class="hljs-value">[]</span>,
+  "<span class="hljs-attribute">author</span>": <span class="hljs-value"><span class="hljs-string">"Sequoia McDowell &lt;sequoia.mcdowell@gmail.com&gt; (http://sequoia.makes.software/)"</span></span>,
+  "<span class="hljs-attribute">license</span>": <span class="hljs-value"><span class="hljs-string">"ISC"</span>
+</span>}
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-config">init.author.name=Sequoia McDowell
+init.author.email=sequoia.mcdowell@gmail.com
+init.author.url=http://sequoia.makes.software/
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">Why do I have author stuff?
+
+<strong>let's fix that up for you</strong></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<h2 id="-npm-config-"><code>npm config</code></h2>
+<ol>
+<li><code>npm config set init.author.name [your name]</code></li>
+<li><code>npm config set init.author.email [your email]</code></li>
+<li><code>cat ~/.npmrc</code></li>
+</ol>
+<aside class="notes" data-markdown="">also npm config get init.author.name
+
+<strong>now <code>node .</code></strong>
+
+fix this ^</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>In <code>myproject/</code>:</p>
+<h3 id="part-1">Part 1</h3>
+<ol>
+<li>Create <code>index.js</code></li>
+<li>Put <code>console.log('hello world')</code> in it</li>
+<li>"<code>node .</code>" to run <code>index.js</code>
+<br>
+<br></li>
+</ol>
+<h3 id="part-2">Part 2</h3>
+<ol>
+<li>Rename <code>index.js</code> <code>app.js</code></li>
+<li>Update package.json (? which property ?)</li>
+<li>"<code>node .</code>" to run <code>app.js</code></li>
+</ol>
+<aside class="notes" data-markdown="">- How would we change the file it ran when we run that directory?
+- What happens if we run it from different CWD?</aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 229px; display: block;"><h2 id="dependencies">Dependencies</h2>
+<p><code>npm install</code></p>
+<aside class="notes" data-markdown="">- stuff your project needs</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="-npm-install-"><code>npm install</code></h3>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>npm install foo</code>: installs package</li>
+  <li class="fragment" data-fragment-index="1"><code>npm install --save foo</code>: ... &amp; saves dependency</li>
+  <li class="fragment" data-fragment-index="2"><code>npm remove [--save] foo</code>: remove package</li>
+  <li class="fragment" data-fragment-index="3"><code>npm install</code>: installs <strong>this</strong> package</li>
+</ul>
+
+<aside class="notes" data-markdown="">we want chalk in our project, we're gonna install that
+
+- talk more about last case in a moment</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>In <code>myproject/</code>:</p>
+<p><code>npm install chalk</code></p>
+<aside class="notes" data-markdown="">What do you see?
+- node_modules
+- <em>Explain flat dep tree</em>
+- what do you think this allows us to do?</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Use our dependency:</p>
+<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//npm/start/myproject/app.js</span>
+
+<span class="hljs-built_in">console</span>.log(chalk.green.underline(<span class="hljs-string">'Hello World!'</span>));
+<span class="hljs-built_in">console</span>.log(chalk.red.bold(<span class="hljs-string">'Hello Again!'</span>));
+</code></pre>
+<p><strong>Run the file</strong></p>
+<p>Hints:</p>
+<ol>
+<li>Something is missing...</li>
+</ol>
+<aside class="notes" data-markdown="">try running file
+- → missing require statement
+- <em>talk thru require &amp; stuff</em></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<h2 id="install-this-package">Install "this" package</h2>
+<p>In <code>myproject/</code>:</p>
+<ol>
+<li><code>rm -rf node_modules</code></li>
+<li><code>npm install</code></li>
+<li><code>node .</code></li>
+</ol>
+<aside class="notes" data-markdown="">- should install our dependencies
+- what happened? What's missing?</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>In <code>myproject/</code>:</p>
+<p><code>npm install --save chalk</code></p>
+<aside class="notes" data-markdown="">- <strong>What do you see in package.json now?</strong>
+- now repeat: delete <code>node_modules</code>, npm install
+- what's different?
+- <strong>Why not just check in <code>node_modules</code>?</strong></aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h2 id="-package-dependencies-"><code>package.dependencies</code></h2>
+<p>List of packages (<em>and versions</em>) required by our package</p>
+<pre><code class="lang-json hljs">...
+<span class="hljs-string">"dependencies"</span>: {
+  "<span class="hljs-attribute">chalk</span>": <span class="hljs-value"><span class="hljs-string">"^1.1.1"</span>
+</span>}
+...
+</code></pre>
+<aside class="notes" data-markdown="">- for your package
+- <strong>packages you install also have dependencies</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><p><code>node_modules/chalk/package.json</code></p>
+<pre><code class="lang-json hljs">...
+<span class="hljs-string">"dependencies"</span>: {
+  "<span class="hljs-attribute">ansi-styles</span>": <span class="hljs-value"><span class="hljs-string">"^2.1.0"</span></span>,
+  "<span class="hljs-attribute">escape-string-regexp</span>": <span class="hljs-value"><span class="hljs-string">"^1.0.2"</span></span>,
+  "<span class="hljs-attribute">has-ansi</span>": <span class="hljs-value"><span class="hljs-string">"^2.0.0"</span></span>,
+  "<span class="hljs-attribute">strip-ansi</span>": <span class="hljs-value"><span class="hljs-string">"^3.0.0"</span></span>,
+  "<span class="hljs-attribute">supports-color</span>": <span class="hljs-value"><span class="hljs-string">"^2.0.0"</span>
+</span>},
+...
+</code></pre>
+<aside class="notes" data-markdown="">- when you install <code>chalk</code>, you also install all of <code>chalks</code> deps
+- ditto "chalks deps", "chalks deps deps" ad infinitum</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><p><code>node_modules/chalk/package.json</code></p>
+<pre><code class="lang-json hljs">...
+<span class="hljs-string">"devDependencies"</span>: {
+  "<span class="hljs-attribute">coveralls</span>": <span class="hljs-value"><span class="hljs-string">"^2.11.2"</span></span>,
+  "<span class="hljs-attribute">matcha</span>": <span class="hljs-value"><span class="hljs-string">"^0.6.0"</span></span>,
+  "<span class="hljs-attribute">mocha</span>": <span class="hljs-value"><span class="hljs-string">"*"</span></span>,
+  "<span class="hljs-attribute">nyc</span>": <span class="hljs-value"><span class="hljs-string">"^3.0.0"</span></span>,
+  "<span class="hljs-attribute">require-uncached</span>": <span class="hljs-value"><span class="hljs-string">"^1.0.2"</span></span>,
+  "<span class="hljs-attribute">resolve-from</span>": <span class="hljs-value"><span class="hljs-string">"^1.0.0"</span></span>,
+  "<span class="hljs-attribute">semver</span>": <span class="hljs-value"><span class="hljs-string">"^4.3.3"</span></span>,
+  "<span class="hljs-attribute">xo</span>": <span class="hljs-value"><span class="hljs-string">"*"</span>
+</span>}
+...
+</code></pre>
+<aside class="notes" data-markdown="">- <strong>only</strong> installed for the parent package
+- <strong>What do you think these are for?</strong>
+- grunt, gulp, mocha, test tools, etc.
+- what about versions?</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="semver">Semver</h2>
+<p><em>"Semantic Versioning"</em></p>
+<aside class="notes" data-markdown="">- give meaning to version numbers
+- explain crazy past
+
+<a href="https://docs.npmjs.com/getting-started/semantic-versioning">https://docs.npmjs.com/getting-started/semantic-versioning</a></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="semver-parts">Semver Parts</h3>
+<p><code>3.10.23</code></p>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>3</code>: Major Version</li>
+  <li class="fragment" data-fragment-index="1"><code>10</code>: Minor Version</li>
+  <li class="fragment" data-fragment-index="2"><code>23</code>: Patch Version</li>
+</ul>
+
+<aside class="notes" data-markdown="">- Major: increment this when breaking BC
+- Minor: adding features, don't break BC
+- Patch: Bug fixes &amp; minor changes</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="semver-ranges">Semver Ranges</h3>
+<ul>
+  <li class="fragment" data-fragment-index="0"><code>&gt;=2.3</code></li>
+  <li class="fragment" data-fragment-index="1"><code>2.*</code></li>
+  <li class="fragment" data-fragment-index="2"> <code>1.2.7</code></li>
+  <li class="fragment" data-fragment-index="3"><code>~3.1</code> (<code>3.1.*</code>)</li>
+  <li class="fragment" data-fragment-index="4"><code>^3.1.9</code> (<code>3.*</code> + <code>&gt;=3.1</code>)</li>
+</ul>
+
+<aside class="notes" data-markdown="">- tilde: fix all available digits
+- carat: fix only first digit
+- carat is good for "all but breaking changes"</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><p><a href="http://semver.npmjs.com/">http://semver.npmjs.com/</a></p>
+<aside class="notes" data-markdown="">- go to website &amp; play around</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="finding-packages">Finding packages</h2>
+<ul>
+  <li class="fragment" data-fragment-index="0"><a href="https://www.npmjs.com/">https://www.npmjs.com/</a></li>
+  <li class="fragment" data-fragment-index="1"><code>npm search</code></li>
+  <li class="fragment" data-fragment-index="2">google</li>
+</ul>
+
+<aside class="notes" data-markdown="">- go look around
+- NPM search is slow
+- if you don't know exact name sometimes google is better</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: Global Installs</em></p>
+<aside class="notes" data-markdown="">One more part of package.json but we'll do that after (<strong>scripts</strong>)</aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h2 id="global-install">Global Install</h2>
+<p><code>npm install -g foo</code></p>
+<aside class="notes" data-markdown="">- for utilities
+- anything you'd call from the command line</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h2 id="global-install">Global Install</h2>
+<p>Installs to privileged location (<code>/usr/local/bin</code>)</p>
+<ul>
+<li class="fragment" data-fragment-index="0">Change permissions, or<!-- --></li>
+<li class="fragment" data-fragment-index="1">Tell NPM to install elsewhere<!-- --></li>
+<li class="fragment" data-fragment-index="2">Use "sudo"<!-- --></li>
+</ul>
+<aside class="notes" data-markdown="">don't use sudo!</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Make NPM install globals in our home directory</p>
+<p><code>npm set prefix /your/home/npm_packages</code></p>
+<p><strong>Don't do this if you used <code>nvm</code> to install node!!</strong></p>
+<aside class="notes" data-markdown="">now you can install without sudo</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<ol>
+<li><code>npm install -g nodemon</code></li>
+<li><code>nodemon /path/to/myproject</code></li>
+<li>make a change to the <code>myproject/app.js</code> &amp; <strong>save</strong> the file</li>
+</ol>
+<aside class="notes" data-markdown="">- grunt, gulp, jshint etc. are more useful</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="-package-bin-"><code>package.bin</code></h3>
+<p>Like <code>package.main</code> but for command-line usage:</p>
+<pre><code class="lang-json hljs">  <span class="hljs-string">"main"</span>: <span class="hljs-string">"index.js"</span>,
+  <span class="hljs-string">"bin"</span> : <span class="hljs-string">"bin/index.js"</span>
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-json hljs">  <span class="hljs-string">"bin"</span> : {
+    "<span class="hljs-attribute">ccc</span>" : <span class="hljs-value"><span class="hljs-string">"dist/cli/do_this.js"</span></span>,
+    "<span class="hljs-attribute">jsfoo</span>":<span class="hljs-value"><span class="hljs-string">"dist/cli/foo.js"</span>
+  </span>}
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- you can also install cli packages local to your app
+- <strong>demo</strong>: <code>npm install cowsay</code>, <code>"sayhi" : "cowsay Hello"</code>, <code>npm run boo</code></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><em>Up Next: npm scripts</em></p>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h2 id="npm-scripts">NPM Scripts</h2>
+<p><a href="https://docs.npmjs.com/misc/scripts">https://docs.npmjs.com/misc/scripts</a></p>
+<ul>
+  <li class="fragment" data-fragment-index="0">Live in <code>package.json</code></li>
+  <li class="fragment" data-fragment-index="1">Run with <code>npm run scriptname</code></li>
+  <li class="fragment" data-fragment-index="2">A few "special" ones run automatically</li>
+</ul>
+
+<aside class="notes" data-markdown="">- <strong>Why would this be useful?</strong></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><pre><code class="lang-json hljs">...
+<span class="hljs-string">"scripts"</span>: {
+  "<span class="hljs-attribute">bbl-build</span>": <span class="hljs-value"><span class="hljs-string">"babel src --out-dir dist"</span></span>,
+  "<span class="hljs-attribute">build</span>": <span class="hljs-value"><span class="hljs-string">"npm run bbl-build"</span></span>,
+  "<span class="hljs-attribute">postinstall</span>": <span class="hljs-value"><span class="hljs-string">"npm run build"</span></span>,
+  "<span class="hljs-attribute">start</span>": <span class="hljs-value"><span class="hljs-string">"node . --httpauth ../presentations.htpasswd"</span></span>,
+  "<span class="hljs-attribute">debug</span>": <span class="hljs-value"><span class="hljs-string">"PORT=3030 DEBUG=app:*,express:* npm run start"</span></span>,
+  "<span class="hljs-attribute">pretest</span>": <span class="hljs-value"><span class="hljs-string">"echo \"about to start tests...\""</span></span>,
+  "<span class="hljs-attribute">test</span>": <span class="hljs-value"><span class="hljs-string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span>
+</span>},
+...
+</code></pre>
+<aside class="notes" data-markdown="">- talk thru these
+- bower install
+- demo a bit
+- alternative to grunt/gulp for builds</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>In <code>myproject/</code>:</p>
+<ol>
+<li>Install (and save!) <code>cowsay</code> local to project</li>
+<li>Add script to <code>package.json</code> that runs <code>cowsay Hello</code></li>
+<li>Run script: <code>npm run hello</code></li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li><code>npm run hello</code> runs a script named <code>hello</code></li>
+</ol>
+<aside class="notes" data-markdown="">- demo watch for them
+- <em>extra fileserver exercise in x/npm</em>
+- add debugger to a server ?
+- add watch script ?</aside></section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 330px; display: none;"><section data-markdown="" data-markdown-parsed="true" style="top: 330px; display: none;"><h1 id="tomorrow">Tomorrow</h1>
+<ul>
+<li>Express</li>
+<li>Datastores &amp; ORMs</li>
+</ul>
+<p><a href="https://mongolab.com/">https://mongolab.com/</a></p>
+<aside class="notes" data-markdown="">- go over express
+- datastores, mongo &amp; mysql
+- set up an account on mongolab for free mongodb hosting</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h1 id="good-job-">Good Job! :)</h1>
+</section></section></div><div class="backgrounds"><div class="slide-background stack present" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" style="display: none;"><div class="slide-background present" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down enabled" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">NPM
+http://npmjs.com/
+- who has used?
+- package manager for node &amp; more</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

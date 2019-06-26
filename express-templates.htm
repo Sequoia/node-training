@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)http://localhost:8080/node-2day/express-templates#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" class="present" style="top: 35.5px; display: block;"><h1 id="express-templates">Express Templates</h1>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">app.set(<span class="hljs-string">'view engine'</span>, <span class="hljs-string">'jade'</span>);
+app.set(<span class="hljs-string">'views'</span>, <span class="hljs-string">'./templates'</span>);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-jade">// templates/thoughts.jade
+html
+  head
+    title= title
+  body
+    h1 Express is... #{descriptor}!
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="2"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> data = {
+  title: <span class="hljs-string">'My views on Express'</span>,
+  descriptor: <span class="hljs-string">'great'</span>
+};
+res.render(<span class="hljs-string">'thoughts'</span>, data);
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown=""><strong>Finally</strong> I'll tell you how <code>res.render</code> works!!
+1. setup (<em>aside re: app.get, app.set</em>)
+2. here's the template file
+  - uses whitespace/nesting
+  - two main ways to inject data: tagname= #{descriptor}
+3. Here's how we call it</aside></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 169px; display: block;"><h1 id="express-templates">Express Templates</h1>
+<ul>
+  <li class="fragment" data-fragment-index="0">Consolidate.js</li>
+  <li class="fragment" data-fragment-index="1">Jade</li>
+  <li class="fragment" data-fragment-index="2"><code>npm install --save jade</code></li>
+</ul>
+
+<aside class="notes" data-markdown="">- can use basically any template lib
+
+getting date into the page 
+- <a href="http://jade-lang.com/reference/interpolation/">http://jade-lang.com/reference/interpolation/</a>
+- <a href="http://jade-lang.com/reference/attributes/">http://jade-lang.com/reference/attributes/</a></aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 9px; display: block;"><h2 id="jade">Jade</h2>
+<pre><code class="lang-jade">html
+  head
+    title Hello World!
+  body
+    h1 I like Javascript
+    p How do I like javascript? Let me count the ways...
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">html</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">title</span>&gt;</span>Hello World!<span class="hljs-tag">&lt;/<span class="hljs-title">title</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">head</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-title">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>I like Javascript<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>How do I like javascript? Let me count the ways...<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">body</span>&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-title">html</span>&gt;</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- talk about nesting</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="classes-ids">Classes &amp; IDs</h3>
+<pre><code class="lang-jade">.content
+  h1#title I like Javascript
+  h2.subitle Yes I do
+  p How do I like javascript? Let me count the ways...
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"content"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">h1</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"title"</span>&gt;</span>I like Javascript<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">h2</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"subtitle"</span>&gt;</span>yes I do<span class="hljs-tag">&lt;/<span class="hljs-title">h2</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>How do I like javascript? let me count the ways...<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- makes a div w/class
+- adds id to elem
+- adds class to elem</aside></section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="attributes">Attributes</h3>
+<pre><code class="lang-jade">script(src='/js/main.js')
+
+label Subscribe to our newsletter
+  input(
+    type='checkbox'
+    name='subscribe'
+    checked='checked'
+  )
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"/js/main.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>Subscribe to our newsletter
+  <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"checkbox"</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"subscribe"</span> <span class="hljs-attribute">checked</span>=<span class="hljs-value">"checked"</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+</code></pre>
+<!-- -->
+</section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p><code>express-app/start/tmpl-server.js</code></p>
+<ol>
+<li>Add a <code>title</code>, <code>body</code>, and <code>h1</code>
+<code>start/templates/homepage.jade</code></li>
+<li>Render it on request to <code>/</code></li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li>install jade!</li>
+<li>app.set <code>view engine</code>, <code>views</code></li>
+<li>paths are relative to <code>CWD</code></li>
+<li><a href="http://expressjs.com/en/guide/using-template-engines.html">http://expressjs.com/en/guide/using-template-engines.html</a></li>
+</ol>
+</section></section><section data-charset="iso-8859-15" hidden="" aria-hidden="true" class="stack future" style="top: 0px; display: block;"><section data-markdown="" data-markdown-parsed="true" style="top: 75.5px; display: block;"><h3 id="injecting-data">Injecting Data</h3>
+<pre><code class="lang-jade">// infobox.jade (snippet)
+.infobox
+  h3= title
+  p User "#{username}" has been updated
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">res.render(<span class="hljs-string">'infobox'</span>, {
+  title: <span class="hljs-string">"Save Successful"</span>,
+  username: <span class="hljs-string">"Sequoia"</span>
+});
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"infobox"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>Save Successful<span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>User "Sequoia" has been updated<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- "putting text in stuff"
+- using a snippet here, normally would be full page or json</aside></section><section data-markdown="" data-markdown-parsed="true" data-state="exercise" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Update <code>/restuarants/:id</code> to use templates:</p>
+<ul>
+<li><code>restuarants-router-5.js</code></li>
+<li><code>tempalates/restuarant.jade</code></li>
+</ul>
+<p>Response:</p>
+<pre><code class="lang-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">title</span>&gt;</span>Amici's<span class="hljs-tag">&lt;/<span class="hljs-title">title</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">body</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>Restaurant<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">ul</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">li</span>&gt;</span>id: 1<span class="hljs-tag">&lt;/<span class="hljs-title">li</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">li</span>&gt;</span>name: Amici's<span class="hljs-tag">&lt;/<span class="hljs-title">li</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">li</span>&gt;</span>founded: 2010<span class="hljs-tag">&lt;/<span class="hljs-title">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-title">ul</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">html</span>&gt;</span>
+</code></pre>
+<p>...ditto for <code>/restaurants/2</code>, <code>/restaurants/3</code> etc.</p>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="dynamic-attributes">Dynamic Attributes</h3>
+<pre><code class="lang-jade">// infobox.jade
+.infobox(class=type)
+  h3= title
+  p= message
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> event = {
+  type : <span class="hljs-string">"error"</span>,
+  title: <span class="hljs-string">"Save Failed"</span>,
+  message: <span class="hljs-string">"Please log in"</span>
+};
+res.render(<span class="hljs-string">'infobox'</span>, event);
+</code></pre>
+<!-- -->
+<pre class="fragment" data-fragment-index="1"><code class="lang-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"infobox error"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>Save failed<span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>403: Please log in<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+</code></pre>
+<!-- -->
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="dynamic-attributes">Dynamic Attributes</h3>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> event = {
+  type : [<span class="hljs-string">"success"</span>, <span class="hljs-string">"user-action"</span>]
+  title: <span class="hljs-string">"Success"</span>,
+  message: <span class="hljs-string">"Profile Updated"</span>
+};
+res.render(<span class="hljs-string">'infobox'</span>, event);
+</code></pre>
+<pre><code class="lang-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"infobox success user-action"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>Success<span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Profile Updated<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+</code></pre>
+</section><section data-markdown="" data-markdown-parsed="true" class="future" aria-hidden="true" style="top: 330px; display: none;"><h3 id="conditionals-iteration">Conditionals &amp; Iteration</h3>
+<pre><code class="lang-jade">body.userlist
+  if !users.length
+    p No users!
+  else
+    ul
+      each user in users
+        li= user.name
+</code></pre>
+<aside class="notes" data-markdown="">- What do you think this will do?
+- <em>Try it together</em></aside></section><section data-markdown="" data-markdown-parsed="true" data-state="transition" class="future" aria-hidden="true" style="top: 330px; display: none;"><!-- -->
+<p>Up Next: Datastores</p>
+</section></section></div><div class="backgrounds"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="slide-background stack future" data-loaded="true" style="display: block;"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled fragmented" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">Express Templates
+app.set('view engine', 'jade');
+app.set('views', './templates');
+
+
+// templates/thoughts.jade
+html
+  head
+    title= title
+  body
+    h1 Express is... #{descriptor}!
+
+
+var data = {
+  title: 'My views on Express',
+  descriptor: 'great'
+};
+res.render('thoughts', data);
+
+
+Finally I'll tell you how res.render works!!
+1. setup (aside re: app.get, app.set)
+2. here's the template file
+  - uses whitespace/nesting
+  - two main ways to inject data: tagname= #{descriptor}
+3. Here's how we call it</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

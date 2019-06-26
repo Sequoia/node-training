@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)http://localhost:8080/node-2day/sequelize#/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"><link rel="stylesheet" href="./stuff/reveal.css"><link id="theme" rel="stylesheet" href="./vendor/reveal.js/css/theme/black.css"><link id="customStyles" rel="stylesheet" href="./stuff/sequoia.css"><!-- Code syntax highlighting--><link rel="stylesheet" href="./stuff/zenburn.css"></head><body style="transition: -webkit-transform 0.8s ease 0s;"><div class="reveal slide center" role="application" data-transition-speed="default" data-background-transition="fade"><!-- Any section element inside of this container is displayed as a slide--><div class="slides" style="width: 960px; height: 700px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.834429);"><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" class="present" style="top: 243px; display: block;"><h1 id="sequelize">Sequelize</h1>
+<aside class="notes" data-markdown="">- Sequelize is an ORM</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 229.5px; display: block;"><h2 id="what-is-an-orm-">What is an ORM?</h2>
+<p>"Object Relational Mapper"</p>
+<aside class="notes" data-markdown="">- allows you to represent your documents as objects in code &amp; access them thus
+- "queries" are abstracted away</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 161.5px; display: block;"><h2 id="sequelize-setup">Sequelize setup</h2>
+<pre><code class="lang-no-highlight">$ npm install --save sequelize
+
+# And one of the following:
+$ npm install --save pg pg-hstore
+$ npm install --save mysql // For both mysql and mariadb dialects
+$ npm install --save sqlite3
+$ npm install --save tedious // MSSQL
+</code></pre>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="sequelize-setup">Sequelize setup</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> Sequelize = <span class="hljs-built_in">require</span>(<span class="hljs-string">'Sequelize'</span>);
+
+<span class="hljs-keyword">var</span> db = <span class="hljs-keyword">new</span> Sequelize(<span class="hljs-string">'database'</span>, <span class="hljs-string">'username'</span>, <span class="hljs-string">'password'</span>, {
+  host: <span class="hljs-string">'localhost'</span>,
+  dialect: <span class="hljs-string">'mysql'</span>,
+});
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> db = <span class="hljs-keyword">new</span> Sequelize(<span class="hljs-string">'postgres://user:pass@host:5432/dbname'</span>);
+</code></pre>
+<!-- -->
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="models">Models</h2>
+<pre><code class="lang-js hljs javascript"><span class="hljs-keyword">var</span> Restaurant = db.define(<span class="hljs-string">'Restaurant'</span>, {
+  name: { type: Sequelize.STRING, },
+  founded: { type: Sequelize.INTEGER }
+});
+
+<span class="hljs-keyword">var</span> Dish = db.define(<span class="hljs-string">'Dish'</span>, {
+  name: { type: Sequelize.STRING, },
+  spicy: { type: Sequelize.BOOLEAN }
+});
+</code></pre>
+<aside class="notes" data-markdown="">- Create our models
+- sequelize objects that allow us to build queries
+- names are model "names", will be pluralized to create tables
+- No tables yet!</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="relationships">Relationships</h2>
+<ul>
+<li><code>hasOne</code></li>
+<li><code>belongsTo</code></li>
+<li><code>hasMany</code></li>
+</ul>
+<p><strong>Automatically add foreign key id fields</strong></p>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">Restaurant.hasMany(Dish);
+<span class="hljs-comment">//adds RestaurantId to Dish</span>
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- has one vs. belongsTo: determines where ID fields are added</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="syncing-models">Syncing Models</h2>
+<pre><code class="lang-js hljs javascript">db.sync()
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">db.sync({force: <span class="hljs-literal">true</span>});
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- Creates Tables
+- Creates Tables + drop
+- <em>Look at sequelize-restaurants</em></aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>In <code>sequelize-restaurants</code>...</p>
+<ol>
+<li><code>npm install</code></li>
+<li>create a database (<code>test-db</code>, <code>node-workshop</code>, whatever)</li>
+<li>edit <code>index.js</code> to match your environment</li>
+<li><code>node .</code></li>
+</ol>
+<p>Hints:</p>
+<ul>
+<li><strong>Grants!</strong> Consider using <code>root</code><br>(never in production of course ☺)</li>
+<li>Database must be created, but not tables</li>
+</ul>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="-restaurants-"><code>Restaurants</code></h2>
+<pre><code class="lang-no-highlight">+-----------+--------------+------+-----+---------+----------------+
+| Field     | Type         | Null | Key | Default | Extra          |
++-----------+--------------+------+-----+---------+----------------+
+| id        | int(11)      | NO   | PRI | NULL    | auto_increment |
+| name      | varchar(255) | YES  |     | NULL    |                |
+| founded   | int(11)      | YES  |     | NULL    |                |
+| createdAt | datetime     | NO   |     | NULL    |                |
+| updatedAt | datetime     | NO   |     | NULL    |                |
++-----------+--------------+------+-----+---------+----------------+
+</code></pre>
+<h2 id="-dishes-"><code>Dishes</code></h2>
+<pre><code class="lang-no-highlight">+--------------+--------------+------+-----+------+----------------+
+| id           | int(11)      | NO   | PRI | NULL | auto_increment |
+| name         | varchar(255) | YES  |     | NULL |                |
+| spicy        | tinyint(1)   | YES  |     | NULL |                |
+| createdAt    | datetime     | NO   |     | NULL |                |
+| updatedAt    | datetime     | NO   |     | NULL |                |
+| RestaurantId | int(11)      | YES  | MUL | NULL |                |
++--------------+--------------+------+-----+------+----------------+
+</code></pre>
+<aside class="notes" data-markdown="">- created fields:
+  - id
+  - createdAt
+  - updatedAt
+  - RestaurantId
+- <em>Explore the data a bit</em></aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="queries">Queries</h2>
+<ul>
+<li><code>Model.find</code></li>
+<li><code>Model.findById</code></li>
+<li><code>Model.findAll</code></li>
+<li>Return Promises</li>
+</ul>
+<pre><code class="lang-js hljs javascript">Post.findAll()
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">posts</span>)</span>{
+    <span class="hljs-comment">//do something with posts Array</span>
+  });
+</code></pre>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="-tojson-"><code>.toJSON</code></h2>
+<pre><code class="hljs elixir"><span class="hljs-constant">Post.</span>findById(<span class="hljs-number">1</span>)
+  .<span class="hljs-keyword">then</span>(function(post){
+    post.title;                           <span class="hljs-regexp">//</span> <span class="hljs-string">"The Hotdog Dillema"</span>
+    post.hasOwnProperty(<span class="hljs-string">'title'</span>);         <span class="hljs-regexp">//</span> <span class="hljs-keyword">false</span>
+    post.toJSON().hasOwnProperty(<span class="hljs-string">'title'</span>);<span class="hljs-regexp">//</span> <span class="hljs-keyword">true</span>
+  });
+</code></pre><p><span class="fragment" data-fragment-index="0"><strong>Property access is <em>proxied</em></strong>. Use <code>.toJSON</code> to get a POJO (plain old
+javascript object).</span></p>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>Connect the <code>/restaurants/</code> route</p>
+<p>Hints:</p>
+<ul>
+<li>Promise!!<pre><code class="lang-js hljs javascript">Model.findAll()
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">results</span>)</span>{
+    <span class="hljs-comment">//use results</span>
+  });
+</code></pre>
+</li>
+<li>Template expects an object with a <code>restaurants</code> key:<pre><code class="lang-no-highlight">each restaurant in restaurants
+  li
+    a(href='/restaurants/' + restaurant.id)= restaurant.name
+</code></pre>
+</li>
+</ul>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="query-conditions">Query Conditions</h2>
+<pre><code class="lang-js hljs javascript">Post.findAll({
+  where: {
+    featured : <span class="hljs-literal">true</span>
+  }
+});
+</code></pre>
+<pre><code class="lang-sql hljs"><span class="hljs-operator"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Posts <span class="hljs-keyword">WHERE</span> featured = <span class="hljs-number">1</span>;</span>
+</code></pre>
+<aside class="notes" data-markdown=""><strong>I'm simplifying these queries some</strong></aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="query-conditions">Query Conditions</h2>
+<pre><code class="lang-js hljs javascript">$or: [{a: <span class="hljs-number">5</span>}, {a: <span class="hljs-number">6</span>}]  <span class="hljs-comment">// (a = 5 OR a = 6)</span>
+
+$gt: <span class="hljs-number">6</span>,                <span class="hljs-comment">// &gt; 6</span>
+$gte: <span class="hljs-number">6</span>,               <span class="hljs-comment">// &gt;= 6</span>
+
+$ne: <span class="hljs-number">20</span>,               <span class="hljs-comment">// != 20</span>
+
+$between: [<span class="hljs-number">6</span>, <span class="hljs-number">10</span>],     <span class="hljs-comment">// BETWEEN 6 AND 10</span>
+$notBetween: [<span class="hljs-number">11</span>, <span class="hljs-number">15</span>], <span class="hljs-comment">// NOT BETWEEN 11 AND 15</span>
+
+$<span class="hljs-keyword">in</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>],           <span class="hljs-comment">// IN [1, 2]</span>
+$like: <span class="hljs-string">'%hat'</span>,         <span class="hljs-comment">// LIKE '%hat'</span>
+</code></pre>
+<aside class="notes" data-markdown="">- ditto <code>not</code> prefix for in &amp; like</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="query-conditions">Query Conditions</h2>
+<pre><code class="lang-js hljs javascript">Post.findAll({
+  where : {
+    $or : [
+      { featured : <span class="hljs-literal">true</span> },
+      { likes : { $gte : <span class="hljs-number">10</span> } }
+    ]
+  }
+});
+</code></pre>
+<pre><code class="lang-sql hljs"><span class="hljs-operator"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Posts
+  <span class="hljs-keyword">WHERE</span> (featured = <span class="hljs-number">1</span> <span class="hljs-keyword">OR</span> likes &gt;= <span class="hljs-number">10</span>)
+</span></code></pre>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="attributes">Attributes</h2>
+<pre><code class="lang-js hljs javascript">Post.find({
+  where: { id : <span class="hljs-number">32</span> },
+  attributes : [ <span class="hljs-string">'title'</span>, <span class="hljs-string">'url'</span>]
+});
+</code></pre>
+<pre><code class="lang-sql hljs"><span class="hljs-operator"><span class="hljs-keyword">SELECT</span> title, <span class="hljs-keyword">url</span> <span class="hljs-keyword">FROM</span> Posts <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">id</span> = <span class="hljs-number">32</span>
+</span></code></pre>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="relations">Relations</h2>
+<pre><code class="lang-js hljs javascript">Post.find({
+  where: { id : <span class="hljs-number">32</span> },
+  include: [ Comment ]
+});
+</code></pre>
+<pre><code class="lang-sql hljs"><span class="hljs-operator"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Posts
+  <span class="hljs-keyword">LEFT</span> <span class="hljs-keyword">OUTER</span> <span class="hljs-keyword">JOIN</span> Comments <span class="hljs-keyword">ON</span> Posts.<span class="hljs-keyword">id</span> = Comments.PostId
+  <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">id</span> = <span class="hljs-number">32</span>
+</span></code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">Post.findById(<span class="hljs-number">32</span>, { include: [ Comment ] });
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- actually doesn't do <code>*</code> it names each field
+- could also use findById here</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>Connect the <code>/restaurants/:id</code> route</p>
+<p>Hints:</p>
+<ul>
+<li>id passed in <code>req.params</code></li>
+<li><code>findById</code></li>
+<li><code>include : [ Related, Models, Here ]</code></li>
+<li>Promise!!</li>
+<li>Template expects an object with <code>name</code>, <code>founded</code>, <code>Dishes</code> keys</li>
+</ul>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="saving-data">Saving data</h2>
+<h3 id="build-save">Build &amp; Save</h3>
+<pre><code class="lang-js hljs javascript">postContents = <span class="hljs-string">'&lt;h1&gt;You have probably asked yourself this question a million times...'</span>;
+
+<span class="hljs-keyword">var</span> hd_post = Post.build({
+  title : <span class="hljs-string">'Are Hotdogs Sandwiches?'</span>
+});
+
+hd_post.contents = postContents;
+hd_post.save();
+</code></pre>
+<h3 id="create" data-fragment-index="0" class="fragment">Create</h3>
+<!-- -->
+<pre data-fragment-index="0" class="fragment"><code class="lang-js hljs javascript">Post.create({
+  title : <span class="hljs-string">'Are Hotdogs Sandwiches?'</span>,
+  contents : postContents
+})
+.then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">hd_post</span>)</span>{ ... });
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- building model does not persist it to database!
+- <em>create does</em></aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><h2 id="updating-data">Updating data</h2>
+<pre><code class="lang-js hljs javascript">Post
+  .findById(<span class="hljs-number">123</span>)
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">hd_post</span>)</span>{
+    hd_post.update({
+      title : <span class="hljs-string">'The Hotdog Dilemma'</span>
+    });
+  })
+</code></pre>
+<pre class="fragment" data-fragment-index="0"><code class="lang-js hljs javascript">Post.update(
+  { title : <span class="hljs-string">'The Hotdog Dilemma'</span> },
+  { where : { id : <span class="hljs-number">123</span> } }
+);
+</code></pre>
+<!-- -->
+<aside class="notes" data-markdown="">- second is "bulk update"</aside></section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="exercise" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>Connect the <code>POST /restaurants/</code> route</p>
+<p>Hints:</p>
+<ul>
+<li><code>req.body</code> (already parsed! ☺)</li>
+<li>Promise!!<pre><code class="lang-js hljs javascript">Model.saveOperation(data)
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">newRecord</span>)</span>{
+    <span class="hljs-comment">// console.log(newRecord.id)</span>
+  });
+</code></pre>
+</li>
+<li><code>create</code> <strong>or</strong> <code>build</code> &amp; <code>save</code></li>
+</ul>
+</section><section data-charset="iso-8859-15" data-markdown="" data-markdown-parsed="true" data-state="transition" hidden="" aria-hidden="true" class="future" style="top: 330px; display: none;"><!-- -->
+<p>Up Next: Mongoose</p>
+</section></div><div class="backgrounds"><div class="slide-background present" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" data-loaded="true" style="display: block;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div><div class="slide-background future" style="display: none;"></div></div><div class="progress" style="display: block;"><span style="width: 0px;"></span></div><aside class="controls" style="display: none;"><button class="navigate-left" aria-label="previous slide"></button><button class="navigate-right enabled" aria-label="next slide"></button><button class="navigate-up" aria-label="above slide"></button><button class="navigate-down" aria-label="below slide"></button></aside><div class="slide-number" style="display: none;"></div><div class="speaker-notes" data-prevent-swipe=""></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">Sequelize
+- Sequelize is an ORM</div></div><script src="./stuff/head.min.js"></script><script src="./stuff/reveal.js"></script><script src="./stuff/initSlides.js"></script></body></html>

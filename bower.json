@@ -1,8 +1,0 @@
-{
-  "name": "presos",
-  "version": "0.0.1",
-  "dependencies": {
-    "reveal.js": "~3.2.0"
-  },
-  "private": true
-}
